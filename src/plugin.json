@@ -30,8 +30,16 @@
         "url": "https://github.com/pgillich/grafana-tree-panel"
       },
       {
+        "name": "Documentation",
+        "url": "https://github.com/pgillich/grafana-tree-panel"
+      },
+      {
+        "name": "Website",
+        "url": "https://github.com/pgillich/grafana-tree-panel"
+      },
+      {
         "name": "License",
-        "url": "https://github.com/grafana/grafana-starter-panel/blob/master/LICENSE"
+        "url": "https://github.com/pgillich/grafana-tree-panel/blob/master/LICENSE"
       }
     ],
     "screenshots": [],
@@ -39,7 +47,7 @@
     "updated": "%TODAY%"
   },
   "dependencies": {
-    "grafanaDependency": ">=7.0.0",
+    "grafanaDependency": ">=8.0.0",
     "plugins": []
   }
 }

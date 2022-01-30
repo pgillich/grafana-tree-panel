@@ -1,0 +1,45 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "panel",
+  "name": "Tree View",
+  "id": "pgillich-tree-panel",
+  "state": "beta",
+  "info": {
+    "description": "Tree View for JSON API datasource. It can show JSON REST API responses, for example: Kubernetes",
+    "author": {
+      "name": "Peter Gillich",
+      "url": "https://www.linkedin.com/in/petergillich/"
+    },
+    "keywords": [
+      "grafana",
+      "plugin",
+      "panel",
+      "tree",
+      "rest",
+      "json",
+      "jsonata",
+      "kubernetes"
+    ],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [
+      {
+        "name": "Github",
+        "url": "https://github.com/pgillich/grafana-tree-panel"
+      },
+      {
+        "name": "License",
+        "url": "https://github.com/grafana/grafana-starter-panel/blob/master/LICENSE"
+      }
+    ],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=7.0.0",
+    "plugins": []
+  }
+}

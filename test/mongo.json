@@ -1,0 +1,1495 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "checksum/config": "0a32cd9c1df183fde50fb7709a3d22489327645c3ff311d7290d65e82ebb23e1",
+                    "cni.projectcalico.org/containerID": "c4a0c7f7314a8f4bb32141328dd44cd003c1ee0a705affd81e115b96574b84ff",
+                    "cni.projectcalico.org/podIP": "10.72.106.217/32",
+                    "cni.projectcalico.org/podIPs": "10.72.106.217/32",
+                    "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.106.217\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+                    "k8s.v1.cni.cncf.io/networks-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.106.217\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]"
+                },
+                "creationTimestamp": "2021-12-17T08:52:02Z",
+                "generateName": "mongodb-exporter-prometheus-mongodb-exporter-6dcdd8c8fc-",
+                "labels": {
+                    "app.kubernetes.io/instance": "mongodb-exporter",
+                    "app.kubernetes.io/name": "prometheus-mongodb-exporter",
+                    "pod-template-hash": "6dcdd8c8fc"
+                },
+                "name": "mongodb-exporter-prometheus-mongodb-exporter-6dcdd8c8fc-zqffr",
+                "namespace": "mongo",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "ReplicaSet",
+                        "name": "mongodb-exporter-prometheus-mongodb-exporter-6dcdd8c8fc",
+                        "uid": "cf6f095b-781c-4299-9f52-b7a3ba024efa"
+                    }
+                ],
+                "resourceVersion": "24579817",
+                "uid": "9f443388-3d48-4fdd-8053-4a4a1a51d932"
+            },
+            "spec": {
+                "affinity": {},
+                "containers": [
+                    {
+                        "args": [
+                            "--web.listen-address=:9216",
+                            "--collect.collection",
+                            "--collect.database",
+                            "--collect.indexusage",
+                            "--collect.topmetrics",
+                            "--collect.connpoolstats"
+                        ],
+                        "env": [
+                            {
+                                "name": "MONGODB_URI",
+                                "valueFrom": {
+                                    "secretKeyRef": {
+                                        "key": "mongodb-uri",
+                                        "name": "mongodb-exporter-prometheus-mongodb-exporter"
+                                    }
+                                }
+                            }
+                        ],
+                        "image": "ssheehy/mongodb-exporter:0.10.0",
+                        "imagePullPolicy": "IfNotPresent",
+                        "livenessProbe": {
+                            "failureThreshold": 3,
+                            "httpGet": {
+                                "path": "/",
+                                "port": "metrics",
+                                "scheme": "HTTP"
+                            },
+                            "initialDelaySeconds": 10,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 1
+                        },
+                        "name": "mongodb-exporter",
+                        "ports": [
+                            {
+                                "containerPort": 9216,
+                                "name": "metrics",
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "readinessProbe": {
+                            "failureThreshold": 3,
+                            "httpGet": {
+                                "path": "/",
+                                "port": "metrics",
+                                "scheme": "HTTP"
+                            },
+                            "initialDelaySeconds": 10,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 1
+                        },
+                        "resources": {},
+                        "securityContext": {
+                            "allowPrivilegeEscalation": false,
+                            "capabilities": {
+                                "drop": [
+                                    "all"
+                                ]
+                            },
+                            "readOnlyRootFilesystem": true,
+                            "runAsGroup": 10000,
+                            "runAsNonRoot": true,
+                            "runAsUser": 10000
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-k7gng",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "nodeName": "o-k8s-vps3",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "mongodb-exporter-prometheus-mongodb-exporter",
+                "serviceAccountName": "mongodb-exporter-prometheus-mongodb-exporter",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "kube-api-access-k7gng",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-12-17T08:52:02Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:18:10Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:18:10Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-12-17T08:52:02Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "cri-o://343446be48bd57468f9eff30937b902afb27960849cae2253ebfd7403fea1dca",
+                        "image": "docker.io/ssheehy/mongodb-exporter:0.10.0",
+                        "imageID": "docker.io/ssheehy/mongodb-exporter@sha256:97bbcb1be64692f986b0cf97cab776bff81795dd02943882b46a45b7733a9bba",
+                        "lastState": {},
+                        "name": "mongodb-exporter",
+                        "ready": true,
+                        "restartCount": 0,
+                        "started": true,
+                        "state": {
+                            "running": {
+                                "startedAt": "2022-01-20T17:17:55Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.121.33",
+                "phase": "Running",
+                "podIP": "10.72.106.217",
+                "podIPs": [
+                    {
+                        "ip": "10.72.106.217"
+                    }
+                ],
+                "qosClass": "BestEffort",
+                "startTime": "2021-12-17T08:52:02Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "cni.projectcalico.org/containerID": "92b4381abbb7973d33e3283f9778ee0f01801d24a8b571fa3d9decda1ba3fc4b",
+                    "cni.projectcalico.org/podIP": "",
+                    "cni.projectcalico.org/podIPs": "",
+                    "helm.sh/hook": "test-success",
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{\"helm.sh/hook\":\"test-success\"},\"labels\":{\"app.kubernetes.io/instance\":\"mongodb-exporter\",\"app.kubernetes.io/name\":\"prometheus-mongodb-exporter\",\"helm.sh/chart\":\"prometheus-mongodb-exporter-2.8.1\",\"sidecar.istio.io/inject\":\"false\"},\"name\":\"mongodb-exporter-prometheus-mongodb-exporter-test-connection\",\"namespace\":\"mongo\"},\"spec\":{\"containers\":[{\"args\":[\"-qO-\",\"mongodb-exporter-prometheus-mongodb-exporter:9216/metrics\"],\"command\":[\"wget\"],\"image\":\"busybox\",\"name\":\"wget\"}],\"restartPolicy\":\"Never\"}}\n"
+                },
+                "creationTimestamp": "2021-12-17T08:52:02Z",
+                "labels": {
+                    "app.kubernetes.io/instance": "mongodb-exporter",
+                    "app.kubernetes.io/name": "prometheus-mongodb-exporter",
+                    "helm.sh/chart": "prometheus-mongodb-exporter-2.8.1",
+                    "sidecar.istio.io/inject": "false"
+                },
+                "name": "mongodb-exporter-prometheus-mongodb-exporter-test-connection",
+                "namespace": "mongo",
+                "resourceVersion": "128464",
+                "uid": "74a4bfc2-00a3-4ac3-a958-3d1c90810947"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "args": [
+                            "-qO-",
+                            "mongodb-exporter-prometheus-mongodb-exporter:9216/metrics"
+                        ],
+                        "command": [
+                            "wget"
+                        ],
+                        "image": "busybox",
+                        "imagePullPolicy": "Always",
+                        "name": "wget",
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-8qgqb",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "nodeName": "o-k8s-vps3",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Never",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "kube-api-access-8qgqb",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-12-17T08:52:02Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-12-17T08:52:19Z",
+                        "message": "containers with unready status: [wget]",
+                        "reason": "ContainersNotReady",
+                        "status": "False",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-12-17T08:52:19Z",
+                        "message": "containers with unready status: [wget]",
+                        "reason": "ContainersNotReady",
+                        "status": "False",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-12-17T08:52:02Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "cri-o://5a762a4d71092cc2cb4e059240997ca747fdfcecc5ddbc9568a2a2b1a1d4985e",
+                        "image": "docker.io/library/busybox:latest",
+                        "imageID": "docker.io/library/busybox@sha256:50e44504ea4f19f141118a8a8868e6c5bb9856efa33f2183f5ccea7ac62aacc9",
+                        "lastState": {},
+                        "name": "wget",
+                        "ready": false,
+                        "restartCount": 0,
+                        "started": false,
+                        "state": {
+                            "terminated": {
+                                "containerID": "cri-o://5a762a4d71092cc2cb4e059240997ca747fdfcecc5ddbc9568a2a2b1a1d4985e",
+                                "exitCode": 1,
+                                "finishedAt": "2021-12-17T08:52:19Z",
+                                "reason": "Error",
+                                "startedAt": "2021-12-17T08:52:18Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.121.33",
+                "phase": "Failed",
+                "podIP": "10.72.106.17",
+                "podIPs": [
+                    {
+                        "ip": "10.72.106.17"
+                    }
+                ],
+                "qosClass": "BestEffort",
+                "startTime": "2021-12-17T08:52:02Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "cni.projectcalico.org/containerID": "0389d917c1ca4d75b487ffeaa0151eaec2f7d033de3bd88091c75307e8b385d9",
+                    "cni.projectcalico.org/podIP": "10.72.78.102/32",
+                    "cni.projectcalico.org/podIPs": "10.72.78.102/32",
+                    "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.78.102\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+                    "k8s.v1.cni.cncf.io/networks-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.78.102\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]"
+                },
+                "creationTimestamp": "2021-12-17T08:52:02Z",
+                "generateName": "percona-server-mongodb-operator-fcc5c8d6-",
+                "labels": {
+                    "name": "percona-server-mongodb-operator",
+                    "pod-template-hash": "fcc5c8d6"
+                },
+                "name": "percona-server-mongodb-operator-fcc5c8d6-sqb8m",
+                "namespace": "mongo",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "ReplicaSet",
+                        "name": "percona-server-mongodb-operator-fcc5c8d6",
+                        "uid": "d1f7622d-da7f-4c33-a584-c907668f034d"
+                    }
+                ],
+                "resourceVersion": "24579039",
+                "uid": "b8f74686-c460-4918-a639-cce22bc88eca"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "command": [
+                            "percona-server-mongodb-operator"
+                        ],
+                        "env": [
+                            {
+                                "name": "WATCH_NAMESPACE",
+                                "valueFrom": {
+                                    "fieldRef": {
+                                        "apiVersion": "v1",
+                                        "fieldPath": "metadata.namespace"
+                                    }
+                                }
+                            },
+                            {
+                                "name": "POD_NAME",
+                                "valueFrom": {
+                                    "fieldRef": {
+                                        "apiVersion": "v1",
+                                        "fieldPath": "metadata.name"
+                                    }
+                                }
+                            },
+                            {
+                                "name": "OPERATOR_NAME",
+                                "value": "percona-server-mongodb-operator"
+                            },
+                            {
+                                "name": "RESYNC_PERIOD",
+                                "value": "5s"
+                            },
+                            {
+                                "name": "LOG_VERBOSE",
+                                "value": "false"
+                            }
+                        ],
+                        "image": "percona/percona-server-mongodb-operator:1.10.0",
+                        "imagePullPolicy": "Always",
+                        "name": "percona-server-mongodb-operator",
+                        "ports": [
+                            {
+                                "containerPort": 60000,
+                                "name": "metrics",
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "resources": {},
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-6l5hk",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "nodeName": "o-k8s-vps2",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "percona-server-mongodb-operator",
+                "serviceAccountName": "percona-server-mongodb-operator",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "kube-api-access-6l5hk",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-12-17T08:52:02Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:17:18Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:17:18Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-12-17T08:52:02Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "cri-o://d247208cf719beb7db82d9683a5abd9316a507333c426e5af8b26f2b6968bd7e",
+                        "image": "docker.io/percona/percona-server-mongodb-operator:1.10.0",
+                        "imageID": "docker.io/percona/percona-server-mongodb-operator@sha256:1b6b5dda3c9ec50128f8e4fd0a9e07feb16bb262b92f8d31f09fe19df51b069a",
+                        "lastState": {},
+                        "name": "percona-server-mongodb-operator",
+                        "ready": true,
+                        "restartCount": 0,
+                        "started": true,
+                        "state": {
+                            "running": {
+                                "startedAt": "2022-01-20T17:17:18Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.121.32",
+                "phase": "Running",
+                "podIP": "10.72.78.102",
+                "podIPs": [
+                    {
+                        "ip": "10.72.78.102"
+                    }
+                ],
+                "qosClass": "BestEffort",
+                "startTime": "2021-12-17T08:52:02Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "cni.projectcalico.org/containerID": "a6ee2f685dab498fa6c5fa9093325606201a15f4152f4929584f279c9b3e2bab",
+                    "cni.projectcalico.org/podIP": "10.72.106.241/32",
+                    "cni.projectcalico.org/podIPs": "10.72.106.241/32",
+                    "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.106.241\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+                    "k8s.v1.cni.cncf.io/networks-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.106.241\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+                    "percona.com/ssl-hash": "",
+                    "percona.com/ssl-internal-hash": ""
+                },
+                "creationTimestamp": "2022-01-20T17:19:34Z",
+                "generateName": "vcc-rs0-",
+                "labels": {
+                    "app.kubernetes.io/component": "mongod",
+                    "app.kubernetes.io/instance": "vcc",
+                    "app.kubernetes.io/managed-by": "percona-server-mongodb-operator",
+                    "app.kubernetes.io/name": "percona-server-mongodb",
+                    "app.kubernetes.io/part-of": "percona-server-mongodb",
+                    "app.kubernetes.io/replset": "rs0",
+                    "controller-revision-hash": "vcc-rs0-f857f4966",
+                    "statefulset.kubernetes.io/pod-name": "vcc-rs0-0"
+                },
+                "name": "vcc-rs0-0",
+                "namespace": "mongo",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "StatefulSet",
+                        "name": "vcc-rs0",
+                        "uid": "bcc7c579-bc5c-4f1d-8f08-9337e9980cdc"
+                    }
+                ],
+                "resourceVersion": "24585016",
+                "uid": "50d2fadf-93c0-4ca5-b02b-4d77651d85f8"
+            },
+            "spec": {
+                "affinity": {
+                    "podAntiAffinity": {
+                        "requiredDuringSchedulingIgnoredDuringExecution": [
+                            {
+                                "labelSelector": {
+                                    "matchLabels": {
+                                        "app.kubernetes.io/component": "mongod",
+                                        "app.kubernetes.io/instance": "vcc",
+                                        "app.kubernetes.io/managed-by": "percona-server-mongodb-operator",
+                                        "app.kubernetes.io/name": "percona-server-mongodb",
+                                        "app.kubernetes.io/part-of": "percona-server-mongodb",
+                                        "app.kubernetes.io/replset": "rs0"
+                                    }
+                                },
+                                "topologyKey": "kubernetes.io/hostname"
+                            }
+                        ]
+                    }
+                },
+                "containers": [
+                    {
+                        "args": [
+                            "--bind_ip_all",
+                            "--auth",
+                            "--dbpath=/data/db",
+                            "--port=27017",
+                            "--replSet=rs0",
+                            "--storageEngine=wiredTiger",
+                            "--relaxPermChecks",
+                            "--sslAllowInvalidCertificates",
+                            "--clusterAuthMode=keyFile",
+                            "--keyFile=/etc/mongodb-secrets/mongodb-key",
+                            "--slowms=100",
+                            "--profile=1",
+                            "--rateLimit=100",
+                            "--enableEncryption",
+                            "--encryptionKeyFile=/etc/mongodb-encryption/encryption-key",
+                            "--encryptionCipherMode=AES256-CBC",
+                            "--wiredTigerCacheSizeGB=0.50",
+                            "--wiredTigerCollectionBlockCompressor=snappy",
+                            "--wiredTigerJournalCompressor=snappy",
+                            "--wiredTigerIndexPrefixCompression=true",
+                            "--setParameter",
+                            "ttlMonitorSleepSecs=60",
+                            "--setParameter",
+                            "wiredTigerConcurrentReadTransactions=128",
+                            "--setParameter",
+                            "wiredTigerConcurrentWriteTransactions=128"
+                        ],
+                        "command": [
+                            "/data/db/ps-entry.sh"
+                        ],
+                        "env": [
+                            {
+                                "name": "SERVICE_NAME",
+                                "value": "vcc"
+                            },
+                            {
+                                "name": "NAMESPACE",
+                                "value": "mongo"
+                            },
+                            {
+                                "name": "MONGODB_PORT",
+                                "value": "27017"
+                            },
+                            {
+                                "name": "MONGODB_REPLSET",
+                                "value": "rs0"
+                            }
+                        ],
+                        "envFrom": [
+                            {
+                                "secretRef": {
+                                    "name": "internal-vcc-users",
+                                    "optional": false
+                                }
+                            }
+                        ],
+                        "image": "percona/percona-server-mongodb:4.4.10-11",
+                        "imagePullPolicy": "Always",
+                        "livenessProbe": {
+                            "exec": {
+                                "command": [
+                                    "/data/db/mongodb-healthcheck",
+                                    "k8s",
+                                    "liveness",
+                                    "--ssl",
+                                    "--sslInsecure",
+                                    "--sslCAFile",
+                                    "/etc/mongodb-ssl/ca.crt",
+                                    "--sslPEMKeyFile",
+                                    "/tmp/tls.pem",
+                                    "--startupDelaySeconds",
+                                    "7200"
+                                ]
+                            },
+                            "failureThreshold": 4,
+                            "initialDelaySeconds": 60,
+                            "periodSeconds": 30,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 5
+                        },
+                        "name": "mongod",
+                        "ports": [
+                            {
+                                "containerPort": 27017,
+                                "name": "mongodb",
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "readinessProbe": {
+                            "failureThreshold": 8,
+                            "initialDelaySeconds": 10,
+                            "periodSeconds": 3,
+                            "successThreshold": 1,
+                            "tcpSocket": {
+                                "port": 27017
+                            },
+                            "timeoutSeconds": 2
+                        },
+                        "resources": {
+                            "limits": {
+                                "cpu": "1",
+                                "memory": "2Gi"
+                            },
+                            "requests": {
+                                "cpu": "1",
+                                "memory": "2Gi"
+                            }
+                        },
+                        "securityContext": {
+                            "runAsNonRoot": true,
+                            "runAsUser": 1001
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/data/db",
+                                "name": "mongod-data"
+                            },
+                            {
+                                "mountPath": "/etc/mongodb-secrets",
+                                "name": "vcc-mongodb-keyfile",
+                                "readOnly": true
+                            },
+                            {
+                                "mountPath": "/etc/mongodb-ssl",
+                                "name": "ssl",
+                                "readOnly": true
+                            },
+                            {
+                                "mountPath": "/etc/mongodb-ssl-internal",
+                                "name": "ssl-internal",
+                                "readOnly": true
+                            },
+                            {
+                                "mountPath": "/etc/mongodb-encryption",
+                                "name": "vcc-mongodb-encryption-key",
+                                "readOnly": true
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-dlvg4",
+                                "readOnly": true
+                            }
+                        ],
+                        "workingDir": "/data/db"
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "hostname": "vcc-rs0-0",
+                "initContainers": [
+                    {
+                        "command": [
+                            "/init-entrypoint.sh"
+                        ],
+                        "image": "percona/percona-server-mongodb-operator:1.7.0",
+                        "imagePullPolicy": "Always",
+                        "name": "mongo-init",
+                        "resources": {
+                            "limits": {
+                                "cpu": "1",
+                                "memory": "2Gi"
+                            },
+                            "requests": {
+                                "cpu": "1",
+                                "memory": "2Gi"
+                            }
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/data/db",
+                                "name": "mongod-data"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-dlvg4",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "nodeName": "o-k8s-vps3",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {
+                    "fsGroup": 1001
+                },
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "subdomain": "vcc-rs0",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "mongod-data",
+                        "persistentVolumeClaim": {
+                            "claimName": "mongod-data-vcc-rs0-0"
+                        }
+                    },
+                    {
+                        "name": "vcc-mongodb-keyfile",
+                        "secret": {
+                            "defaultMode": 288,
+                            "optional": false,
+                            "secretName": "vcc-mongodb-keyfile"
+                        }
+                    },
+                    {
+                        "name": "vcc-mongodb-encryption-key",
+                        "secret": {
+                            "defaultMode": 288,
+                            "optional": false,
+                            "secretName": "vcc-mongodb-encryption-key"
+                        }
+                    },
+                    {
+                        "name": "ssl",
+                        "secret": {
+                            "defaultMode": 288,
+                            "optional": true,
+                            "secretName": "vcc-ssl"
+                        }
+                    },
+                    {
+                        "name": "ssl-internal",
+                        "secret": {
+                            "defaultMode": 288,
+                            "optional": true,
+                            "secretName": "vcc-ssl-internal"
+                        }
+                    },
+                    {
+                        "name": "kube-api-access-dlvg4",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:21:31Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:22:19Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:22:19Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:19:34Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "cri-o://aba4600e7e93c6657868fe2e4ce7b9bfb5cf90b1d2f1feb04ce228e73837ef8d",
+                        "image": "docker.io/percona/percona-server-mongodb:4.4.10-11",
+                        "imageID": "docker.io/percona/percona-server-mongodb@sha256:ea73a506fa02604660e3ef7d452d142a89587bb5daca15d3cc1b539a9b1000c5",
+                        "lastState": {},
+                        "name": "mongod",
+                        "ready": true,
+                        "restartCount": 0,
+                        "started": true,
+                        "state": {
+                            "running": {
+                                "startedAt": "2022-01-20T17:22:07Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.121.33",
+                "initContainerStatuses": [
+                    {
+                        "containerID": "cri-o://a4ee840ab71bc3fdcbf97aa9ca21c3fe031d82da8ec69f0e9b05cb835a0e8bf3",
+                        "image": "docker.io/percona/percona-server-mongodb-operator:1.7.0",
+                        "imageID": "docker.io/percona/percona-server-mongodb-operator@sha256:3c29f7cd2204903a56350edac6aa64a43121de7cddc8d7769a2354f8972611d3",
+                        "lastState": {},
+                        "name": "mongo-init",
+                        "ready": true,
+                        "restartCount": 0,
+                        "state": {
+                            "terminated": {
+                                "containerID": "cri-o://a4ee840ab71bc3fdcbf97aa9ca21c3fe031d82da8ec69f0e9b05cb835a0e8bf3",
+                                "exitCode": 0,
+                                "finishedAt": "2022-01-20T17:21:30Z",
+                                "reason": "Completed",
+                                "startedAt": "2022-01-20T17:21:30Z"
+                            }
+                        }
+                    }
+                ],
+                "phase": "Running",
+                "podIP": "10.72.106.241",
+                "podIPs": [
+                    {
+                        "ip": "10.72.106.241"
+                    }
+                ],
+                "qosClass": "Guaranteed",
+                "startTime": "2022-01-20T17:19:34Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "cni.projectcalico.org/containerID": "dfb10228eac0d296d701cc3d1968356fb259b78273addd61770a2023dc7d0716",
+                    "cni.projectcalico.org/podIP": "10.72.81.105/32",
+                    "cni.projectcalico.org/podIPs": "10.72.81.105/32",
+                    "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.81.105\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+                    "k8s.v1.cni.cncf.io/networks-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.81.105\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+                    "percona.com/ssl-hash": "",
+                    "percona.com/ssl-internal-hash": ""
+                },
+                "creationTimestamp": "2022-01-20T17:22:19Z",
+                "generateName": "vcc-rs0-",
+                "labels": {
+                    "app.kubernetes.io/component": "mongod",
+                    "app.kubernetes.io/instance": "vcc",
+                    "app.kubernetes.io/managed-by": "percona-server-mongodb-operator",
+                    "app.kubernetes.io/name": "percona-server-mongodb",
+                    "app.kubernetes.io/part-of": "percona-server-mongodb",
+                    "app.kubernetes.io/replset": "rs0",
+                    "controller-revision-hash": "vcc-rs0-f857f4966",
+                    "statefulset.kubernetes.io/pod-name": "vcc-rs0-1"
+                },
+                "name": "vcc-rs0-1",
+                "namespace": "mongo",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "StatefulSet",
+                        "name": "vcc-rs0",
+                        "uid": "bcc7c579-bc5c-4f1d-8f08-9337e9980cdc"
+                    }
+                ],
+                "resourceVersion": "24585465",
+                "uid": "e2a1edae-075b-46ac-8103-71140278fdc5"
+            },
+            "spec": {
+                "affinity": {
+                    "podAntiAffinity": {
+                        "requiredDuringSchedulingIgnoredDuringExecution": [
+                            {
+                                "labelSelector": {
+                                    "matchLabels": {
+                                        "app.kubernetes.io/component": "mongod",
+                                        "app.kubernetes.io/instance": "vcc",
+                                        "app.kubernetes.io/managed-by": "percona-server-mongodb-operator",
+                                        "app.kubernetes.io/name": "percona-server-mongodb",
+                                        "app.kubernetes.io/part-of": "percona-server-mongodb",
+                                        "app.kubernetes.io/replset": "rs0"
+                                    }
+                                },
+                                "topologyKey": "kubernetes.io/hostname"
+                            }
+                        ]
+                    }
+                },
+                "containers": [
+                    {
+                        "args": [
+                            "--bind_ip_all",
+                            "--auth",
+                            "--dbpath=/data/db",
+                            "--port=27017",
+                            "--replSet=rs0",
+                            "--storageEngine=wiredTiger",
+                            "--relaxPermChecks",
+                            "--sslAllowInvalidCertificates",
+                            "--clusterAuthMode=keyFile",
+                            "--keyFile=/etc/mongodb-secrets/mongodb-key",
+                            "--slowms=100",
+                            "--profile=1",
+                            "--rateLimit=100",
+                            "--enableEncryption",
+                            "--encryptionKeyFile=/etc/mongodb-encryption/encryption-key",
+                            "--encryptionCipherMode=AES256-CBC",
+                            "--wiredTigerCacheSizeGB=0.50",
+                            "--wiredTigerCollectionBlockCompressor=snappy",
+                            "--wiredTigerJournalCompressor=snappy",
+                            "--wiredTigerIndexPrefixCompression=true",
+                            "--setParameter",
+                            "ttlMonitorSleepSecs=60",
+                            "--setParameter",
+                            "wiredTigerConcurrentReadTransactions=128",
+                            "--setParameter",
+                            "wiredTigerConcurrentWriteTransactions=128"
+                        ],
+                        "command": [
+                            "/data/db/ps-entry.sh"
+                        ],
+                        "env": [
+                            {
+                                "name": "SERVICE_NAME",
+                                "value": "vcc"
+                            },
+                            {
+                                "name": "NAMESPACE",
+                                "value": "mongo"
+                            },
+                            {
+                                "name": "MONGODB_PORT",
+                                "value": "27017"
+                            },
+                            {
+                                "name": "MONGODB_REPLSET",
+                                "value": "rs0"
+                            }
+                        ],
+                        "envFrom": [
+                            {
+                                "secretRef": {
+                                    "name": "internal-vcc-users",
+                                    "optional": false
+                                }
+                            }
+                        ],
+                        "image": "percona/percona-server-mongodb:4.4.10-11",
+                        "imagePullPolicy": "Always",
+                        "livenessProbe": {
+                            "exec": {
+                                "command": [
+                                    "/data/db/mongodb-healthcheck",
+                                    "k8s",
+                                    "liveness",
+                                    "--ssl",
+                                    "--sslInsecure",
+                                    "--sslCAFile",
+                                    "/etc/mongodb-ssl/ca.crt",
+                                    "--sslPEMKeyFile",
+                                    "/tmp/tls.pem",
+                                    "--startupDelaySeconds",
+                                    "7200"
+                                ]
+                            },
+                            "failureThreshold": 4,
+                            "initialDelaySeconds": 60,
+                            "periodSeconds": 30,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 5
+                        },
+                        "name": "mongod",
+                        "ports": [
+                            {
+                                "containerPort": 27017,
+                                "name": "mongodb",
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "readinessProbe": {
+                            "failureThreshold": 8,
+                            "initialDelaySeconds": 10,
+                            "periodSeconds": 3,
+                            "successThreshold": 1,
+                            "tcpSocket": {
+                                "port": 27017
+                            },
+                            "timeoutSeconds": 2
+                        },
+                        "resources": {
+                            "limits": {
+                                "cpu": "1",
+                                "memory": "2Gi"
+                            },
+                            "requests": {
+                                "cpu": "1",
+                                "memory": "2Gi"
+                            }
+                        },
+                        "securityContext": {
+                            "runAsNonRoot": true,
+                            "runAsUser": 1001
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/data/db",
+                                "name": "mongod-data"
+                            },
+                            {
+                                "mountPath": "/etc/mongodb-secrets",
+                                "name": "vcc-mongodb-keyfile",
+                                "readOnly": true
+                            },
+                            {
+                                "mountPath": "/etc/mongodb-ssl",
+                                "name": "ssl",
+                                "readOnly": true
+                            },
+                            {
+                                "mountPath": "/etc/mongodb-ssl-internal",
+                                "name": "ssl-internal",
+                                "readOnly": true
+                            },
+                            {
+                                "mountPath": "/etc/mongodb-encryption",
+                                "name": "vcc-mongodb-encryption-key",
+                                "readOnly": true
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-2fh8h",
+                                "readOnly": true
+                            }
+                        ],
+                        "workingDir": "/data/db"
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "hostname": "vcc-rs0-1",
+                "initContainers": [
+                    {
+                        "command": [
+                            "/init-entrypoint.sh"
+                        ],
+                        "image": "percona/percona-server-mongodb-operator:1.7.0",
+                        "imagePullPolicy": "Always",
+                        "name": "mongo-init",
+                        "resources": {
+                            "limits": {
+                                "cpu": "1",
+                                "memory": "2Gi"
+                            },
+                            "requests": {
+                                "cpu": "1",
+                                "memory": "2Gi"
+                            }
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/data/db",
+                                "name": "mongod-data"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-2fh8h",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "nodeName": "o-k8s-vps1",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {
+                    "fsGroup": 1001
+                },
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "subdomain": "vcc-rs0",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "mongod-data",
+                        "persistentVolumeClaim": {
+                            "claimName": "mongod-data-vcc-rs0-1"
+                        }
+                    },
+                    {
+                        "name": "vcc-mongodb-keyfile",
+                        "secret": {
+                            "defaultMode": 288,
+                            "optional": false,
+                            "secretName": "vcc-mongodb-keyfile"
+                        }
+                    },
+                    {
+                        "name": "vcc-mongodb-encryption-key",
+                        "secret": {
+                            "defaultMode": 288,
+                            "optional": false,
+                            "secretName": "vcc-mongodb-encryption-key"
+                        }
+                    },
+                    {
+                        "name": "ssl",
+                        "secret": {
+                            "defaultMode": 288,
+                            "optional": true,
+                            "secretName": "vcc-ssl"
+                        }
+                    },
+                    {
+                        "name": "ssl-internal",
+                        "secret": {
+                            "defaultMode": 288,
+                            "optional": true,
+                            "secretName": "vcc-ssl-internal"
+                        }
+                    },
+                    {
+                        "name": "kube-api-access-2fh8h",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:22:41Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:22:55Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:22:55Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:22:19Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "cri-o://2958206b291dce1f56af6284146b3ed18ace8d8183e03bae1dff9378e408453c",
+                        "image": "docker.io/percona/percona-server-mongodb:4.4.10-11",
+                        "imageID": "docker.io/percona/percona-server-mongodb@sha256:ea73a506fa02604660e3ef7d452d142a89587bb5daca15d3cc1b539a9b1000c5",
+                        "lastState": {},
+                        "name": "mongod",
+                        "ready": true,
+                        "restartCount": 0,
+                        "started": true,
+                        "state": {
+                            "running": {
+                                "startedAt": "2022-01-20T17:22:43Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.121.31",
+                "initContainerStatuses": [
+                    {
+                        "containerID": "cri-o://3a135aa497e28bbebc43b49e52f90ff012b6c71a67476ebc0330056b91139424",
+                        "image": "docker.io/percona/percona-server-mongodb-operator:1.7.0",
+                        "imageID": "docker.io/percona/percona-server-mongodb-operator@sha256:3c29f7cd2204903a56350edac6aa64a43121de7cddc8d7769a2354f8972611d3",
+                        "lastState": {},
+                        "name": "mongo-init",
+                        "ready": true,
+                        "restartCount": 0,
+                        "state": {
+                            "terminated": {
+                                "containerID": "cri-o://3a135aa497e28bbebc43b49e52f90ff012b6c71a67476ebc0330056b91139424",
+                                "exitCode": 0,
+                                "finishedAt": "2022-01-20T17:22:40Z",
+                                "reason": "Completed",
+                                "startedAt": "2022-01-20T17:22:40Z"
+                            }
+                        }
+                    }
+                ],
+                "phase": "Running",
+                "podIP": "10.72.81.105",
+                "podIPs": [
+                    {
+                        "ip": "10.72.81.105"
+                    }
+                ],
+                "qosClass": "Guaranteed",
+                "startTime": "2022-01-20T17:22:19Z"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

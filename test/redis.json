@@ -1,0 +1,1489 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "cni.projectcalico.org/containerID": "e58b0653d2dc5f950012421d857680149bdff61ecdbebbf714613206451bb5fd",
+                    "cni.projectcalico.org/podIP": "10.72.78.128/32",
+                    "cni.projectcalico.org/podIPs": "10.72.78.128/32",
+                    "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.78.128\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+                    "k8s.v1.cni.cncf.io/networks-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.78.128\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]"
+                },
+                "creationTimestamp": "2021-12-17T08:31:51Z",
+                "generateName": "redisoperator-56d6888cc-",
+                "labels": {
+                    "app": "redisoperator",
+                    "pod-template-hash": "56d6888cc"
+                },
+                "name": "redisoperator-56d6888cc-ks84t",
+                "namespace": "redis",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "ReplicaSet",
+                        "name": "redisoperator-56d6888cc",
+                        "uid": "1f14732b-1009-4dc1-957d-47a82b29ed2c"
+                    }
+                ],
+                "resourceVersion": "29757274",
+                "uid": "0634c9b6-245c-499e-b8e8-4376b947d3be"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "image": "quay.io/spotahome/redis-operator:latest",
+                        "imagePullPolicy": "IfNotPresent",
+                        "name": "app",
+                        "resources": {
+                            "limits": {
+                                "cpu": "100m",
+                                "memory": "50Mi"
+                            },
+                            "requests": {
+                                "cpu": "10m",
+                                "memory": "50Mi"
+                            }
+                        },
+                        "securityContext": {
+                            "readOnlyRootFilesystem": true,
+                            "runAsNonRoot": true,
+                            "runAsUser": 1000
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-ms4mn",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "nodeName": "o-k8s-vps2",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {},
+                "serviceAccount": "redisoperator",
+                "serviceAccountName": "redisoperator",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "kube-api-access-ms4mn",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-12-17T08:31:51Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-27T19:52:06Z",
+                        "message": "containers with unready status: [app]",
+                        "reason": "ContainersNotReady",
+                        "status": "False",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-27T19:52:06Z",
+                        "message": "containers with unready status: [app]",
+                        "reason": "ContainersNotReady",
+                        "status": "False",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-12-17T08:31:51Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "cri-o://addb2379a25126e3c309f661b5caedaa54637a6aa581e8696fc2c0cbd5a1d3cd",
+                        "image": "quay.io/spotahome/redis-operator:latest",
+                        "imageID": "quay.io/spotahome/redis-operator@sha256:e3f7ea2a24de787087d960be0d89b61fb45640782d76446b0c5e5ae627856cc7",
+                        "lastState": {
+                            "terminated": {
+                                "containerID": "cri-o://addb2379a25126e3c309f661b5caedaa54637a6aa581e8696fc2c0cbd5a1d3cd",
+                                "exitCode": 1,
+                                "finishedAt": "2022-01-27T19:52:05Z",
+                                "reason": "Error",
+                                "startedAt": "2022-01-27T19:51:59Z"
+                            }
+                        },
+                        "name": "app",
+                        "ready": false,
+                        "restartCount": 1964,
+                        "started": false,
+                        "state": {
+                            "waiting": {
+                                "message": "back-off 5m0s restarting failed container=app pod=redisoperator-56d6888cc-ks84t_redis(0634c9b6-245c-499e-b8e8-4376b947d3be)",
+                                "reason": "CrashLoopBackOff"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.121.32",
+                "phase": "Running",
+                "podIP": "10.72.78.128",
+                "podIPs": [
+                    {
+                        "ip": "10.72.78.128"
+                    }
+                ],
+                "qosClass": "Burstable",
+                "startTime": "2021-12-17T08:31:51Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "cni.projectcalico.org/containerID": "638984d55c7536c452328568a88e029f7ed4092dd39c9efa55698f6ef325f0e2",
+                    "cni.projectcalico.org/podIP": "10.72.78.141/32",
+                    "cni.projectcalico.org/podIPs": "10.72.78.141/32",
+                    "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.78.141\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+                    "k8s.v1.cni.cncf.io/networks-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.78.141\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]"
+                },
+                "creationTimestamp": "2022-01-20T17:19:44Z",
+                "generateName": "rfr-vcc-",
+                "labels": {
+                    "app.kubernetes.io/component": "redis",
+                    "app.kubernetes.io/managed-by": "redis-operator",
+                    "app.kubernetes.io/name": "vcc",
+                    "app.kubernetes.io/part-of": "redis-failover",
+                    "controller-revision-hash": "rfr-vcc-5967b4999f",
+                    "redisfailovers.databases.spotahome.com/name": "vcc",
+                    "statefulset.kubernetes.io/pod-name": "rfr-vcc-0"
+                },
+                "name": "rfr-vcc-0",
+                "namespace": "redis",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "StatefulSet",
+                        "name": "rfr-vcc",
+                        "uid": "5673a95b-1ee6-4f64-9825-eca790c14c3b"
+                    }
+                ],
+                "resourceVersion": "24584964",
+                "uid": "fed28d4f-3f4c-4f1d-834b-cf7943dbe40b"
+            },
+            "spec": {
+                "affinity": {
+                    "podAntiAffinity": {
+                        "preferredDuringSchedulingIgnoredDuringExecution": [
+                            {
+                                "podAffinityTerm": {
+                                    "labelSelector": {
+                                        "matchLabels": {
+                                            "app.kubernetes.io/component": "redis",
+                                            "app.kubernetes.io/managed-by": "redis-operator",
+                                            "app.kubernetes.io/name": "vcc",
+                                            "app.kubernetes.io/part-of": "redis-failover",
+                                            "redisfailovers.databases.spotahome.com/name": "vcc"
+                                        }
+                                    },
+                                    "topologyKey": "kubernetes.io/hostname"
+                                },
+                                "weight": 100
+                            }
+                        ]
+                    }
+                },
+                "containers": [
+                    {
+                        "command": [
+                            "redis-server",
+                            "/redis/redis.conf"
+                        ],
+                        "env": [
+                            {
+                                "name": "REDIS_PASSWORD",
+                                "valueFrom": {
+                                    "secretKeyRef": {
+                                        "key": "password",
+                                        "name": "redis-auth"
+                                    }
+                                }
+                            }
+                        ],
+                        "image": "redis:6.2.6-alpine",
+                        "imagePullPolicy": "Always",
+                        "lifecycle": {
+                            "preStop": {
+                                "exec": {
+                                    "command": [
+                                        "/bin/sh",
+                                        "/redis-shutdown/shutdown.sh"
+                                    ]
+                                }
+                            }
+                        },
+                        "livenessProbe": {
+                            "exec": {
+                                "command": [
+                                    "sh",
+                                    "-c",
+                                    "redis-cli -h $(hostname) ping"
+                                ]
+                            },
+                            "failureThreshold": 3,
+                            "initialDelaySeconds": 30,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 5
+                        },
+                        "name": "redis",
+                        "ports": [
+                            {
+                                "containerPort": 6379,
+                                "name": "redis",
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "readinessProbe": {
+                            "exec": {
+                                "command": [
+                                    "/bin/sh",
+                                    "/redis-readiness/ready.sh"
+                                ]
+                            },
+                            "failureThreshold": 3,
+                            "initialDelaySeconds": 30,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 5
+                        },
+                        "resources": {
+                            "limits": {
+                                "cpu": "400m",
+                                "memory": "500Mi"
+                            },
+                            "requests": {
+                                "cpu": "100m",
+                                "memory": "100Mi"
+                            }
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/redis",
+                                "name": "redis-config"
+                            },
+                            {
+                                "mountPath": "/redis-shutdown",
+                                "name": "redis-shutdown-config"
+                            },
+                            {
+                                "mountPath": "/redis-readiness",
+                                "name": "redis-readiness-config"
+                            },
+                            {
+                                "mountPath": "/data",
+                                "name": "data"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-z9sph",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "hostname": "rfr-vcc-0",
+                "nodeName": "o-k8s-vps2",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {
+                    "fsGroup": 1000,
+                    "runAsGroup": 1000,
+                    "runAsNonRoot": true,
+                    "runAsUser": 1000
+                },
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "subdomain": "rfr-vcc",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "data",
+                        "persistentVolumeClaim": {
+                            "claimName": "data-rfr-vcc-0"
+                        }
+                    },
+                    {
+                        "configMap": {
+                            "defaultMode": 420,
+                            "name": "rfr-vcc"
+                        },
+                        "name": "redis-config"
+                    },
+                    {
+                        "configMap": {
+                            "defaultMode": 484,
+                            "name": "rfr-s-vcc"
+                        },
+                        "name": "redis-shutdown-config"
+                    },
+                    {
+                        "configMap": {
+                            "defaultMode": 484,
+                            "name": "rfr-readiness-vcc"
+                        },
+                        "name": "redis-readiness-config"
+                    },
+                    {
+                        "name": "kube-api-access-z9sph",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:19:44Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:22:15Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:22:15Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:19:44Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "cri-o://f34740a77647fb9f9a79d4e9e3f1a9c1db87478fd4ceaec33414970ebaba6968",
+                        "image": "docker.io/library/redis:6.2.6-alpine",
+                        "imageID": "docker.io/library/redis@sha256:32f8cf4bf6412626b21273fed376182b6786b75182e4a19f90f3f57d01362fbb",
+                        "lastState": {},
+                        "name": "redis",
+                        "ready": true,
+                        "restartCount": 0,
+                        "started": true,
+                        "state": {
+                            "running": {
+                                "startedAt": "2022-01-20T17:21:41Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.121.32",
+                "phase": "Running",
+                "podIP": "10.72.78.141",
+                "podIPs": [
+                    {
+                        "ip": "10.72.78.141"
+                    }
+                ],
+                "qosClass": "Burstable",
+                "startTime": "2022-01-20T17:19:44Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "cni.projectcalico.org/containerID": "ae92016bff536101a59ea60319e3f70a176c30b6bdc61b02a5dc3ce85fb347a8",
+                    "cni.projectcalico.org/podIP": "10.72.106.239/32",
+                    "cni.projectcalico.org/podIPs": "10.72.106.239/32",
+                    "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.106.239\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+                    "k8s.v1.cni.cncf.io/networks-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.106.239\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]"
+                },
+                "creationTimestamp": "2022-01-20T17:19:34Z",
+                "generateName": "rfr-vcc-",
+                "labels": {
+                    "app.kubernetes.io/component": "redis",
+                    "app.kubernetes.io/managed-by": "redis-operator",
+                    "app.kubernetes.io/name": "vcc",
+                    "app.kubernetes.io/part-of": "redis-failover",
+                    "controller-revision-hash": "rfr-vcc-5967b4999f",
+                    "redisfailovers.databases.spotahome.com/name": "vcc",
+                    "statefulset.kubernetes.io/pod-name": "rfr-vcc-1"
+                },
+                "name": "rfr-vcc-1",
+                "namespace": "redis",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "StatefulSet",
+                        "name": "rfr-vcc",
+                        "uid": "5673a95b-1ee6-4f64-9825-eca790c14c3b"
+                    }
+                ],
+                "resourceVersion": "24583866",
+                "uid": "d01cfed6-dfaf-4444-928a-f0c2e42dacaf"
+            },
+            "spec": {
+                "affinity": {
+                    "podAntiAffinity": {
+                        "preferredDuringSchedulingIgnoredDuringExecution": [
+                            {
+                                "podAffinityTerm": {
+                                    "labelSelector": {
+                                        "matchLabels": {
+                                            "app.kubernetes.io/component": "redis",
+                                            "app.kubernetes.io/managed-by": "redis-operator",
+                                            "app.kubernetes.io/name": "vcc",
+                                            "app.kubernetes.io/part-of": "redis-failover",
+                                            "redisfailovers.databases.spotahome.com/name": "vcc"
+                                        }
+                                    },
+                                    "topologyKey": "kubernetes.io/hostname"
+                                },
+                                "weight": 100
+                            }
+                        ]
+                    }
+                },
+                "containers": [
+                    {
+                        "command": [
+                            "redis-server",
+                            "/redis/redis.conf"
+                        ],
+                        "env": [
+                            {
+                                "name": "REDIS_PASSWORD",
+                                "valueFrom": {
+                                    "secretKeyRef": {
+                                        "key": "password",
+                                        "name": "redis-auth"
+                                    }
+                                }
+                            }
+                        ],
+                        "image": "redis:6.2.6-alpine",
+                        "imagePullPolicy": "Always",
+                        "lifecycle": {
+                            "preStop": {
+                                "exec": {
+                                    "command": [
+                                        "/bin/sh",
+                                        "/redis-shutdown/shutdown.sh"
+                                    ]
+                                }
+                            }
+                        },
+                        "livenessProbe": {
+                            "exec": {
+                                "command": [
+                                    "sh",
+                                    "-c",
+                                    "redis-cli -h $(hostname) ping"
+                                ]
+                            },
+                            "failureThreshold": 3,
+                            "initialDelaySeconds": 30,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 5
+                        },
+                        "name": "redis",
+                        "ports": [
+                            {
+                                "containerPort": 6379,
+                                "name": "redis",
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "readinessProbe": {
+                            "exec": {
+                                "command": [
+                                    "/bin/sh",
+                                    "/redis-readiness/ready.sh"
+                                ]
+                            },
+                            "failureThreshold": 3,
+                            "initialDelaySeconds": 30,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 5
+                        },
+                        "resources": {
+                            "limits": {
+                                "cpu": "400m",
+                                "memory": "500Mi"
+                            },
+                            "requests": {
+                                "cpu": "100m",
+                                "memory": "100Mi"
+                            }
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/redis",
+                                "name": "redis-config"
+                            },
+                            {
+                                "mountPath": "/redis-shutdown",
+                                "name": "redis-shutdown-config"
+                            },
+                            {
+                                "mountPath": "/redis-readiness",
+                                "name": "redis-readiness-config"
+                            },
+                            {
+                                "mountPath": "/data",
+                                "name": "data"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-crsxv",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "hostname": "rfr-vcc-1",
+                "nodeName": "o-k8s-vps3",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {
+                    "fsGroup": 1000,
+                    "runAsGroup": 1000,
+                    "runAsNonRoot": true,
+                    "runAsUser": 1000
+                },
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "subdomain": "rfr-vcc",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "name": "data",
+                        "persistentVolumeClaim": {
+                            "claimName": "data-rfr-vcc-1"
+                        }
+                    },
+                    {
+                        "configMap": {
+                            "defaultMode": 420,
+                            "name": "rfr-vcc"
+                        },
+                        "name": "redis-config"
+                    },
+                    {
+                        "configMap": {
+                            "defaultMode": 484,
+                            "name": "rfr-s-vcc"
+                        },
+                        "name": "redis-shutdown-config"
+                    },
+                    {
+                        "configMap": {
+                            "defaultMode": 484,
+                            "name": "rfr-readiness-vcc"
+                        },
+                        "name": "redis-readiness-config"
+                    },
+                    {
+                        "name": "kube-api-access-crsxv",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:19:34Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:20:55Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:20:55Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:19:34Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "cri-o://11fa213730191ea55ee31716d317ad903d910e59405f70cf3eaf325eec7d8986",
+                        "image": "docker.io/library/redis:6.2.6-alpine",
+                        "imageID": "docker.io/library/redis@sha256:32f8cf4bf6412626b21273fed376182b6786b75182e4a19f90f3f57d01362fbb",
+                        "lastState": {},
+                        "name": "redis",
+                        "ready": true,
+                        "restartCount": 0,
+                        "started": true,
+                        "state": {
+                            "running": {
+                                "startedAt": "2022-01-20T17:20:20Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.121.33",
+                "phase": "Running",
+                "podIP": "10.72.106.239",
+                "podIPs": [
+                    {
+                        "ip": "10.72.106.239"
+                    }
+                ],
+                "qosClass": "Burstable",
+                "startTime": "2022-01-20T17:19:34Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "cni.projectcalico.org/containerID": "af2a19785a219f62151e0d3a76855f711499969eef5ed90879566ab8498bcf8e",
+                    "cni.projectcalico.org/podIP": "10.72.78.123/32",
+                    "cni.projectcalico.org/podIPs": "10.72.78.123/32",
+                    "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.78.123\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+                    "k8s.v1.cni.cncf.io/networks-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.78.123\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]"
+                },
+                "creationTimestamp": "2021-12-17T08:37:37Z",
+                "generateName": "rfs-vcc-5cc6bf796c-",
+                "labels": {
+                    "app.kubernetes.io/component": "sentinel",
+                    "app.kubernetes.io/managed-by": "redis-operator",
+                    "app.kubernetes.io/name": "vcc",
+                    "app.kubernetes.io/part-of": "redis-failover",
+                    "pod-template-hash": "5cc6bf796c",
+                    "redisfailovers.databases.spotahome.com/name": "vcc"
+                },
+                "name": "rfs-vcc-5cc6bf796c-g9mnr",
+                "namespace": "redis",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "ReplicaSet",
+                        "name": "rfs-vcc-5cc6bf796c",
+                        "uid": "330cc93c-dc9a-444e-bdf4-67fab5692102"
+                    }
+                ],
+                "resourceVersion": "24580363",
+                "uid": "8a878f81-6762-489a-acbe-277f6d7f644a"
+            },
+            "spec": {
+                "affinity": {
+                    "podAntiAffinity": {
+                        "preferredDuringSchedulingIgnoredDuringExecution": [
+                            {
+                                "podAffinityTerm": {
+                                    "labelSelector": {
+                                        "matchLabels": {
+                                            "app.kubernetes.io/component": "sentinel",
+                                            "app.kubernetes.io/managed-by": "redis-operator",
+                                            "app.kubernetes.io/name": "vcc",
+                                            "app.kubernetes.io/part-of": "redis-failover",
+                                            "redisfailovers.databases.spotahome.com/name": "vcc"
+                                        }
+                                    },
+                                    "topologyKey": "kubernetes.io/hostname"
+                                },
+                                "weight": 100
+                            }
+                        ]
+                    }
+                },
+                "containers": [
+                    {
+                        "command": [
+                            "redis-server",
+                            "/redis/sentinel.conf",
+                            "--sentinel"
+                        ],
+                        "image": "redis:6.2.6-alpine",
+                        "imagePullPolicy": "Always",
+                        "livenessProbe": {
+                            "exec": {
+                                "command": [
+                                    "sh",
+                                    "-c",
+                                    "redis-cli -h $(hostname) -p 26379 ping"
+                                ]
+                            },
+                            "failureThreshold": 3,
+                            "initialDelaySeconds": 30,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 5
+                        },
+                        "name": "sentinel",
+                        "ports": [
+                            {
+                                "containerPort": 26379,
+                                "name": "sentinel",
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "readinessProbe": {
+                            "exec": {
+                                "command": [
+                                    "sh",
+                                    "-c",
+                                    "redis-cli -h $(hostname) -p 26379 ping"
+                                ]
+                            },
+                            "failureThreshold": 3,
+                            "initialDelaySeconds": 30,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 5
+                        },
+                        "resources": {
+                            "limits": {
+                                "memory": "100Mi"
+                            },
+                            "requests": {
+                                "cpu": "100m",
+                                "memory": "100Mi"
+                            }
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/redis",
+                                "name": "sentinel-config-writable"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-sjhf4",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "initContainers": [
+                    {
+                        "command": [
+                            "cp",
+                            "/redis/sentinel.conf",
+                            "/redis-writable/sentinel.conf"
+                        ],
+                        "image": "redis:6.2.6-alpine",
+                        "imagePullPolicy": "Always",
+                        "name": "sentinel-config-copy",
+                        "resources": {
+                            "limits": {
+                                "cpu": "10m",
+                                "memory": "32Mi"
+                            },
+                            "requests": {
+                                "cpu": "10m",
+                                "memory": "32Mi"
+                            }
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/redis",
+                                "name": "sentinel-config"
+                            },
+                            {
+                                "mountPath": "/redis-writable",
+                                "name": "sentinel-config-writable"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-sjhf4",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "nodeName": "o-k8s-vps2",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {
+                    "fsGroup": 1000,
+                    "runAsGroup": 1000,
+                    "runAsNonRoot": true,
+                    "runAsUser": 1000
+                },
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "configMap": {
+                            "defaultMode": 420,
+                            "name": "rfs-vcc"
+                        },
+                        "name": "sentinel-config"
+                    },
+                    {
+                        "emptyDir": {},
+                        "name": "sentinel-config-writable"
+                    },
+                    {
+                        "name": "kube-api-access-sjhf4",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-12-17T08:37:48Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:18:31Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:18:31Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-12-17T08:37:37Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "cri-o://7c0dff602e5f748230fad068cda54acab7321e994b71f2c0219f60b2dd76cbbc",
+                        "image": "docker.io/library/redis:6.2.6-alpine",
+                        "imageID": "docker.io/library/redis@sha256:32f8cf4bf6412626b21273fed376182b6786b75182e4a19f90f3f57d01362fbb",
+                        "lastState": {},
+                        "name": "sentinel",
+                        "ready": true,
+                        "restartCount": 0,
+                        "started": true,
+                        "state": {
+                            "running": {
+                                "startedAt": "2022-01-20T17:18:01Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.121.32",
+                "initContainerStatuses": [
+                    {
+                        "containerID": "cri-o://71d8b44de864ff58f9c112abfa113960eb5b21e5844655744d1f441d5781ebc7",
+                        "image": "docker.io/library/redis:6.2.6-alpine",
+                        "imageID": "docker.io/library/redis@sha256:32f8cf4bf6412626b21273fed376182b6786b75182e4a19f90f3f57d01362fbb",
+                        "lastState": {},
+                        "name": "sentinel-config-copy",
+                        "ready": true,
+                        "restartCount": 0,
+                        "state": {
+                            "terminated": {
+                                "containerID": "cri-o://71d8b44de864ff58f9c112abfa113960eb5b21e5844655744d1f441d5781ebc7",
+                                "exitCode": 0,
+                                "finishedAt": "2022-01-20T17:17:58Z",
+                                "reason": "Completed",
+                                "startedAt": "2022-01-20T17:17:57Z"
+                            }
+                        }
+                    }
+                ],
+                "phase": "Running",
+                "podIP": "10.72.78.123",
+                "podIPs": [
+                    {
+                        "ip": "10.72.78.123"
+                    }
+                ],
+                "qosClass": "Burstable",
+                "startTime": "2021-12-17T08:37:37Z"
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "annotations": {
+                    "cni.projectcalico.org/containerID": "e7036e72987046d68dbff681fae82b715cd6592116b97867f5d533765443d669",
+                    "cni.projectcalico.org/podIP": "10.72.106.224/32",
+                    "cni.projectcalico.org/podIPs": "10.72.106.224/32",
+                    "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.106.224\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+                    "k8s.v1.cni.cncf.io/networks-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.72.106.224\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]"
+                },
+                "creationTimestamp": "2021-12-17T08:37:37Z",
+                "generateName": "rfs-vcc-5cc6bf796c-",
+                "labels": {
+                    "app.kubernetes.io/component": "sentinel",
+                    "app.kubernetes.io/managed-by": "redis-operator",
+                    "app.kubernetes.io/name": "vcc",
+                    "app.kubernetes.io/part-of": "redis-failover",
+                    "pod-template-hash": "5cc6bf796c",
+                    "redisfailovers.databases.spotahome.com/name": "vcc"
+                },
+                "name": "rfs-vcc-5cc6bf796c-mmrkr",
+                "namespace": "redis",
+                "ownerReferences": [
+                    {
+                        "apiVersion": "apps/v1",
+                        "blockOwnerDeletion": true,
+                        "controller": true,
+                        "kind": "ReplicaSet",
+                        "name": "rfs-vcc-5cc6bf796c",
+                        "uid": "330cc93c-dc9a-444e-bdf4-67fab5692102"
+                    }
+                ],
+                "resourceVersion": "24580446",
+                "uid": "cd1751c9-d89f-4854-9ba1-fe07188835ab"
+            },
+            "spec": {
+                "affinity": {
+                    "podAntiAffinity": {
+                        "preferredDuringSchedulingIgnoredDuringExecution": [
+                            {
+                                "podAffinityTerm": {
+                                    "labelSelector": {
+                                        "matchLabels": {
+                                            "app.kubernetes.io/component": "sentinel",
+                                            "app.kubernetes.io/managed-by": "redis-operator",
+                                            "app.kubernetes.io/name": "vcc",
+                                            "app.kubernetes.io/part-of": "redis-failover",
+                                            "redisfailovers.databases.spotahome.com/name": "vcc"
+                                        }
+                                    },
+                                    "topologyKey": "kubernetes.io/hostname"
+                                },
+                                "weight": 100
+                            }
+                        ]
+                    }
+                },
+                "containers": [
+                    {
+                        "command": [
+                            "redis-server",
+                            "/redis/sentinel.conf",
+                            "--sentinel"
+                        ],
+                        "image": "redis:6.2.6-alpine",
+                        "imagePullPolicy": "Always",
+                        "livenessProbe": {
+                            "exec": {
+                                "command": [
+                                    "sh",
+                                    "-c",
+                                    "redis-cli -h $(hostname) -p 26379 ping"
+                                ]
+                            },
+                            "failureThreshold": 3,
+                            "initialDelaySeconds": 30,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 5
+                        },
+                        "name": "sentinel",
+                        "ports": [
+                            {
+                                "containerPort": 26379,
+                                "name": "sentinel",
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "readinessProbe": {
+                            "exec": {
+                                "command": [
+                                    "sh",
+                                    "-c",
+                                    "redis-cli -h $(hostname) -p 26379 ping"
+                                ]
+                            },
+                            "failureThreshold": 3,
+                            "initialDelaySeconds": 30,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 5
+                        },
+                        "resources": {
+                            "limits": {
+                                "memory": "100Mi"
+                            },
+                            "requests": {
+                                "cpu": "100m",
+                                "memory": "100Mi"
+                            }
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/redis",
+                                "name": "sentinel-config-writable"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-hqtpp",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "dnsPolicy": "ClusterFirst",
+                "enableServiceLinks": true,
+                "initContainers": [
+                    {
+                        "command": [
+                            "cp",
+                            "/redis/sentinel.conf",
+                            "/redis-writable/sentinel.conf"
+                        ],
+                        "image": "redis:6.2.6-alpine",
+                        "imagePullPolicy": "Always",
+                        "name": "sentinel-config-copy",
+                        "resources": {
+                            "limits": {
+                                "cpu": "10m",
+                                "memory": "32Mi"
+                            },
+                            "requests": {
+                                "cpu": "10m",
+                                "memory": "32Mi"
+                            }
+                        },
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/redis",
+                                "name": "sentinel-config"
+                            },
+                            {
+                                "mountPath": "/redis-writable",
+                                "name": "sentinel-config-writable"
+                            },
+                            {
+                                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                                "name": "kube-api-access-hqtpp",
+                                "readOnly": true
+                            }
+                        ]
+                    }
+                ],
+                "nodeName": "o-k8s-vps3",
+                "preemptionPolicy": "PreemptLowerPriority",
+                "priority": 0,
+                "restartPolicy": "Always",
+                "schedulerName": "default-scheduler",
+                "securityContext": {
+                    "fsGroup": 1000,
+                    "runAsGroup": 1000,
+                    "runAsNonRoot": true,
+                    "runAsUser": 1000
+                },
+                "serviceAccount": "default",
+                "serviceAccountName": "default",
+                "terminationGracePeriodSeconds": 30,
+                "tolerations": [
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/not-ready",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    },
+                    {
+                        "effect": "NoExecute",
+                        "key": "node.kubernetes.io/unreachable",
+                        "operator": "Exists",
+                        "tolerationSeconds": 300
+                    }
+                ],
+                "volumes": [
+                    {
+                        "configMap": {
+                            "defaultMode": 420,
+                            "name": "rfs-vcc"
+                        },
+                        "name": "sentinel-config"
+                    },
+                    {
+                        "emptyDir": {},
+                        "name": "sentinel-config-writable"
+                    },
+                    {
+                        "name": "kube-api-access-hqtpp",
+                        "projected": {
+                            "defaultMode": 420,
+                            "sources": [
+                                {
+                                    "serviceAccountToken": {
+                                        "expirationSeconds": 3607,
+                                        "path": "token"
+                                    }
+                                },
+                                {
+                                    "configMap": {
+                                        "items": [
+                                            {
+                                                "key": "ca.crt",
+                                                "path": "ca.crt"
+                                            }
+                                        ],
+                                        "name": "kube-root-ca.crt"
+                                    }
+                                },
+                                {
+                                    "downwardAPI": {
+                                        "items": [
+                                            {
+                                                "fieldRef": {
+                                                    "apiVersion": "v1",
+                                                    "fieldPath": "metadata.namespace"
+                                                },
+                                                "path": "namespace"
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "conditions": [
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:18:01Z",
+                        "status": "True",
+                        "type": "Initialized"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:18:40Z",
+                        "status": "True",
+                        "type": "Ready"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2022-01-20T17:18:40Z",
+                        "status": "True",
+                        "type": "ContainersReady"
+                    },
+                    {
+                        "lastProbeTime": null,
+                        "lastTransitionTime": "2021-12-17T08:37:37Z",
+                        "status": "True",
+                        "type": "PodScheduled"
+                    }
+                ],
+                "containerStatuses": [
+                    {
+                        "containerID": "cri-o://f2330a6fad5d2c67efb4a5595ceb061c584b1fbbb51cd94931ee45148c6be26e",
+                        "image": "docker.io/library/redis:6.2.6-alpine",
+                        "imageID": "docker.io/library/redis@sha256:32f8cf4bf6412626b21273fed376182b6786b75182e4a19f90f3f57d01362fbb",
+                        "lastState": {},
+                        "name": "sentinel",
+                        "ready": true,
+                        "restartCount": 0,
+                        "started": true,
+                        "state": {
+                            "running": {
+                                "startedAt": "2022-01-20T17:18:03Z"
+                            }
+                        }
+                    }
+                ],
+                "hostIP": "192.168.121.33",
+                "initContainerStatuses": [
+                    {
+                        "containerID": "cri-o://f7b7cfaedc0c2cf907d530597a2acba20723edce8fb91a8c36279ecf1eee2963",
+                        "image": "docker.io/library/redis:6.2.6-alpine",
+                        "imageID": "docker.io/library/redis@sha256:32f8cf4bf6412626b21273fed376182b6786b75182e4a19f90f3f57d01362fbb",
+                        "lastState": {},
+                        "name": "sentinel-config-copy",
+                        "ready": true,
+                        "restartCount": 0,
+                        "state": {
+                            "terminated": {
+                                "containerID": "cri-o://f7b7cfaedc0c2cf907d530597a2acba20723edce8fb91a8c36279ecf1eee2963",
+                                "exitCode": 0,
+                                "finishedAt": "2022-01-20T17:18:00Z",
+                                "reason": "Completed",
+                                "startedAt": "2022-01-20T17:18:00Z"
+                            }
+                        }
+                    }
+                ],
+                "phase": "Running",
+                "podIP": "10.72.106.224",
+                "podIPs": [
+                    {
+                        "ip": "10.72.106.224"
+                    }
+                ],
+                "qosClass": "Burstable",
+                "startTime": "2021-12-17T08:37:37Z"
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

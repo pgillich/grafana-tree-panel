@@ -81,13 +81,13 @@ export const TreePanel: FC<Props> = ({ options, data, width, height }) => {
   );
 };
 
-const jsonMapReplacer = (_key: string, value: any): any => {
+function jsonMapReplacer(_key: string, value: any): any {
   if (value instanceof Map) {
     return Array.from(value.entries());
   } else {
     return value;
   }
-};
+}
 
 function orderValues(orderLevels: TreeLevelOrderMode) {
   return (valuesIterator: IterableIterator<DataItem>): DataItem[] => {
@@ -104,7 +104,7 @@ function orderValues(orderLevels: TreeLevelOrderMode) {
 
 function buildTreeData(options: TreeOptions, series: DataFrame[]) {
   const name = options.rootName;
-  let treeFields = options.treeFields.split('\n');
+  const treeFields = options.treeFields.split('\n');
   const rootId = 'R';
   let rows: DataItem[] = [];
   series.forEach((serie) => {
@@ -128,15 +128,15 @@ function buildTreeData(options: TreeOptions, series: DataFrame[]) {
 }
 
 function childrenByField(item: DataItem, options: TreeOptions, treeFields: string[]) {
-  let treeField = treeFields[0];
-  let evalTemplate = (str: string, values: Map<string, string>) =>
+  const treeField = treeFields[0];
+  const evalTemplate = (str: string, values: Map<string, string>) =>
     str.replace(/\${(.*?)}/g, (x, g) => String(values.get(String(g))));
 
   if (treeFields.length === 1) {
     let itemIdx = 0;
     item.rows.forEach((child) => {
-      let key = evalTemplate(treeField, child.values);
-      let childId = item.id + idSep + correctId(key) + idSep + String(itemIdx++);
+      const key = evalTemplate(treeField, child.values);
+      const childId = item.id + idSep + correctId(key) + idSep + String(itemIdx++);
       item.groups.set(key, {
         id: childId,
         text: key,
@@ -152,8 +152,8 @@ function childrenByField(item: DataItem, options: TreeOptions, treeFields: strin
 
   let itemIdx = 0;
   item.rows.forEach((child) => {
-    let key = evalTemplate(treeField, child.values);
-    let childId = item.id + idSep + correctId(key) + idSep + String(itemIdx++);
+    const key = evalTemplate(treeField, child.values);
+    const childId = item.id + idSep + correctId(key) + idSep + String(itemIdx++);
     if (!item.groups.has(key)) {
       item.groups.set(key, {
         id: childId,
@@ -205,14 +205,14 @@ function getRows(fields: Field[]): DataItem[] {
   return rows;
 }
 
-const stringTree = function (item: DataItem, indent: string, showId: boolean): string {
+function stringTree(item: DataItem, indent: string, showId: boolean): string {
   let stringItem = (showId ? indent + item.id + '\n' : '') + indent + item.text + '\n';
   item.groups.forEach((child) => {
     stringItem += stringTree(child, indent + '  ', showId);
   });
 
   return stringItem;
-};
+}
 
 /*
 https://www.w3.org/TR/html4/types.html#type-name
@@ -222,5 +222,3 @@ letters, digits ([0-9]), hyphens ("-"), underscores ("_"), colons (":"), and per
 export function correctId(id: string): string {
   return id.replace(/[^A-Z^a-z^0-9^\-^_^:^.]/g, '_');
 }
-
-//export default TreePanel;

@@ -1,4 +1,4 @@
-import React /*, { ReactElement }*/ from 'react';
+import React from 'react';
 import { configure, HTMLAttributes, mount, ReactWrapper } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import fs from 'fs';

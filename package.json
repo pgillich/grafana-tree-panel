@@ -1,6 +1,6 @@
 {
   "name": "pgillich-tree-panel",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "",
   "scripts": {
     "build": "grafana-toolkit plugin:build --preserveConsole",

@@ -5,10 +5,10 @@
   "id": "pgillich-tree-panel",
   "state": "beta",
   "info": {
-    "description": "Tree View for JSON API datasource. It can show JSON REST API responses, for example: Kubernetes",
+    "description": "Tree View for JSON API datasource. It can show JSON REST API responses, for example: Kubernetes API",
     "author": {
       "name": "Peter Gillich",
-      "url": "https://www.linkedin.com/in/petergillich/"
+      "url": "https://github.com/pgillich/"
     },
     "keywords": [
       "grafana",

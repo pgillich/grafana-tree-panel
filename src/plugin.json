@@ -42,7 +42,16 @@
         "url": "https://github.com/pgillich/grafana-tree-panel/blob/master/LICENSE"
       }
     ],
-    "screenshots": [],
+    "screenshots": [
+      {
+        "name": "Panel",
+        "path": "https://github.com/pgillich/grafana-tree-panel/raw/main/images/1panel.jpg"
+      },
+      {
+        "name": "Options",
+        "path": "https://github.com/pgillich/grafana-tree-panel/raw/main/images/options.jpg"
+      }
+    ],
     "version": "%VERSION%",
     "updated": "%TODAY%"
   },

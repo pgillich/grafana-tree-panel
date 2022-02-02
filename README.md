@@ -1,6 +1,6 @@
 # Grafana Tree Panel Plugin
 
-[![Build](https://github.com/pgillich/grafana-tree-panel/workflows/CI/badge.svg)](https://github.com/pgillich/grafana-tree-panell/actions?query=workflow%3A%22CI%22)
+[![Build](https://github.com/pgillich/grafana-tree-panel/workflows/CI/badge.svg)](https://github.com/pgillich/grafana-tree-panel/actions?query=workflow%3A%22CI%22)
 
 This plugin can show a tree from records provided by a datasource. This panel is optized and tested with [JSON API](https://grafana.com/grafana/plugins/marcusolsson-json-datasource/) datasource.
 
@@ -24,7 +24,7 @@ Example JSONata expression for Kubernetes API, which substitutes the missing val
 $map(items, function($v) {{"namespace": $v.metadata.namespace, "name": $v.metadata.name, "appName": $v.metadata.labels."app.kubernetes.io/name" ? $v.metadata.labels."app.kubernetes.io/name" : ($v.metadata.labels."app" ? $v.metadata.labels."app" : "-"), "statusPhase": $v.status.phase, "containerCount": $count($v.spec.containers), "containerImage": $join($v.spec.containers[*].image, " "), "containerState": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : "-", "cluster": $serieVariable}})
 ```
 
-If Grafana runs outside of Kubernetes, a `kubectl proxy` command can create API endpoint for [JSON API](https://grafana.com/grafana/plugins/marcusolsson-json-datasource/) in order to access the cluster:
+If Grafana runs outside of the Kubernetes cluster, a `kubectl proxy` command can create API endpoint for [JSON API](https://grafana.com/grafana/plugins/marcusolsson-json-datasource/) in order to access the cluster:
 
 ```sh
 kubectl proxy --address 0.0.0.0 --accept-hosts='.*' --reject-methods=POST,PUT,PATCH -v5

@@ -16,7 +16,7 @@ import {
   Field,
   ArrayVector,
 } from '@grafana/data';
-import { TreeLevelOrderMode, TreeOptions } from './types';
+import { TreeFileldTemplateEngine, TreeLevelOrderMode, TreeOptions } from './types';
 import { TreePanel, Props, idSep } from './TreePanel';
 
 configure({ adapter: new Adapter() });
@@ -43,6 +43,7 @@ const panelPropsDefault: PanelProps = {
 };
 
 const optionsDefault = {
+  treeFieldTemplateEngine: TreeFileldTemplateEngine.Simple,
   treeFields: 'MUST_BE_SET',
   rootName: 'Pods',
   serieVariable: 'serieVariable',
@@ -60,6 +61,43 @@ describe('Data processing and panel rendering', () => {
     const options = {
       ...optionsDefault,
       treeFields: '${statusPhase}\n${namespace}\n${appName} ${name}\n${containerImage} ${containerState}',
+    } as TreeOptions;
+
+    let seriesData: Array<Field<string>> = [];
+    const len = loadSerie(seriesData, 'test/mongo.json', 'mongo', options.serieVariable, podJsonata);
+
+    const data = {
+      series: [
+        {
+          name: 'mongo.json',
+          fields: seriesData,
+          length: len,
+        },
+      ],
+      timeRange: ({} as unknown) as TimeRange,
+      state: LoadingState.Done,
+    } as PanelData;
+
+    const params: Props = {
+      ...panelPropsDefault,
+      options: options,
+      data: data,
+    };
+
+    const wrapper = mount(<TreePanel {...params} />);
+
+    const nodes = wrapper.find('.customTreeItem');
+    const nodesRendered = stringNodes(nodes, false);
+    console.log('stringNodes():\n' + nodesRendered);
+
+    expect(nodesRendered).toMatchSnapshot();
+  });
+
+  it('simple data, handlebars', () => {
+    const options = {
+      ...optionsDefault,
+      treeFieldTemplateEngine: TreeFileldTemplateEngine.Handlebars,
+      treeFields: '{{statusPhase}}\n{{namespace}}\n{{appName}} {{name}}\n{{containerImage}} {{containerState}}',
     } as TreeOptions;
 
     let seriesData: Array<Field<string>> = [];
@@ -134,10 +172,102 @@ describe('Data processing and panel rendering', () => {
     expect(nodesRendered).toMatchSnapshot();
   });
 
+  it('2 containers, handlebars', () => {
+    const options = {
+      ...optionsDefault,
+      treeFields: '{{namespace}}\n{{appName}}\n({{statusPhase}}) {{name}} [{{containerImage}}]\n{{containerState}}',
+    } as TreeOptions;
+
+    let seriesData: Array<Field<string>> = [];
+    const len = loadSerie(
+      seriesData,
+      'test/longhorn-system.json',
+      'longhorn-system',
+      options.serieVariable,
+      podJsonata
+    );
+
+    const data = {
+      series: [
+        {
+          name: 'longhorn-system.json',
+          fields: seriesData,
+          length: len,
+        },
+      ],
+      timeRange: ({} as unknown) as TimeRange,
+      state: LoadingState.Done,
+    } as PanelData;
+
+    const params: Props = {
+      ...panelPropsDefault,
+      options: options,
+      data: data,
+    };
+
+    const wrapper = mount(<TreePanel {...params} />);
+
+    const nodes = wrapper.find('.customTreeItem');
+    const nodesRendered = stringNodes(nodes, false);
+    console.log('stringNodes():\n' + nodesRendered);
+
+    expect(nodesRendered).toMatchSnapshot();
+  });
+
   it('2 series', () => {
     const options = {
       ...optionsDefault,
       treeFields: '${statusPhase}\n${namespace}\n${appName} ${name}\n${containerImage}',
+    } as TreeOptions;
+
+    let seriesDataA: Array<Field<string>> = [];
+    const lenA = loadSerie(seriesDataA, 'test/redis.json', 'redis', options.serieVariable, podJsonata);
+
+    let seriesDataB: Array<Field<string>> = [];
+    const lenB = loadSerie(
+      seriesDataB,
+      'test/rabbitmq-system.json',
+      'rabbitmq-system',
+      options.serieVariable,
+      podJsonata
+    );
+
+    const data = {
+      series: [
+        {
+          name: 'redis.json',
+          fields: seriesDataA,
+          length: lenA,
+        },
+        {
+          name: 'rabbitmq-system.json',
+          fields: seriesDataB,
+          length: lenB,
+        },
+      ],
+      timeRange: ({} as unknown) as TimeRange,
+      state: LoadingState.Done,
+    } as PanelData;
+
+    const params: Props = {
+      ...panelPropsDefault,
+      options: options,
+      data: data,
+    };
+
+    const wrapper = mount(<TreePanel {...params} />);
+
+    const nodes = wrapper.find('.customTreeItem');
+    const nodesRendered = stringNodes(nodes, false);
+    console.log('stringNodes():\n' + nodesRendered);
+
+    expect(nodesRendered).toMatchSnapshot();
+  });
+
+  it('2 series, handlebars', () => {
+    const options = {
+      ...optionsDefault,
+      treeFields: '{{statusPhase}}\n{{namespace}}\n{{appName}} {{name}}\n{{containerImage}}',
     } as TreeOptions;
 
     let seriesDataA: Array<Field<string>> = [];

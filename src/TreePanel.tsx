@@ -3,9 +3,10 @@ import { Field, PanelProps, DataFrame, GrafanaTheme2 } from '@grafana/data';
 import { TreeView, TreeItem } from '@material-ui/lab';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRighticon from '@material-ui/icons/ChevronRight';
-import { TreeOptions, TreeLevelOrderMode } from 'types';
+import { TreeOptions, TreeLevelOrderMode, TreeFileldTemplateEngine } from 'types';
 import { useStyles2 } from '@grafana/ui';
 import { css } from '@emotion/css';
+import Handlebars from 'handlebars';
 
 export interface Props extends PanelProps<TreeOptions> {}
 
@@ -18,6 +19,14 @@ interface DataItem {
 }
 
 export const idSep = ':';
+
+const treeFileldTemplateEngines = new Map<
+  TreeFileldTemplateEngine,
+  (str: string, values: Map<string, string>) => string
+>([
+  [TreeFileldTemplateEngine.Simple, evalTemplateSimple],
+  [TreeFileldTemplateEngine.Handlebars, evalTemplateHandlebars],
+]);
 
 const getStyles = (theme: GrafanaTheme2) => ({
   treeBox: css`
@@ -129,13 +138,11 @@ function buildTreeData(options: TreeOptions, series: DataFrame[]) {
 
 function childrenByField(item: DataItem, options: TreeOptions, treeFields: string[]) {
   const treeField = treeFields[0];
-  const evalTemplate = (str: string, values: Map<string, string>) =>
-    str.replace(/\${(.*?)}/g, (x, g) => String(values.get(String(g))));
 
   if (treeFields.length === 1) {
     let itemIdx = 0;
     item.rows.forEach((child) => {
-      const key = evalTemplate(treeField, child.values);
+      const key = evalTemplate(options.treeFieldTemplateEngine, treeField, child.values);
       const childId = item.id + idSep + correctId(key) + idSep + String(itemIdx++);
       item.groups.set(key, {
         id: childId,
@@ -152,7 +159,7 @@ function childrenByField(item: DataItem, options: TreeOptions, treeFields: strin
 
   let itemIdx = 0;
   item.rows.forEach((child) => {
-    const key = evalTemplate(treeField, child.values);
+    const key = evalTemplate(options.treeFieldTemplateEngine, treeField, child.values);
     const childId = item.id + idSep + correctId(key) + idSep + String(itemIdx++);
     if (!item.groups.has(key)) {
       item.groups.set(key, {
@@ -175,6 +182,37 @@ function childrenByField(item: DataItem, options: TreeOptions, treeFields: strin
   });
 
   item.rows = [];
+}
+
+function evalTemplate(templateEngine: TreeFileldTemplateEngine, str: string, values: Map<string, string>): string {
+  const templateFunc = treeFileldTemplateEngines.get(templateEngine);
+  if (templateFunc === undefined) {
+    return 'Internal error: templateEngine is undefined';
+  }
+  let evaluated = '';
+
+  try {
+    evaluated = templateFunc(str, values);
+  } catch (err) {
+    evaluated = err instanceof Error ? err.message : String(err);
+  }
+
+  return evaluated;
+}
+
+function evalTemplateSimple(str: string, values: Map<string, string>): string {
+  const evalTemplate = (str: string, values: Map<string, string>) =>
+    str.replace(/\${(.*?)}/g, (x, g) => String(values.get(String(g))));
+
+  return evalTemplate(str, values);
+}
+
+function evalTemplateHandlebars(source: string, values: Map<string, string>): string {
+  var template = Handlebars.compile(source, {
+    noEscape: true,
+  });
+
+  return template(Object.fromEntries(values));
 }
 
 function getRows(fields: Field[]): DataItem[] {

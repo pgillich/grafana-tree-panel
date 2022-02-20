@@ -72,6 +72,14 @@ exports[`Data processing and panel rendering 2 containers 1`] = `
              {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:18:02Z\\"}}"
 `;
 
+exports[`Data processing and panel rendering 2 containers, handlebars 1`] = `
+"Pods (29)
+  {{namespace}} (29)
+    {{appName}} (29)
+      ({{statusPhase}}) {{name}} [{{containerImage}}] (29)
+        {{containerState}}"
+`;
+
 exports[`Data processing and panel rendering 2 series 1`] = `
 "Pods (9)
   Pending (1)
@@ -99,7 +107,33 @@ exports[`Data processing and panel rendering 2 series 1`] = `
          redis:6.2.6-alpine"
 `;
 
+exports[`Data processing and panel rendering 2 series, handlebars 1`] = `
+"Pods (9)
+  {{statusPhase}} (9)
+    {{namespace}} (9)
+      {{appName}} {{name}} (9)
+        {{containerImage}}"
+`;
+
 exports[`Data processing and panel rendering simple data 1`] = `
+"Pods (5)
+  Failed (1)
+    mongo (1)
+      prometheus-mongodb-exporter mongodb-exporter-prometheus-mongodb-exporter-test-connection (1)
+                   busybox {\\"terminated\\":{\\"containerID\\":\\"cri-o://5a762a4d71092cc2cb4e059240997ca747fdfcecc5ddbc9568a2a2b1a1d4985e\\",\\"exitCode\\":1,\\"finishedAt\\":\\"2021-12-17T08:52:19Z\\",\\"reason\\":\\"Error\\",\\"startedAt\\":\\"2021-12-17T08:52:18Z\\"}}
+  Running (4)
+    mongo (4)
+      - percona-server-mongodb-operator-fcc5c8d6-sqb8m (1)
+             percona/percona-server-mongodb-operator:1.10.0 {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:18Z\\"}}
+      percona-server-mongodb vcc-rs0-0 (1)
+             percona/percona-server-mongodb:4.4.10-11 {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:22:07Z\\"}}
+      percona-server-mongodb vcc-rs0-1 (1)
+             percona/percona-server-mongodb:4.4.10-11 {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:22:43Z\\"}}
+      prometheus-mongodb-exporter mongodb-exporter-prometheus-mongodb-exporter-6dcdd8c8fc-zqffr (1)
+             ssheehy/mongodb-exporter:0.10.0 {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:55Z\\"}}"
+`;
+
+exports[`Data processing and panel rendering simple data, handlebars 1`] = `
 "Pods (5)
   Failed (1)
     mongo (1)

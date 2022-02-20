@@ -3,8 +3,14 @@ export enum TreeLevelOrderMode {
   Desc = 'desc',
 }
 
+export enum TreeFileldTemplateEngine {
+  Simple = 'simple',
+  Handlebars = 'handlebars',
+}
+
 export interface TreeOptions {
   rootName: string;
+  treeFieldTemplateEngine: TreeFileldTemplateEngine;
   treeFields: string;
   serieVariable: string;
   expandLevel: number;

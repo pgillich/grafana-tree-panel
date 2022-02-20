@@ -1,5 +1,5 @@
 import { PanelPlugin } from '@grafana/data';
-import { TreeOptions, TreeLevelOrderMode } from './types';
+import { TreeOptions, TreeLevelOrderMode, TreeFileldTemplateEngine } from './types';
 import { TreePanel } from './TreePanel';
 
 export const plugin = new PanelPlugin<TreeOptions>(TreePanel).setPanelOptions((builder) => {
@@ -9,6 +9,18 @@ export const plugin = new PanelPlugin<TreeOptions>(TreePanel).setPanelOptions((b
       name: 'Tree root name',
       description: '1 line',
       defaultValue: 'Root',
+    })
+    .addSelect({
+      path: `treeFieldTemplateEngine`,
+      name: 'Field template engine',
+      description: '',
+      defaultValue: TreeFileldTemplateEngine.Simple,
+      settings: {
+        options: [
+          { value: TreeFileldTemplateEngine.Simple, label: 'Simple, ${field}' },
+          { value: TreeFileldTemplateEngine.Handlebars, label: 'Handlebars, {{field}}' },
+        ],
+      },
     })
     .addTextInput({
       path: 'treeFields',

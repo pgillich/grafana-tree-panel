@@ -1,0 +1,202 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "creationTimestamp": "2022-02-17T12:28:11Z",
+        "generateName": "my-nginx-5997694d7b-",
+        "labels": {
+            "app": "my-nginx",
+            "pod-template-hash": "5997694d7b"
+        },
+        "name": "my-nginx-5997694d7b-vfvff",
+        "namespace": "default",
+        "ownerReferences": [
+            {
+                "apiVersion": "apps/v1",
+                "blockOwnerDeletion": true,
+                "controller": true,
+                "kind": "ReplicaSet",
+                "name": "my-nginx-5997694d7b",
+                "uid": "59f867cd-6528-4324-94eb-4f05513b3047"
+            }
+        ],
+        "resourceVersion": "8038",
+        "uid": "ca2a8960-9f0e-49eb-b133-2babb387a241"
+    },
+    "spec": {
+        "containers": [
+            {
+                "image": "nginx:latest",
+                "imagePullPolicy": "Always",
+                "name": "nginx",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-b4kdw",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "initContainers": [
+            {
+                "image": "busybox:latest",
+                "imagePullPolicy": "Always",
+                "name": "busybox",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-b4kdw",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "nodeName": "demo-worker",
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "readinessGates": [
+            {
+                "conditionType": "www.example.com/feature-1"
+            }
+        ],
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/not-ready",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/unreachable",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            }
+        ],
+        "volumes": [
+            {
+                "name": "kube-api-access-b4kdw",
+                "projected": {
+                    "defaultMode": 420,
+                    "sources": [
+                        {
+                            "serviceAccountToken": {
+                                "expirationSeconds": 3607,
+                                "path": "token"
+                            }
+                        },
+                        {
+                            "configMap": {
+                                "items": [
+                                    {
+                                        "key": "ca.crt",
+                                        "path": "ca.crt"
+                                    }
+                                ],
+                                "name": "kube-root-ca.crt"
+                            }
+                        },
+                        {
+                            "downwardAPI": {
+                                "items": [
+                                    {
+                                        "fieldRef": {
+                                            "apiVersion": "v1",
+                                            "fieldPath": "metadata.namespace"
+                                        },
+                                        "path": "namespace"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-17T12:28:11Z",
+                "message": "containers with incomplete status: [busybox]",
+                "reason": "ContainersNotInitialized",
+                "status": "False",
+                "type": "Initialized"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-17T12:28:11Z",
+                "message": "containers with unready status: [nginx]",
+                "reason": "ContainersNotReady",
+                "status": "False",
+                "type": "Ready"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-17T12:28:11Z",
+                "message": "containers with unready status: [nginx]",
+                "reason": "ContainersNotReady",
+                "status": "False",
+                "type": "ContainersReady"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-17T12:28:11Z",
+                "status": "True",
+                "type": "PodScheduled"
+            }
+        ],
+        "containerStatuses": [
+            {
+                "image": "nginx:latest",
+                "imageID": "",
+                "lastState": {},
+                "name": "nginx",
+                "ready": false,
+                "restartCount": 0,
+                "started": false,
+                "state": {
+                    "waiting": {
+                        "reason": "PodInitializing"
+                    }
+                }
+            }
+        ],
+        "hostIP": "172.18.0.3",
+        "initContainerStatuses": [
+            {
+                "image": "busybox:latest",
+                "imageID": "",
+                "lastState": {},
+                "name": "busybox",
+                "ready": false,
+                "restartCount": 0,
+                "state": {
+                    "waiting": {
+                        "reason": "PodInitializing"
+                    }
+                }
+            }
+        ],
+        "phase": "Pending",
+        "qosClass": "BestEffort",
+        "startTime": "2022-02-17T12:28:11Z"
+    }
+}
+

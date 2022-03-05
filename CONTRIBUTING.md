@@ -25,10 +25,10 @@ services:
       - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=pgillich-tree-panel
 ```
 
-Above should be added to a `docker-compose.yml`, see example environment here: <https://github.com/pgillich/dockprom>. After running `yarn build`, Below command restarts the Grafana container:
+Above should be added to a `docker-compose.yml`, see example environment here: <https://github.com/stefanprodan/dockprom>. After running `yarn build` or `yarn dev`, Below command restarts the Grafana container:
 
 ```sh
-docker-compose stop grafana && docker rm -fv grafana && docker-compose up -d grafana
+docker-compose stop grafana && docker rm -f grafana && docker-compose up -d grafana
 ```
 
 ### Kubernetes
@@ -38,10 +38,26 @@ It's possible to install a local Kubernetes on a laptop with JSON API and this p
 * <https://github.com/pgillich/grafana-kubernetes>
 * <https://github.com/pgillich/kind-on-dev>
 
-Below command generates <https://github.com/pgillich/kind-on-dev/blob/main/pgillich-tree-panel.yaml> file:
+After `yarn build` or `yarn dev`, below command copies the package files to the Grafana container and restarts it:
 
 ```sh
-kubectl create configmap --dry-run=client pgillich-tree-panel --from-file dist -n monitoring -o yaml >/tmp/pgillich-tree-panel.yaml
+GRAFANA_POD=$(kubectl get pod -n monitoring -l 'app.kubernetes.io/name=grafana' -o name | sed 's#^pod/##g'); kubectl exec -n monitoring ${GRAFANA_POD} -c grafana -- /bin/sh -c 'rm -rf /var/lib/grafana/plugins/pgillich-tree-panel/*' kubectl cp ./dist -n monitoring -c grafana ${GRAFANA_POD}:/var/lib/grafana/plugins/pgillich-tree-panel; kubectl exec -n monitoring ${GRAFANA_POD} -c grafana -- /bin/sh -c 'ps -ef; kill 1'
 ```
 
-It's not a whole package: the `img` directory is missing.
+The container restart takes a few seconds, which can be checked by below command:
+
+```sh
+GRAFANA_POD=$(kubectl get pod -n monitoring -l 'app.kubernetes.io/name=grafana' -o name | sed 's#^pod/##g'); kubectl exec -n monitoring ${GRAFANA_POD} -c grafana -- /bin/sh -c 'ps -ef'
+```
+
+After restart, the page must be refreshed.
+
+### Fake JSON server
+
+For testing purposes, a fake JSON server can be setup, for example: <https://github.com/typicode/json-server>.
+
+Below example starts a fake JSON server from a sample JSON directory:
+
+```sh
+touch /tmp/db.json; json-server --host '0.0.0.0' --static ./test/tmp/ /tmp/db.json
+```

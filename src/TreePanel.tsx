@@ -3,10 +3,12 @@ import { Field, PanelProps, DataFrame, GrafanaTheme2 } from '@grafana/data';
 import { TreeView, TreeItem } from '@material-ui/lab';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRighticon from '@material-ui/icons/ChevronRight';
-import { TreeOptions, TreeLevelOrderMode, TreeFileldTemplateEngine } from 'types';
 import { useStyles2 } from '@grafana/ui';
 import { css } from '@emotion/css';
 import Handlebars from 'handlebars';
+import { TreeOptions, TreeLevelOrderMode, TreeFileldTemplateEngine } from 'types';
+import { ObjectSerializer, V1Pod } from '@kubernetes/client-node';
+import { printPod } from 'printers';
 
 export interface Props extends PanelProps<TreeOptions> {}
 
@@ -37,6 +39,8 @@ const getStyles = (theme: GrafanaTheme2) => ({
 });
 
 export const TreePanel: FC<Props> = ({ options, data, width, height }) => {
+  Handlebars.registerHelper('printPodColumn', printPodColumn);
+
   if (!data.series || data.series.length === 0) {
     throw 'no data';
   }
@@ -215,6 +219,19 @@ function evalTemplateHandlebars(source: string, values: Map<string, string>): st
   return template(Object.fromEntries(values));
 }
 
+export function printPodColumn(jsonText: string, column: string): string {
+  var pod: V1Pod;
+  try {
+    pod = ObjectSerializer.deserialize(JSON.parse(jsonText), 'V1Pod');
+  } catch (err) {
+    return err instanceof Error ? err.message : String(err);
+  }
+
+  const row = printPod(pod, new Date());
+
+  return row.get(column) === undefined ? '' : String(row.get(column));
+}
+
 function getRows(fields: Field[]): DataItem[] {
   let rows: DataItem[] = [];
   let len = 0;
@@ -227,7 +244,16 @@ function getRows(fields: Field[]): DataItem[] {
   for (let i = 0; i < len; i++) {
     let rowValues = new Map<string, string>();
     fields.forEach((field) => {
-      const value = String(field.values.get(i));
+      let value = field.values.get(i);
+      if (typeof field.values.get(i) === 'object') {
+        try {
+          value = JSON.stringify(field.values.get(i));
+        } catch (err) {
+          value = err instanceof Error ? err.message : String(err) + ': ' + String(value);
+        }
+      } else {
+        value = String(value);
+      }
       rowValues.set(field.name, value);
     });
 

@@ -1,0 +1,572 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "annotations": {
+            "cni.projectcalico.org/containerID": "e91ba740837e3a18f9af85a4967e26195ecd49d4c13d2d667f727b709fcf32f2",
+            "cni.projectcalico.org/podIP": "10.92.124.5/32",
+            "cni.projectcalico.org/podIPs": "10.92.124.5/32",
+            "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.92.124.5\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n},{\n    \"name\": \"mongo/istio-cni\",\n    \"dns\": {}\n}]",
+            "k8s.v1.cni.cncf.io/networks": "istio-cni",
+            "k8s.v1.cni.cncf.io/networks-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.92.124.5\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n},{\n    \"name\": \"mongo/istio-cni\",\n    \"dns\": {}\n}]",
+            "kubectl.kubernetes.io/default-container": "percona-server-mongodb-operator",
+            "kubectl.kubernetes.io/default-logs-container": "percona-server-mongodb-operator",
+            "kubectl.kubernetes.io/restartedAt": "2021-10-07T12:43:32+02:00",
+            "prometheus.io/path": "/stats/prometheus",
+            "prometheus.io/port": "15020",
+            "prometheus.io/scrape": "true",
+            "sidecar.istio.io/interceptionMode": "REDIRECT",
+            "sidecar.istio.io/status": "{\"initContainers\":[\"istio-validation\"],\"containers\":[\"istio-proxy\"],\"volumes\":[\"istio-envoy\",\"istio-data\",\"istio-podinfo\",\"istio-token\",\"istiod-ca-cert\"],\"imagePullSecrets\":null,\"revision\":\"default\"}",
+            "traffic.sidecar.istio.io/excludeInboundPorts": "15020",
+            "traffic.sidecar.istio.io/includeInboundPorts": "*",
+            "traffic.sidecar.istio.io/includeOutboundIPRanges": "*"
+        },
+        "creationTimestamp": "2021-11-08T15:17:29Z",
+        "deletionGracePeriodSeconds": 30,
+        "deletionTimestamp": "2022-02-01T08:20:28Z",
+        "generateName": "percona-server-mongodb-operator-7d76d4844d-",
+        "labels": {
+            "name": "percona-server-mongodb-operator",
+            "pod-template-hash": "7d76d4844d",
+            "security.istio.io/tlsMode": "istio",
+            "service.istio.io/canonical-name": "percona-server-mongodb-operator",
+            "service.istio.io/canonical-revision": "latest"
+        },
+        "name": "percona-server-mongodb-operator-7d76d4844d-2wjwv",
+        "namespace": "mongo",
+        "ownerReferences": [
+            {
+                "apiVersion": "apps/v1",
+                "blockOwnerDeletion": true,
+                "controller": true,
+                "kind": "ReplicaSet",
+                "name": "percona-server-mongodb-operator-7d76d4844d",
+                "uid": "c34bba94-d091-4ed6-91e6-3eb4a4919595"
+            }
+        ],
+        "resourceVersion": "195136015",
+        "uid": "25859a0e-4eac-434c-9aaf-f5270a32d8ec"
+    },
+    "spec": {
+        "containers": [
+            {
+                "command": [
+                    "percona-server-mongodb-operator"
+                ],
+                "env": [
+                    {
+                        "name": "WATCH_NAMESPACE",
+                        "valueFrom": {
+                            "fieldRef": {
+                                "apiVersion": "v1",
+                                "fieldPath": "metadata.namespace"
+                            }
+                        }
+                    },
+                    {
+                        "name": "POD_NAME",
+                        "valueFrom": {
+                            "fieldRef": {
+                                "apiVersion": "v1",
+                                "fieldPath": "metadata.name"
+                            }
+                        }
+                    },
+                    {
+                        "name": "OPERATOR_NAME",
+                        "value": "percona-server-mongodb-operator"
+                    },
+                    {
+                        "name": "RESYNC_PERIOD",
+                        "value": "5s"
+                    },
+                    {
+                        "name": "LOG_VERBOSE",
+                        "value": "false"
+                    }
+                ],
+                "image": "percona/percona-server-mongodb-operator:1.10.0",
+                "imagePullPolicy": "Always",
+                "name": "percona-server-mongodb-operator",
+                "ports": [
+                    {
+                        "containerPort": 60000,
+                        "name": "metrics",
+                        "protocol": "TCP"
+                    }
+                ],
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-bbcgs",
+                        "readOnly": true
+                    }
+                ]
+            },
+            {
+                "args": [
+                    "proxy",
+                    "sidecar",
+                    "--domain",
+                    "$(POD_NAMESPACE).svc.cluster.local",
+                    "--proxyLogLevel=warning",
+                    "--proxyComponentLogLevel=misc:error",
+                    "--log_output_level=default:info",
+                    "--concurrency",
+                    "2"
+                ],
+                "env": [
+                    {
+                        "name": "JWT_POLICY",
+                        "value": "third-party-jwt"
+                    },
+                    {
+                        "name": "PILOT_CERT_PROVIDER",
+                        "value": "istiod"
+                    },
+                    {
+                        "name": "CA_ADDR",
+                        "value": "istiod.istio-system.svc:15012"
+                    },
+                    {
+                        "name": "POD_NAME",
+                        "valueFrom": {
+                            "fieldRef": {
+                                "apiVersion": "v1",
+                                "fieldPath": "metadata.name"
+                            }
+                        }
+                    },
+                    {
+                        "name": "POD_NAMESPACE",
+                        "valueFrom": {
+                            "fieldRef": {
+                                "apiVersion": "v1",
+                                "fieldPath": "metadata.namespace"
+                            }
+                        }
+                    },
+                    {
+                        "name": "INSTANCE_IP",
+                        "valueFrom": {
+                            "fieldRef": {
+                                "apiVersion": "v1",
+                                "fieldPath": "status.podIP"
+                            }
+                        }
+                    },
+                    {
+                        "name": "SERVICE_ACCOUNT",
+                        "valueFrom": {
+                            "fieldRef": {
+                                "apiVersion": "v1",
+                                "fieldPath": "spec.serviceAccountName"
+                            }
+                        }
+                    },
+                    {
+                        "name": "HOST_IP",
+                        "valueFrom": {
+                            "fieldRef": {
+                                "apiVersion": "v1",
+                                "fieldPath": "status.hostIP"
+                            }
+                        }
+                    },
+                    {
+                        "name": "PROXY_CONFIG",
+                        "value": "{}\n"
+                    },
+                    {
+                        "name": "ISTIO_META_POD_PORTS",
+                        "value": "[\n    {\"name\":\"metrics\",\"containerPort\":60000,\"protocol\":\"TCP\"}\n]"
+                    },
+                    {
+                        "name": "ISTIO_META_APP_CONTAINERS",
+                        "value": "percona-server-mongodb-operator"
+                    },
+                    {
+                        "name": "ISTIO_META_CLUSTER_ID",
+                        "value": "Kubernetes"
+                    },
+                    {
+                        "name": "ISTIO_META_INTERCEPTION_MODE",
+                        "value": "REDIRECT"
+                    },
+                    {
+                        "name": "ISTIO_META_WORKLOAD_NAME",
+                        "value": "percona-server-mongodb-operator"
+                    },
+                    {
+                        "name": "ISTIO_META_OWNER",
+                        "value": "kubernetes://apis/apps/v1/namespaces/mongo/deployments/percona-server-mongodb-operator"
+                    },
+                    {
+                        "name": "ISTIO_META_MESH_ID",
+                        "value": "cluster.local"
+                    },
+                    {
+                        "name": "TRUST_DOMAIN",
+                        "value": "cluster.local"
+                    }
+                ],
+                "image": "docker.io/istio/proxyv2:1.11.3",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "istio-proxy",
+                "ports": [
+                    {
+                        "containerPort": 15090,
+                        "name": "http-envoy-prom",
+                        "protocol": "TCP"
+                    }
+                ],
+                "readinessProbe": {
+                    "failureThreshold": 30,
+                    "httpGet": {
+                        "path": "/healthz/ready",
+                        "port": 15021,
+                        "scheme": "HTTP"
+                    },
+                    "initialDelaySeconds": 1,
+                    "periodSeconds": 2,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 3
+                },
+                "resources": {
+                    "limits": {
+                        "cpu": "2",
+                        "memory": "1Gi"
+                    },
+                    "requests": {
+                        "cpu": "100m",
+                        "memory": "128Mi"
+                    }
+                },
+                "securityContext": {
+                    "allowPrivilegeEscalation": false,
+                    "capabilities": {
+                        "drop": [
+                            "ALL"
+                        ]
+                    },
+                    "privileged": false,
+                    "readOnlyRootFilesystem": true,
+                    "runAsGroup": 1337,
+                    "runAsNonRoot": true,
+                    "runAsUser": 1337
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/istio",
+                        "name": "istiod-ca-cert"
+                    },
+                    {
+                        "mountPath": "/var/lib/istio/data",
+                        "name": "istio-data"
+                    },
+                    {
+                        "mountPath": "/etc/istio/proxy",
+                        "name": "istio-envoy"
+                    },
+                    {
+                        "mountPath": "/var/run/secrets/tokens",
+                        "name": "istio-token"
+                    },
+                    {
+                        "mountPath": "/etc/istio/pod",
+                        "name": "istio-podinfo"
+                    },
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-bbcgs",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "initContainers": [
+            {
+                "args": [
+                    "istio-iptables",
+                    "-p",
+                    "15001",
+                    "-z",
+                    "15006",
+                    "-u",
+                    "1337",
+                    "-m",
+                    "REDIRECT",
+                    "-i",
+                    "*",
+                    "-x",
+                    "",
+                    "-b",
+                    "*",
+                    "-d",
+                    "15090,15021,15020",
+                    "--run-validation",
+                    "--skip-rule-apply"
+                ],
+                "image": "docker.io/istio/proxyv2:1.11.3",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "istio-validation",
+                "resources": {
+                    "limits": {
+                        "cpu": "2",
+                        "memory": "1Gi"
+                    },
+                    "requests": {
+                        "cpu": "100m",
+                        "memory": "128Mi"
+                    }
+                },
+                "securityContext": {
+                    "allowPrivilegeEscalation": false,
+                    "capabilities": {
+                        "drop": [
+                            "ALL"
+                        ]
+                    },
+                    "privileged": false,
+                    "readOnlyRootFilesystem": true,
+                    "runAsGroup": 1337,
+                    "runAsNonRoot": true,
+                    "runAsUser": 1337
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-bbcgs",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "nodeName": "hu2-vmp3",
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {
+            "fsGroup": 1337
+        },
+        "serviceAccount": "percona-server-mongodb-operator",
+        "serviceAccountName": "percona-server-mongodb-operator",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/not-ready",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/unreachable",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            }
+        ],
+        "volumes": [
+            {
+                "emptyDir": {
+                    "medium": "Memory"
+                },
+                "name": "istio-envoy"
+            },
+            {
+                "emptyDir": {},
+                "name": "istio-data"
+            },
+            {
+                "downwardAPI": {
+                    "defaultMode": 420,
+                    "items": [
+                        {
+                            "fieldRef": {
+                                "apiVersion": "v1",
+                                "fieldPath": "metadata.labels"
+                            },
+                            "path": "labels"
+                        },
+                        {
+                            "fieldRef": {
+                                "apiVersion": "v1",
+                                "fieldPath": "metadata.annotations"
+                            },
+                            "path": "annotations"
+                        }
+                    ]
+                },
+                "name": "istio-podinfo"
+            },
+            {
+                "name": "istio-token",
+                "projected": {
+                    "defaultMode": 420,
+                    "sources": [
+                        {
+                            "serviceAccountToken": {
+                                "audience": "istio-ca",
+                                "expirationSeconds": 43200,
+                                "path": "istio-token"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "configMap": {
+                    "defaultMode": 420,
+                    "name": "istio-ca-root-cert"
+                },
+                "name": "istiod-ca-cert"
+            },
+            {
+                "name": "kube-api-access-bbcgs",
+                "projected": {
+                    "defaultMode": 420,
+                    "sources": [
+                        {
+                            "serviceAccountToken": {
+                                "expirationSeconds": 3607,
+                                "path": "token"
+                            }
+                        },
+                        {
+                            "configMap": {
+                                "items": [
+                                    {
+                                        "key": "ca.crt",
+                                        "path": "ca.crt"
+                                    }
+                                ],
+                                "name": "kube-root-ca.crt"
+                            }
+                        },
+                        {
+                            "downwardAPI": {
+                                "items": [
+                                    {
+                                        "fieldRef": {
+                                            "apiVersion": "v1",
+                                            "fieldPath": "metadata.namespace"
+                                        },
+                                        "path": "namespace"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2021-11-08T15:17:52Z",
+                "status": "True",
+                "type": "Initialized"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-01T08:12:06Z",
+                "status": "False",
+                "type": "Ready"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2021-11-08T15:18:57Z",
+                "status": "True",
+                "type": "ContainersReady"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2021-11-08T15:17:29Z",
+                "status": "True",
+                "type": "PodScheduled"
+            }
+        ],
+        "containerStatuses": [
+            {
+                "containerID": "cri-o://bb8286989f96956a0ddd327bd3a906a2505a8de994d99165b3e456d2a265cea2",
+                "image": "docker.io/istio/proxyv2:1.11.3",
+                "imageID": "docker.io/istio/proxyv2@sha256:28513eb3706315b26610a53e0d66b29b09a334e3164393b9a0591f34fe47a6fd",
+                "lastState": {},
+                "name": "istio-proxy",
+                "ready": true,
+                "restartCount": 0,
+                "started": true,
+                "state": {
+                    "running": {
+                        "startedAt": "2021-11-08T15:18:09Z"
+                    }
+                }
+            },
+            {
+                "containerID": "cri-o://9baf1ba2b4705dbf0fc1489d49e2ad37d6234fe611f7298161051889dc5dcf78",
+                "image": "docker.io/percona/percona-server-mongodb-operator:1.10.0",
+                "imageID": "docker.io/percona/percona-server-mongodb-operator@sha256:1b6b5dda3c9ec50128f8e4fd0a9e07feb16bb262b92f8d31f09fe19df51b069a",
+                "lastState": {
+                    "terminated": {
+                        "containerID": "cri-o://ceeec6a9e3e6c1fd3e0f2867708a75c1eac3fbcbccbd1bbbc44d4e1c9cd33d40",
+                        "exitCode": 1,
+                        "finishedAt": "2021-11-08T15:18:09Z",
+                        "reason": "Error",
+                        "startedAt": "2021-11-08T15:18:09Z"
+                    }
+                },
+                "name": "percona-server-mongodb-operator",
+                "ready": true,
+                "restartCount": 1,
+                "started": true,
+                "state": {
+                    "running": {
+                        "startedAt": "2021-11-08T15:18:56Z"
+                    }
+                }
+            }
+        ],
+        "hostIP": "10.90.2.3",
+        "initContainerStatuses": [
+            {
+                "containerID": "cri-o://2013ca13ffecdcdf4fac0d4c0594173e694bf9fb3611da790d0017e65a8d188e",
+                "image": "docker.io/istio/proxyv2:1.11.3",
+                "imageID": "docker.io/istio/proxyv2@sha256:28513eb3706315b26610a53e0d66b29b09a334e3164393b9a0591f34fe47a6fd",
+                "lastState": {},
+                "name": "istio-validation",
+                "ready": true,
+                "restartCount": 0,
+                "state": {
+                    "terminated": {
+                        "containerID": "cri-o://2013ca13ffecdcdf4fac0d4c0594173e694bf9fb3611da790d0017e65a8d188e",
+                        "exitCode": 0,
+                        "finishedAt": "2021-11-08T15:17:52Z",
+                        "reason": "Completed",
+                        "startedAt": "2021-11-08T15:17:51Z"
+                    }
+                }
+            }
+        ],
+        "phase": "Running",
+        "podIP": "10.92.124.5",
+        "podIPs": [
+            {
+                "ip": "10.92.124.5"
+            }
+        ],
+        "qosClass": "Burstable",
+        "startTime": "2021-11-08T15:17:29Z"
+    }
+}

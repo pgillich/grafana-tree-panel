@@ -17,8 +17,8 @@ export const plugin = new PanelPlugin<TreeOptions>(TreePanel).setPanelOptions((b
       defaultValue: TreeFileldTemplateEngine.Simple,
       settings: {
         options: [
-          { value: TreeFileldTemplateEngine.Simple, label: 'Simple, ${field}' },
-          { value: TreeFileldTemplateEngine.Handlebars, label: 'Handlebars, {{field}}' },
+          { value: TreeFileldTemplateEngine.Simple, label: 'Simple', description: '${field}' },
+          { value: TreeFileldTemplateEngine.Handlebars, label: 'Handlebars', description: '{{field}}' },
         ],
       },
     })

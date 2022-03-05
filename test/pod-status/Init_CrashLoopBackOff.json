@@ -1,0 +1,349 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "annotations": {
+            "cni.projectcalico.org/containerID": "16e500cf5a2ecd3355694a687563b4b8ee93497f2b4b18d0441a04d418208e9f",
+            "cni.projectcalico.org/podIP": "10.92.92.184/32",
+            "cni.projectcalico.org/podIPs": "10.92.92.184/32",
+            "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.92.92.184\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+            "k8s.v1.cni.cncf.io/networks-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.92.92.184\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+            "kubectl.kubernetes.io/default-container": "main",
+            "kubectl.kubernetes.io/restartedAt": "2021-08-12T01:12:52+02:00"
+        },
+        "creationTimestamp": "2022-02-01T08:19:59Z",
+        "generateName": "kratos-6c76994b97-",
+        "labels": {
+            "app.kubernetes.io/instance": "kratos-vf-test-int",
+            "app.kubernetes.io/name": "kratos",
+            "app.kubernetes.io/part-of": "account-vf-test-int",
+            "app.kubernetes.io/version": "latest",
+            "pod-template-hash": "6c76994b97"
+        },
+        "name": "kratos-6c76994b97-gstzr",
+        "namespace": "account-vf-test-int",
+        "ownerReferences": [
+            {
+                "apiVersion": "apps/v1",
+                "blockOwnerDeletion": true,
+                "controller": true,
+                "kind": "ReplicaSet",
+                "name": "kratos-6c76994b97",
+                "uid": "6a641784-f821-43f0-a7d2-ffc9edb8fe25"
+            }
+        ],
+        "resourceVersion": "211709611",
+        "uid": "a7845403-9a24-4d2c-b959-4d7a2e172036"
+    },
+    "spec": {
+        "containers": [
+            {
+                "args": [
+                    "serve",
+                    "-c",
+                    "/etc/config/kratos/kratos.yml"
+                ],
+                "env": [],
+                "image": "git.local:7077/product/docker/user/kratos:latest",
+                "imagePullPolicy": "Always",
+                "name": "main",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/etc/config/kratos",
+                        "name": "config"
+                    },
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-d8w8g",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": false,
+        "imagePullSecrets": [
+            {
+                "name": "gitlab-pull-secret"
+            }
+        ],
+        "initContainers": [
+            {
+                "command": [
+                    "sh",
+                    "-c",
+                    "mysql \\\n--host mysql.kratos-mysql.svc.cluster.local \\\n--port 3306 \\\n--user $MYSQL_ADMIN_USER \\\n--password=$MYSQL_ADMIN_PASSWORD \\\n--execute \"CREATE DATABASE IF NOT EXISTS \\`$DB_NAME\\` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; CREATE USER IF NOT EXISTS '$DB_USER'@'%' IDENTIFIED BY '$DB_PASSWORD'; GRANT ALL ON \\`$DB_NAME\\`.* TO '$DB_USER'@'%';\"\n"
+                ],
+                "env": [],
+                "image": "mysql:8.0",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "database-setup",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-d8w8g",
+                        "readOnly": true
+                    }
+                ]
+            },
+            {
+                "args": [
+                    "-c",
+                    "cd /config-templates \u0026\u0026 for f in ./* ; do envsubst \u003c \"$f\" \u003e \"/etc/config/kratos/$f\"  ; done"
+                ],
+                "command": [
+                    "bash"
+                ],
+                "envFrom": [
+                    {
+                        "secretRef": {
+                            "name": "vf-test-int"
+                        }
+                    }
+                ],
+                "image": "git.local:7077/product/docker/tool/k8s-init-container:latest",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "config",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/config-templates",
+                        "name": "config-templates"
+                    },
+                    {
+                        "mountPath": "/etc/config/kratos",
+                        "name": "config"
+                    },
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-d8w8g",
+                        "readOnly": true
+                    }
+                ]
+            },
+            {
+                "args": [
+                    "-c",
+                    "/etc/config/kratos/kratos.yml",
+                    "migrate",
+                    "sql",
+                    "-e",
+                    "--yes"
+                ],
+                "env": [],
+                "image": "git.local:7077/product/docker/user/kratos:latest",
+                "imagePullPolicy": "Always",
+                "name": "migrate",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/etc/config/kratos",
+                        "name": "config"
+                    },
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-d8w8g",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "nodeName": "hu2-vmp9",
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/not-ready",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/unreachable",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            }
+        ],
+        "volumes": [
+            {
+                "name": "config-templates",
+                "secret": {
+                    "defaultMode": 420,
+                    "secretName": "kratos-config"
+                }
+            },
+            {
+                "emptyDir": {
+                    "medium": "Memory"
+                },
+                "name": "config"
+            },
+            {
+                "name": "kube-api-access-d8w8g",
+                "projected": {
+                    "defaultMode": 420,
+                    "sources": [
+                        {
+                            "serviceAccountToken": {
+                                "expirationSeconds": 3607,
+                                "path": "token"
+                            }
+                        },
+                        {
+                            "configMap": {
+                                "items": [
+                                    {
+                                        "key": "ca.crt",
+                                        "path": "ca.crt"
+                                    }
+                                ],
+                                "name": "kube-root-ca.crt"
+                            }
+                        },
+                        {
+                            "downwardAPI": {
+                                "items": [
+                                    {
+                                        "fieldRef": {
+                                            "apiVersion": "v1",
+                                            "fieldPath": "metadata.namespace"
+                                        },
+                                        "path": "namespace"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-01T08:19:59Z",
+                "message": "containers with incomplete status: [database-setup config migrate]",
+                "reason": "ContainersNotInitialized",
+                "status": "False",
+                "type": "Initialized"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-01T08:19:59Z",
+                "message": "containers with unready status: [main]",
+                "reason": "ContainersNotReady",
+                "status": "False",
+                "type": "Ready"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-01T08:19:59Z",
+                "message": "containers with unready status: [main]",
+                "reason": "ContainersNotReady",
+                "status": "False",
+                "type": "ContainersReady"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-01T08:19:59Z",
+                "status": "True",
+                "type": "PodScheduled"
+            }
+        ],
+        "containerStatuses": [
+            {
+                "image": "git.local:7077/product/docker/user/kratos:latest",
+                "imageID": "",
+                "lastState": {},
+                "name": "main",
+                "ready": false,
+                "restartCount": 0,
+                "started": false,
+                "state": {
+                    "waiting": {
+                        "reason": "PodInitializing"
+                    }
+                }
+            }
+        ],
+        "hostIP": "10.90.2.9",
+        "initContainerStatuses": [
+            {
+                "containerID": "cri-o://7d5810cb22dcd6d5e35bbc2241225f3c2a1b9f7381d780c66ae7cab511ce9c69",
+                "image": "docker.io/library/mysql:8.0",
+                "imageID": "docker.io/library/mysql@sha256:516b92a7ccf2340c1a696a7ad2de1784393d0876d042cc4913bc33fb3f455a75",
+                "lastState": {
+                    "terminated": {
+                        "containerID": "cri-o://7d5810cb22dcd6d5e35bbc2241225f3c2a1b9f7381d780c66ae7cab511ce9c69",
+                        "exitCode": 1,
+                        "finishedAt": "2022-02-20T07:53:06Z",
+                        "reason": "Error",
+                        "startedAt": "2022-02-20T07:53:06Z"
+                    }
+                },
+                "name": "database-setup",
+                "ready": false,
+                "restartCount": 5345,
+                "state": {
+                    "waiting": {
+                        "message": "back-off 5m0s restarting failed container=database-setup pod=kratos-6c76994b97-gstzr_account-vf-test-int(a7845403-9a24-4d2c-b959-4d7a2e172036)",
+                        "reason": "CrashLoopBackOff"
+                    }
+                }
+            },
+            {
+                "image": "git.local:7077/product/docker/tool/k8s-init-container:latest",
+                "imageID": "",
+                "lastState": {},
+                "name": "config",
+                "ready": false,
+                "restartCount": 0,
+                "state": {
+                    "waiting": {
+                        "reason": "PodInitializing"
+                    }
+                }
+            },
+            {
+                "image": "git.local:7077/product/docker/user/kratos:latest",
+                "imageID": "",
+                "lastState": {},
+                "name": "migrate",
+                "ready": false,
+                "restartCount": 0,
+                "state": {
+                    "waiting": {
+                        "reason": "PodInitializing"
+                    }
+                }
+            }
+        ],
+        "phase": "Pending",
+        "podIP": "10.92.92.184",
+        "podIPs": [
+            {
+                "ip": "10.92.92.184"
+            }
+        ],
+        "qosClass": "BestEffort",
+        "startTime": "2022-02-01T08:19:59Z"
+    }
+}

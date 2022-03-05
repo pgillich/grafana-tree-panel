@@ -1,0 +1,324 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "annotations": {
+            "cni.projectcalico.org/containerID": "60103a366caf67f101afebc39a913c1e76e74427573848bb210fb380a6bff7ba",
+            "cni.projectcalico.org/podIP": "10.92.86.166/32",
+            "cni.projectcalico.org/podIPs": "10.92.86.166/32",
+            "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.92.86.166\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+            "k8s.v1.cni.cncf.io/networks-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.92.86.166\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+            "kubectl.kubernetes.io/default-container": "blackbox-exporter"
+        },
+        "creationTimestamp": "2022-02-01T08:20:02Z",
+        "generateName": "blackbox-exporter-6798fb5bb4-",
+        "labels": {
+            "app.kubernetes.io/component": "exporter",
+            "app.kubernetes.io/name": "blackbox-exporter",
+            "app.kubernetes.io/part-of": "kube-prometheus",
+            "app.kubernetes.io/version": "0.19.0",
+            "pod-template-hash": "6798fb5bb4"
+        },
+        "name": "blackbox-exporter-6798fb5bb4-rb6qc",
+        "namespace": "monitoring",
+        "ownerReferences": [
+            {
+                "apiVersion": "apps/v1",
+                "blockOwnerDeletion": true,
+                "controller": true,
+                "kind": "ReplicaSet",
+                "name": "blackbox-exporter-6798fb5bb4",
+                "uid": "4cbcb527-1a09-42c5-9ea5-870d9b296589"
+            }
+        ],
+        "resourceVersion": "195137643",
+        "uid": "07cd0886-7e80-415c-b839-2c0ca8c000d2"
+    },
+    "spec": {
+        "containers": [
+            {
+                "args": [
+                    "--config.file=/etc/blackbox_exporter/config.yml",
+                    "--web.listen-address=:19115"
+                ],
+                "image": "quay.io/prometheus/blackbox-exporter:v0.19.0",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "blackbox-exporter",
+                "ports": [
+                    {
+                        "containerPort": 19115,
+                        "name": "http",
+                        "protocol": "TCP"
+                    }
+                ],
+                "resources": {
+                    "limits": {
+                        "cpu": "20m",
+                        "memory": "40Mi"
+                    },
+                    "requests": {
+                        "cpu": "10m",
+                        "memory": "20Mi"
+                    }
+                },
+                "securityContext": {
+                    "runAsNonRoot": true,
+                    "runAsUser": 65534
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/etc/blackbox_exporter/",
+                        "name": "config",
+                        "readOnly": true
+                    },
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-tvmf9",
+                        "readOnly": true
+                    }
+                ]
+            },
+            {
+                "args": [
+                    "--webhook-url=http://localhost:19115/-/reload",
+                    "--volume-dir=/etc/blackbox_exporter/"
+                ],
+                "image": "jimmidyson/configmap-reload:v0.5.0",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "module-configmap-reloader",
+                "resources": {
+                    "limits": {
+                        "cpu": "20m",
+                        "memory": "40Mi"
+                    },
+                    "requests": {
+                        "cpu": "10m",
+                        "memory": "20Mi"
+                    }
+                },
+                "securityContext": {
+                    "runAsNonRoot": true,
+                    "runAsUser": 65534
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "FallbackToLogsOnError",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/etc/blackbox_exporter/",
+                        "name": "config",
+                        "readOnly": true
+                    },
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-tvmf9",
+                        "readOnly": true
+                    }
+                ]
+            },
+            {
+                "args": [
+                    "--logtostderr",
+                    "--secure-listen-address=:9115",
+                    "--tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305",
+                    "--upstream=http://127.0.0.1:19115/"
+                ],
+                "image": "quay.io/brancz/kube-rbac-proxy:v0.11.0",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "kube-rbac-proxy",
+                "ports": [
+                    {
+                        "containerPort": 9115,
+                        "name": "https",
+                        "protocol": "TCP"
+                    }
+                ],
+                "resources": {
+                    "limits": {
+                        "cpu": "20m",
+                        "memory": "40Mi"
+                    },
+                    "requests": {
+                        "cpu": "10m",
+                        "memory": "20Mi"
+                    }
+                },
+                "securityContext": {
+                    "runAsGroup": 65532,
+                    "runAsNonRoot": true,
+                    "runAsUser": 65532
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-tvmf9",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "nodeName": "hu2-vmp6",
+        "nodeSelector": {
+            "kubernetes.io/os": "linux"
+        },
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "blackbox-exporter",
+        "serviceAccountName": "blackbox-exporter",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/not-ready",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/unreachable",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            }
+        ],
+        "volumes": [
+            {
+                "configMap": {
+                    "defaultMode": 420,
+                    "name": "blackbox-exporter-configuration"
+                },
+                "name": "config"
+            },
+            {
+                "name": "kube-api-access-tvmf9",
+                "projected": {
+                    "defaultMode": 420,
+                    "sources": [
+                        {
+                            "serviceAccountToken": {
+                                "expirationSeconds": 3607,
+                                "path": "token"
+                            }
+                        },
+                        {
+                            "configMap": {
+                                "items": [
+                                    {
+                                        "key": "ca.crt",
+                                        "path": "ca.crt"
+                                    }
+                                ],
+                                "name": "kube-root-ca.crt"
+                            }
+                        },
+                        {
+                            "downwardAPI": {
+                                "items": [
+                                    {
+                                        "fieldRef": {
+                                            "apiVersion": "v1",
+                                            "fieldPath": "metadata.namespace"
+                                        },
+                                        "path": "namespace"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-01T08:20:02Z",
+                "status": "True",
+                "type": "Initialized"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-01T08:20:34Z",
+                "status": "True",
+                "type": "Ready"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-01T08:20:34Z",
+                "status": "True",
+                "type": "ContainersReady"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-01T08:20:02Z",
+                "status": "True",
+                "type": "PodScheduled"
+            }
+        ],
+        "containerStatuses": [
+            {
+                "containerID": "cri-o://9cd1b8f343ec988b7a92a166e7c81c08c37f8f92441a205a2729d22327a25a94",
+                "image": "quay.io/prometheus/blackbox-exporter:v0.19.0",
+                "imageID": "quay.io/prometheus/blackbox-exporter@sha256:94de5897eef1b3c1ba7fbfebb9af366e032c0ff915a52c0066ff2e0c1bcd2e45",
+                "lastState": {},
+                "name": "blackbox-exporter",
+                "ready": true,
+                "restartCount": 0,
+                "started": true,
+                "state": {
+                    "running": {
+                        "startedAt": "2022-02-01T08:20:30Z"
+                    }
+                }
+            },
+            {
+                "containerID": "cri-o://fe3fa2c24c0b7eef9a98b9338cc38462cd288608957d019642b0e1ae79ea8704",
+                "image": "quay.io/brancz/kube-rbac-proxy:v0.11.0",
+                "imageID": "quay.io/brancz/kube-rbac-proxy@sha256:a4f6c39b17f2ba68366c6d4e139ed18ede2ad9f3f9d5bf7477bdcbef73b43e54",
+                "lastState": {},
+                "name": "kube-rbac-proxy",
+                "ready": true,
+                "restartCount": 0,
+                "started": true,
+                "state": {
+                    "running": {
+                        "startedAt": "2022-02-01T08:20:33Z"
+                    }
+                }
+            },
+            {
+                "containerID": "cri-o://3e140c844dc696993190c404d4a626783ddc23176e6e748f76ef69b979b325c3",
+                "image": "docker.io/jimmidyson/configmap-reload:v0.5.0",
+                "imageID": "docker.io/jimmidyson/configmap-reload@sha256:904d08e9f701d3d8178cb61651dbe8edc5d08dd5895b56bdcac9e5805ea82b52",
+                "lastState": {},
+                "name": "module-configmap-reloader",
+                "ready": true,
+                "restartCount": 0,
+                "started": true,
+                "state": {
+                    "running": {
+                        "startedAt": "2022-02-01T08:20:31Z"
+                    }
+                }
+            }
+        ],
+        "hostIP": "10.90.2.6",
+        "phase": "Running",
+        "podIP": "10.92.86.166",
+        "podIPs": [
+            {
+                "ip": "10.92.86.166"
+            }
+        ],
+        "qosClass": "Burstable",
+        "startTime": "2022-02-01T08:20:02Z"
+    }
+}

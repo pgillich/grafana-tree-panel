@@ -45,3 +45,7 @@ Option descriptions can be read on the panel option editor:
 ## Example Dashboards
 
 Example dashboards can be found in [examples](https://github.com/pgillich/grafana-tree-panel/raw/main/examples).
+
+## Creating Issues
+
+Please attach sample json file(s) to the new Issue.

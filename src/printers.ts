@@ -1,4 +1,5 @@
-import { V1Pod, V1PodCondition } from '@kubernetes/client-node';
+//import { V1Pod, V1PodCondition } from '@kubernetes/client-node';
+import { V1Pod, V1PodCondition } from './kubernetes_client-node/model/models';
 
 /* printPod is a port of:
 func printPod(pod *api.Pod, options printers.GenerateOptions) ([]metav1.TableRow, error)
@@ -98,7 +99,12 @@ export function printPod(pod: V1Pod, now: Date): Map<string, string> {
         } else {
           reason = 'Init:' + container.state.terminated.reason;
         }
-        statusMessage = container.state.terminated.message;
+        statusMessage =
+          container.state.terminated.message !== undefined
+            ? `Terminated: ${container.state.terminated.message}`
+            : container.state.terminated.exitCode !== 0
+            ? `Terminated: exit(${container.state.terminated.exitCode})`
+            : undefined;
         initializing = true;
       } else if (
         container.state?.waiting !== undefined &&
@@ -107,7 +113,8 @@ export function printPod(pod: V1Pod, now: Date): Map<string, string> {
         container.state.waiting.reason !== 'PodInitializing'
       ) {
         reason = 'Init:' + container.state.waiting.reason;
-        statusMessage = container.state.waiting.message;
+        statusMessage =
+          container.state.waiting.message !== undefined ? `Waiting: ${container.state.waiting.message}` : 'Waiting';
         initializing = true;
       } else {
         reason = 'Init:' + i + '/' + pod.spec.initContainers.length;
@@ -134,17 +141,28 @@ export function printPod(pod: V1Pod, now: Date): Map<string, string> {
         }
         if (container.state?.waiting?.reason !== undefined && container.state.waiting.reason !== '') {
           reason = container.state.waiting.reason;
-          statusMessage = container.state.waiting.message;
+          statusMessage =
+            container.state.waiting.message !== undefined ? `Waiting: ${container.state.waiting.message}` : 'Waiting';
         } else if (container.state?.terminated?.reason !== undefined && container.state.terminated.reason !== '') {
           reason = container.state.terminated.reason;
-          statusMessage = container.state.terminated.message;
+          statusMessage =
+            container.state.terminated.message !== undefined
+              ? `Terminated: ${container.state.terminated.message}`
+              : container.state.terminated.exitCode !== 0
+              ? `Terminated: exit(${container.state.terminated.exitCode})`
+              : undefined;
         } else if (container.state?.terminated !== undefined && container.state.terminated.reason !== '') {
           if (container.state.terminated.signal !== undefined && container.state.terminated.signal !== 0) {
             reason = 'Signal:' + container.state.terminated.signal;
           } else {
             reason = 'ExitCode:' + container.state.terminated.exitCode;
           }
-          statusMessage = container.state.terminated.message;
+          statusMessage =
+            container.state.terminated.message !== undefined
+              ? `Terminated: ${container.state.terminated.message}`
+              : container.state.terminated.exitCode !== 0
+              ? `Terminated: exit(${container.state.terminated.exitCode})`
+              : undefined;
         } else if (container.ready && container.state?.running !== undefined) {
           hasRunning = true;
           readyContainers++;

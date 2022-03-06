@@ -12,9 +12,11 @@ export interface TreeOptions {
   rootName: string;
   treeFieldTemplateEngine: TreeFileldTemplateEngine;
   treeFields: string;
-  serieVariable: string;
+  serieColumn: string;
   expandLevel: number;
   showItemCount: boolean;
   orderLevels: TreeLevelOrderMode;
   enableConsoleLog?: boolean;
 }
+
+export declare type IntOrString = number | string;

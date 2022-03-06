@@ -20,7 +20,7 @@
                 "--runInBand",
                 "--silent=false",
                 "--verbose=true",
-                "src/printers.test.ts"
+                "src/module.test.ts"
             ],
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",

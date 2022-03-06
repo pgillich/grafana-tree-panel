@@ -1,13 +1,14 @@
 import React, { FC } from 'react';
-import { Field, PanelProps, DataFrame, GrafanaTheme2 } from '@grafana/data';
+import { Field, FieldType, PanelData, PanelProps, DataFrame, GrafanaTheme2, ArrayVector } from '@grafana/data';
 import { TreeView, TreeItem } from '@material-ui/lab';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRighticon from '@material-ui/icons/ChevronRight';
-import { useStyles2 } from '@grafana/ui';
+import { /*Field,*/ useStyles2 } from '@grafana/ui';
 import { css } from '@emotion/css';
 import Handlebars from 'handlebars';
 import { TreeOptions, TreeLevelOrderMode, TreeFileldTemplateEngine } from 'types';
-import { ObjectSerializer, V1Pod } from '@kubernetes/client-node';
+//import { ObjectSerializer, V1Pod } from '@kubernetes/client-node';
+import { ObjectSerializer, V1Pod } from './kubernetes_client-node/model/models';
 import { printPod } from 'printers';
 
 export interface Props extends PanelProps<TreeOptions> {}
@@ -47,6 +48,7 @@ export const TreePanel: FC<Props> = ({ options, data, width, height }) => {
 
   const styles = useStyles2(getStyles);
 
+  addSerieColumn(options.serieColumn, data);
   let dataItems = buildTreeData(options, data.series);
   if (options.enableConsoleLog) {
     console.log(stringTree(dataItems, '', false));
@@ -113,6 +115,23 @@ function orderValues(orderLevels: TreeLevelOrderMode) {
 
     return values;
   };
+}
+
+function addSerieColumn(columnName: string, data: PanelData) {
+  data.series.forEach((serie) => {
+    const name = serie.name === undefined || serie.name === '' ? '<none>' : serie.name;
+    let values: ArrayVector<string> = new ArrayVector<string>();
+    for (let i = 0; i < serie.length; i++) {
+      values.add(name);
+      const field: Field<string> = {
+        name: columnName,
+        config: {},
+        type: FieldType.string,
+        values: values,
+      } as Field;
+      serie.fields.push(field);
+    }
+  });
 }
 
 function buildTreeData(options: TreeOptions, series: DataFrame[]) {

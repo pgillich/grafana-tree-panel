@@ -2,7 +2,7 @@
 
 exports[`Data processing and panel rendering Rendering 2 containers 1`] = `
 "Pods (29)
-  longhorn-system (29)
+  longhorn-system.json; longhorn-system (29)
     - (9)
        (Running) engine-image-ei-fa2dfbf0-2cql6 [longhornio/longhorn-engine:v1.2.3] (1)
              {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:55Z\\"}}
@@ -74,27 +74,91 @@ exports[`Data processing and panel rendering Rendering 2 containers 1`] = `
 
 exports[`Data processing and panel rendering Rendering 2 containers, handlebars 1`] = `
 "Pods (29)
-  {{namespace}} (29)
-    {{appName}} (29)
-      ({{statusPhase}}) {{name}} [{{containerImage}}] (29)
-        {{containerState}}"
+  longhorn-system.json; longhorn-system (29)
+    - (9)
+       (Running) engine-image-ei-fa2dfbf0-2cql6 [longhornio/longhorn-engine:v1.2.3] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:55Z\\"}}
+       (Running) engine-image-ei-fa2dfbf0-8z9kj [longhornio/longhorn-engine:v1.2.3] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:54Z\\"}}
+       (Running) engine-image-ei-fa2dfbf0-lvkvx [longhornio/longhorn-engine:v1.2.3] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:19:03Z\\"}}
+       (Running) instance-manager-e-7c715a5a [longhornio/longhorn-instance-manager:v1_20211210] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:52Z\\"}}
+       (Running) instance-manager-e-e691695a [longhornio/longhorn-instance-manager:v1_20211210] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:55Z\\"}}
+       (Running) instance-manager-e-ee426bee [longhornio/longhorn-instance-manager:v1_20211210] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:19:33Z\\"}}
+       (Running) instance-manager-r-05f75ac7 [longhornio/longhorn-instance-manager:v1_20211210] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:19:33Z\\"}}
+       (Running) instance-manager-r-74c1e529 [longhornio/longhorn-instance-manager:v1_20211210] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:45Z\\"}}
+       (Running) instance-manager-r-e6aec4c8 [longhornio/longhorn-instance-manager:v1_20211210] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:52Z\\"}}
+    csi-attacher (3)
+       (Running) csi-attacher-5f46994f7-28t4p [longhornio/csi-attacher:v3.2.1] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:19:02Z\\"}}
+       (Running) csi-attacher-5f46994f7-5pc5s [longhornio/csi-attacher:v3.2.1] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:45Z\\"}}
+       (Running) csi-attacher-5f46994f7-cnnr9 [longhornio/csi-attacher:v3.2.1] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:53Z\\"}}
+    csi-provisioner (3)
+       (Running) csi-provisioner-6ccbfbf86f-qhjwm [longhornio/csi-provisioner:v2.1.2] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:19:02Z\\"}}
+       (Running) csi-provisioner-6ccbfbf86f-rn889 [longhornio/csi-provisioner:v2.1.2] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:52Z\\"}}
+       (Running) csi-provisioner-6ccbfbf86f-zjx9h [longhornio/csi-provisioner:v2.1.2] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:58Z\\"}}
+    csi-resizer (3)
+       (Running) csi-resizer-6dd8bd4c97-2k62f [longhornio/csi-resizer:v1.2.0] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:48Z\\"}}
+       (Running) csi-resizer-6dd8bd4c97-l2rwd [longhornio/csi-resizer:v1.2.0] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:19:03Z\\"}}
+       (Running) csi-resizer-6dd8bd4c97-qdx52 [longhornio/csi-resizer:v1.2.0] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:49Z\\"}}
+    csi-snapshotter (3)
+       (Running) csi-snapshotter-86f65d8bc-56nd7 [longhornio/csi-snapshotter:v3.0.3] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:19:01Z\\"}}
+       (Running) csi-snapshotter-86f65d8bc-qn6p8 [longhornio/csi-snapshotter:v3.0.3] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:58Z\\"}}
+       (Running) csi-snapshotter-86f65d8bc-wrn5k [longhornio/csi-snapshotter:v3.0.3] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:54Z\\"}}
+    longhorn-csi-plugin (3)
+        (Running) longhorn-csi-plugin-hzlbr [longhornio/csi-node-driver-registrar:v2.3.0 longhornio/longhorn-manager:v1.2.3] (1)
+                  [{\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:20:00Z\\"}},{\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:57Z\\"}}]
+        (Running) longhorn-csi-plugin-npxkc [longhornio/csi-node-driver-registrar:v2.3.0 longhornio/longhorn-manager:v1.2.3] (1)
+                  [{\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:19:34Z\\"}},{\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:22Z\\"}}]
+        (Running) longhorn-csi-plugin-nw2lv [longhornio/csi-node-driver-registrar:v2.3.0 longhornio/longhorn-manager:v1.2.3] (1)
+                  [{\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:19:23Z\\"}},{\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:16:52Z\\"}}]
+    longhorn-driver-deployer (1)
+       (Running) longhorn-driver-deployer-784546d78d-nz9qv [longhornio/longhorn-manager:v1.2.3] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:19:19Z\\"}}
+    longhorn-manager (3)
+       (Running) longhorn-manager-5cl94 [longhornio/longhorn-manager:v1.2.3] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:19:01Z\\"}}
+       (Running) longhorn-manager-9jgkt [longhornio/longhorn-manager:v1.2.3] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:21Z\\"}}
+       (Running) longhorn-manager-z4cr5 [longhornio/longhorn-manager:v1.2.3] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:53Z\\"}}
+    longhorn-ui (1)
+       (Running) longhorn-ui-9fdb94f9-w84gf [longhornio/longhorn-ui:v1.2.3] (1)
+             {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:18:02Z\\"}}"
 `;
 
 exports[`Data processing and panel rendering Rendering 2 series 1`] = `
 "Pods (9)
   Pending (1)
-    rabbitmq-system (1)
+    rabbitmq-system.json; rabbitmq-system (1)
       messaging-topology-operator messaging-topology-operator-f9c69d45b-gxmj6 (1)
          rabbitmqoperator/messaging-topology-operator:1.2.1
   Running (8)
-    rabbitmq-system (3)
+    rabbitmq-system.json; rabbitmq-system (3)
       rabbitmq-cluster-operator rabbitmq-cluster-operator-7cbf865f89-qwwwj (1)
          rabbitmqoperator/cluster-operator:1.10.0
       rabbitmq rabbitmq-server-0 (1)
          rabbitmq:3.8.26-management
       rabbitmq rabbitmq-server-1 (1)
          rabbitmq:3.8.26-management
-    redis (5)
+    redis.json; redis (5)
       redisoperator redisoperator-56d6888cc-ks84t (1)
          quay.io/spotahome/redis-operator:latest
       vcc rfr-vcc-0 (1)
@@ -109,20 +173,39 @@ exports[`Data processing and panel rendering Rendering 2 series 1`] = `
 
 exports[`Data processing and panel rendering Rendering 2 series, handlebars 1`] = `
 "Pods (9)
-  {{statusPhase}} (9)
-    {{namespace}} (9)
-      {{appName}} {{name}} (9)
-        {{containerImage}}"
+  Pending (1)
+    rabbitmq-system.json; rabbitmq-system (1)
+      messaging-topology-operator messaging-topology-operator-f9c69d45b-gxmj6 (1)
+         rabbitmqoperator/messaging-topology-operator:1.2.1
+  Running (8)
+    rabbitmq-system.json; rabbitmq-system (3)
+      rabbitmq-cluster-operator rabbitmq-cluster-operator-7cbf865f89-qwwwj (1)
+         rabbitmqoperator/cluster-operator:1.10.0
+      rabbitmq rabbitmq-server-0 (1)
+         rabbitmq:3.8.26-management
+      rabbitmq rabbitmq-server-1 (1)
+         rabbitmq:3.8.26-management
+    redis.json; redis (5)
+      redisoperator redisoperator-56d6888cc-ks84t (1)
+         quay.io/spotahome/redis-operator:latest
+      vcc rfr-vcc-0 (1)
+         redis:6.2.6-alpine
+      vcc rfr-vcc-1 (1)
+         redis:6.2.6-alpine
+      vcc rfs-vcc-5cc6bf796c-g9mnr (1)
+         redis:6.2.6-alpine
+      vcc rfs-vcc-5cc6bf796c-mmrkr (1)
+         redis:6.2.6-alpine"
 `;
 
 exports[`Data processing and panel rendering Rendering simple data 1`] = `
 "Pods (5)
   Failed (1)
-    mongo (1)
+    mongo.json; mongo (1)
       prometheus-mongodb-exporter mongodb-exporter-prometheus-mongodb-exporter-test-connection (1)
                    busybox {\\"terminated\\":{\\"containerID\\":\\"cri-o://5a762a4d71092cc2cb4e059240997ca747fdfcecc5ddbc9568a2a2b1a1d4985e\\",\\"exitCode\\":1,\\"finishedAt\\":\\"2021-12-17T08:52:19Z\\",\\"reason\\":\\"Error\\",\\"startedAt\\":\\"2021-12-17T08:52:18Z\\"}}
   Running (4)
-    mongo (4)
+    mongo.json; mongo (4)
       - percona-server-mongodb-operator-fcc5c8d6-sqb8m (1)
              percona/percona-server-mongodb-operator:1.10.0 {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:18Z\\"}}
       percona-server-mongodb vcc-rs0-0 (1)
@@ -136,11 +219,11 @@ exports[`Data processing and panel rendering Rendering simple data 1`] = `
 exports[`Data processing and panel rendering Rendering simple data, handlebars 1`] = `
 "Pods (5)
   Failed (1)
-    mongo (1)
+    mongo.json; mongo (1)
       prometheus-mongodb-exporter mongodb-exporter-prometheus-mongodb-exporter-test-connection (1)
                    busybox {\\"terminated\\":{\\"containerID\\":\\"cri-o://5a762a4d71092cc2cb4e059240997ca747fdfcecc5ddbc9568a2a2b1a1d4985e\\",\\"exitCode\\":1,\\"finishedAt\\":\\"2021-12-17T08:52:19Z\\",\\"reason\\":\\"Error\\",\\"startedAt\\":\\"2021-12-17T08:52:18Z\\"}}
   Running (4)
-    mongo (4)
+    mongo.json; mongo (4)
       - percona-server-mongodb-operator-fcc5c8d6-sqb8m (1)
              percona/percona-server-mongodb-operator:1.10.0 {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:18Z\\"}}
       percona-server-mongodb vcc-rs0-0 (1)
@@ -154,17 +237,17 @@ exports[`Data processing and panel rendering Rendering simple data, handlebars 1
 exports[`Data processing and panel rendering Rendering simple data, handlebars, PodStatus 1`] = `
 "Pods (5)
   Error (1)
-    mongo (1)
+    mongo.json; mongo (1)
       prometheus-mongodb-exporter mongodb-exporter-prometheus-mongodb-exporter-test-connection (1)
-                   busybox {\\"terminated\\":{\\"containerID\\":\\"cri-o://5a762a4d71092cc2cb4e059240997ca747fdfcecc5ddbc9568a2a2b1a1d4985e\\",\\"exitCode\\":1,\\"finishedAt\\":\\"2021-12-17T08:52:19Z\\",\\"reason\\":\\"Error\\",\\"startedAt\\":\\"2021-12-17T08:52:18Z\\"}}
+         busybox Terminated: exit(1)
   Running (4)
-    mongo (4)
+    mongo.json; mongo (4)
       - percona-server-mongodb-operator-fcc5c8d6-sqb8m (1)
-             percona/percona-server-mongodb-operator:1.10.0 {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:18Z\\"}}
+         percona/percona-server-mongodb-operator:1.10.0 <none>
       percona-server-mongodb vcc-rs0-0 (1)
-             percona/percona-server-mongodb:4.4.10-11 {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:22:07Z\\"}}
+         percona/percona-server-mongodb:4.4.10-11 <none>
       percona-server-mongodb vcc-rs0-1 (1)
-             percona/percona-server-mongodb:4.4.10-11 {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:22:43Z\\"}}
+         percona/percona-server-mongodb:4.4.10-11 <none>
       prometheus-mongodb-exporter mongodb-exporter-prometheus-mongodb-exporter-6dcdd8c8fc-zqffr (1)
-             ssheehy/mongodb-exporter:0.10.0 {\\"running\\":{\\"startedAt\\":\\"2022-01-20T17:17:55Z\\"}}"
+         ssheehy/mongodb-exporter:0.10.0 <none>"
 `;

@@ -1,5 +1,6 @@
 import fs from 'fs';
-import { ObjectSerializer, V1Pod } from '@kubernetes/client-node';
+//import { ObjectSerializer, V1Pod } from '@kubernetes/client-node';
+import { ObjectSerializer, V1Pod } from './kubernetes_client-node/model/models';
 import { printPod, PodRowColumn } from 'printers';
 
 describe('printPod', () => {
@@ -13,7 +14,7 @@ describe('printPod', () => {
       [PodRowColumn.reason, 'ErrImagePull'],
       [
         PodRowColumn.message,
-        'rpc error: code = Unknown desc = Requesting bear token: invalid status code from registry 403 (Forbidden)',
+        'Waiting: rpc error: code = Unknown desc = Requesting bear token: invalid status code from registry 403 (Forbidden)',
       ],
       [PodRowColumn.restarts, '0'],
       [PodRowColumn.age, '1d16h'],
@@ -37,7 +38,7 @@ describe('printPod', () => {
       [PodRowColumn.reason, 'ImageInspectError'],
       [
         PodRowColumn.message,
-        'Failed to inspect image "maintained/tcpdump": rpc error: code = Unknown desc = short-name "maintained/tcpdump:latest" did not resolve to an alias and no unqualified-search registries are defined in "/etc/containers/registries.conf.d/01-unqualified.conf"',
+        'Waiting: Failed to inspect image "maintained/tcpdump": rpc error: code = Unknown desc = short-name "maintained/tcpdump:latest" did not resolve to an alias and no unqualified-search registries are defined in "/etc/containers/registries.conf.d/01-unqualified.conf"',
       ],
       [PodRowColumn.restarts, '0'],
       [PodRowColumn.age, '2d19h'],
@@ -59,7 +60,10 @@ describe('printPod', () => {
       [PodRowColumn.name, 'tester'],
       [PodRowColumn.ready, '0/1'],
       [PodRowColumn.reason, 'ImagePullBackOff'],
-      [PodRowColumn.message, 'Back-off pulling image "git.local:7077/product/docker/tool/k8s-init-container:latest"'],
+      [
+        PodRowColumn.message,
+        'Waiting: Back-off pulling image "git.local:7077/product/docker/tool/k8s-init-container:latest"',
+      ],
       [PodRowColumn.restarts, '0'],
       [PodRowColumn.age, '1d16h'],
       [PodRowColumn.ip, '10.92.118.250'],
@@ -80,7 +84,7 @@ describe('printPod', () => {
       [PodRowColumn.name, 'nodelocaldns-krt85'],
       [PodRowColumn.ready, '0/1'],
       [PodRowColumn.reason, 'Error'],
-      [PodRowColumn.message, '<none>'],
+      [PodRowColumn.message, 'Terminated: exit(255)'],
       [PodRowColumn.restarts, '3'],
       [PodRowColumn.age, '136d18h'],
       [PodRowColumn.ip, '10.90.2.3'],
@@ -101,7 +105,7 @@ describe('printPod', () => {
       [PodRowColumn.name, 'mysql-564d57cc47-qmlwp'],
       [PodRowColumn.ready, '0/1'],
       [PodRowColumn.reason, 'ContainerCreating'],
-      [PodRowColumn.message, '<none>'],
+      [PodRowColumn.message, 'Waiting'],
       [PodRowColumn.restarts, '0'],
       [PodRowColumn.age, '9d23h'],
       [PodRowColumn.ip, '<none>'],
@@ -124,7 +128,7 @@ describe('printPod', () => {
       [PodRowColumn.reason, 'CrashLoopBackOff'],
       [
         PodRowColumn.message,
-        'back-off 5m0s restarting failed container=longhorn-driver-deployer pod=longhorn-driver-deployer-69985cff47-zrr68_longhorn-system(0233ba8a-69bc-428d-8e2c-aec03cb5b146)',
+        'Waiting: back-off 5m0s restarting failed container=longhorn-driver-deployer pod=longhorn-driver-deployer-69985cff47-zrr68_longhorn-system(0233ba8a-69bc-428d-8e2c-aec03cb5b146)',
       ],
       [PodRowColumn.restarts, '3778 (7m42s ago)'],
       [PodRowColumn.age, '18d23h'],
@@ -295,7 +299,7 @@ describe('printPod', () => {
       [PodRowColumn.reason, 'Init:CrashLoopBackOff'],
       [
         PodRowColumn.message,
-        'back-off 5m0s restarting failed container=database-setup pod=kratos-6c76994b97-gstzr_account-vf-test-int(a7845403-9a24-4d2c-b959-4d7a2e172036)',
+        'Waiting: back-off 5m0s restarting failed container=database-setup pod=kratos-6c76994b97-gstzr_account-vf-test-int(a7845403-9a24-4d2c-b959-4d7a2e172036)',
       ],
       [PodRowColumn.restarts, '5345 (6m54s ago)'],
       [PodRowColumn.age, '18d23h'],
@@ -319,7 +323,7 @@ describe('printPod', () => {
       [PodRowColumn.reason, 'Init:ErrImagePull'],
       [
         PodRowColumn.message,
-        'rpc error: code = NotFound desc = failed to pull and unpack image "docker.io/library/busybox:bad-version": failed to resolve reference "docker.io/library/busybox:bad-version": docker.io/library/busybox:bad-version: not found',
+        'Waiting: rpc error: code = NotFound desc = failed to pull and unpack image "docker.io/library/busybox:bad-version": failed to resolve reference "docker.io/library/busybox:bad-version": docker.io/library/busybox:bad-version: not found',
       ],
       [PodRowColumn.restarts, '0'],
       [PodRowColumn.age, '2d20h'],

@@ -33,10 +33,11 @@ export const plugin = new PanelPlugin<TreeOptions>(TreePanel).setPanelOptions((b
       },
     })
     .addTextInput({
-      path: 'serieVariable',
-      name: 'Serie varible name',
-      description: 'Injected as variable.\nExample for usage in Tree level definitions: $serieVariable',
-      defaultValue: 'serieVariable',
+      path: 'serieColumn',
+      name: 'Serie column name',
+      description:
+        'Serie name added as a new column. The value is unspecified in Table view.\nExample for usage in Tree level definitions: ${serieColumn} or {{serieColumn}}',
+      defaultValue: 'serieColumn',
     })
     .addNumberInput({
       path: 'expandLevel',

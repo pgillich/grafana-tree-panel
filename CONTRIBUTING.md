@@ -2,7 +2,15 @@
 
 ## Development Environment
 
-The skeleton was created by <https://www.npmjs.com/package/@grafana/toolkit>. The typical developing use cases are described there. Jest snapshot is also used, so snapshots can be updated by `--updateSnapshot` option.
+The skeleton was created by <https://www.npmjs.com/package/@grafana/toolkit>. The typical developing use cases are described there.
+Jest snapshot is also used, so snapshots can be updated by `--updateSnapshot` option.
+
+## Kubernetes client
+
+The official [@kubernetes/client-node](https://www.npmjs.com/package/@kubernetes/client-node) does not run in browser, because the `os.constants.signals` is needed, but [browser-os](https://www.npmjs.com/package/browser-os) does not provides it.
+There is similar issue with [browser-stream](https://www.npmjs.com/package/browser-stream).
+
+The workaround is generating only the model of [@kubernetes/client-node](https://www.npmjs.com/package/@kubernetes/client-node) by `generate-client.sh`, which is forked from <https://github.com/kubernetes-client/javascript/blob/master/generate-client.sh>.
 
 ### Docker Compose
 
@@ -59,5 +67,5 @@ For testing purposes, a fake JSON server can be setup, for example: <https://git
 Below example starts a fake JSON server from a sample JSON directory:
 
 ```sh
-touch /tmp/db.json; json-server --host '0.0.0.0' --static ./test/tmp/ /tmp/db.json
+touch /tmp/db.json; json-server --host '0.0.0.0' --port 3001 --static ./test/tmp/ /tmp/db.json
 ```

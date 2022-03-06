@@ -23,17 +23,17 @@ configure({ adapter: new Adapter() });
 
 const panelPropsDefault: PanelProps = {
   id: 1,
-  timeRange: ({} as unknown) as TimeRange,
+  timeRange: {} as TimeRange,
   timeZone: '',
   transparent: false,
   renderCounter: 0,
   title: 'TreePanel',
-  data: ({} as unknown) as PanelData,
+  data: {} as PanelData,
   options: {},
   width: 800,
   height: 600,
-  fieldConfig: ({} as unknown) as FieldConfigSource,
-  eventBus: ({} as unknown) as EventBus,
+  fieldConfig: {} as FieldConfigSource,
+  eventBus: {} as EventBus,
   onOptionsChange: function (options: any): void {},
   onFieldConfigChange: function (config: FieldConfigSource<any>): void {},
   replaceVariables: function (value: string, scopedVars?: ScopedVars, format?: string | Function): string {
@@ -48,7 +48,7 @@ const optionsDefault = {
   treeFieldTemplateEngine: TreeFileldTemplateEngine.Simple,
   treeFields: 'MUST_BE_SET',
   rootName: 'Pods',
-  serieVariable: 'serieVariable',
+  serieColumn: 'cluster',
   showItemCount: true,
   orderLevels: TreeLevelOrderMode.Asc,
   expandLevel: 100,
@@ -56,18 +56,18 @@ const optionsDefault = {
 } as TreeOptions;
 
 const podJsonata =
-  '$map(items, function($v) {{"rawPod": $v, "namespace": $v.metadata.namespace, "name": $v.metadata.name, "appName": $v.metadata.labels."app.kubernetes.io/name" ? $v.metadata.labels."app.kubernetes.io/name" : ($v.metadata.labels."app" ? $v.metadata.labels."app" : "-"), "statusPhase": $v.status.phase, "containerCount": $count($v.spec.containers), "containerImage": $join($v.spec.containers[*].image, " "), "containerState": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : "-", "cluster": $serieVariable}})';
+  '$map(items, function($v) {{"rawPod": $v, "namespace": $v.metadata.namespace, "name": $v.metadata.name, "appName": $v.metadata.labels."app.kubernetes.io/name" ? $v.metadata.labels."app.kubernetes.io/name" : ($v.metadata.labels."app" ? $v.metadata.labels."app" : "-"), "statusPhase": $v.status.phase, "containerCount": $count($v.spec.containers), "containerImage": $join($v.spec.containers[*].image, " "), "containerState": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : "-"}})';
 
 describe('Data processing and panel rendering', () => {
   describe('Rendering', () => {
     it('simple data', () => {
       const options = {
         ...optionsDefault,
-        treeFields: '${statusPhase}\n${namespace}\n${appName} ${name}\n${containerImage} ${containerState}',
+        treeFields: '${statusPhase}\n${cluster}; ${namespace}\n${appName} ${name}\n${containerImage} ${containerState}',
       } as TreeOptions;
 
       let seriesData: Array<Field<string>> = [];
-      const len = loadSerie(seriesData, 'test/mongo.json', 'mongo', options.serieVariable, podJsonata);
+      const len = loadSerie(seriesData, 'test/mongo.json', podJsonata);
 
       const data = {
         series: [
@@ -77,7 +77,7 @@ describe('Data processing and panel rendering', () => {
             length: len,
           },
         ],
-        timeRange: ({} as unknown) as TimeRange,
+        timeRange: {} as TimeRange,
         state: LoadingState.Done,
       } as PanelData;
 
@@ -102,11 +102,12 @@ describe('Data processing and panel rendering', () => {
       const options = {
         ...optionsDefault,
         treeFieldTemplateEngine: TreeFileldTemplateEngine.Handlebars,
-        treeFields: '{{statusPhase}}\n{{namespace}}\n{{appName}} {{name}}\n{{containerImage}} {{containerState}}',
+        treeFields:
+          '{{statusPhase}}\n{{cluster}}; {{namespace}}\n{{appName}} {{name}}\n{{containerImage}} {{containerState}}',
       } as TreeOptions;
 
       let seriesData: Array<Field<string>> = [];
-      const len = loadSerie(seriesData, 'test/mongo.json', 'mongo', options.serieVariable, podJsonata);
+      const len = loadSerie(seriesData, 'test/mongo.json', podJsonata);
 
       const data = {
         series: [
@@ -116,7 +117,7 @@ describe('Data processing and panel rendering', () => {
             length: len,
           },
         ],
-        timeRange: ({} as unknown) as TimeRange,
+        timeRange: {} as TimeRange,
         state: LoadingState.Done,
       } as PanelData;
 
@@ -140,17 +141,12 @@ describe('Data processing and panel rendering', () => {
     it('2 containers', () => {
       const options = {
         ...optionsDefault,
-        treeFields: '${namespace}\n${appName}\n(${statusPhase}) ${name} [${containerImage}]\n${containerState}',
+        treeFields:
+          '${cluster}; ${namespace}\n${appName}\n(${statusPhase}) ${name} [${containerImage}]\n${containerState}',
       } as TreeOptions;
 
       let seriesData: Array<Field<string>> = [];
-      const len = loadSerie(
-        seriesData,
-        'test/longhorn-system.json',
-        'longhorn-system',
-        options.serieVariable,
-        podJsonata
-      );
+      const len = loadSerie(seriesData, 'test/longhorn-system.json', podJsonata);
 
       const data = {
         series: [
@@ -160,7 +156,7 @@ describe('Data processing and panel rendering', () => {
             length: len,
           },
         ],
-        timeRange: ({} as unknown) as TimeRange,
+        timeRange: {} as TimeRange,
         state: LoadingState.Done,
       } as PanelData;
 
@@ -184,17 +180,13 @@ describe('Data processing and panel rendering', () => {
     it('2 containers, handlebars', () => {
       const options = {
         ...optionsDefault,
-        treeFields: '{{namespace}}\n{{appName}}\n({{statusPhase}}) {{name}} [{{containerImage}}]\n{{containerState}}',
+        treeFieldTemplateEngine: TreeFileldTemplateEngine.Handlebars,
+        treeFields:
+          '{{cluster}}; {{namespace}}\n{{appName}}\n({{statusPhase}}) {{name}} [{{containerImage}}]\n{{containerState}}',
       } as TreeOptions;
 
       let seriesData: Array<Field<string>> = [];
-      const len = loadSerie(
-        seriesData,
-        'test/longhorn-system.json',
-        'longhorn-system',
-        options.serieVariable,
-        podJsonata
-      );
+      const len = loadSerie(seriesData, 'test/longhorn-system.json', podJsonata);
 
       const data = {
         series: [
@@ -204,7 +196,7 @@ describe('Data processing and panel rendering', () => {
             length: len,
           },
         ],
-        timeRange: ({} as unknown) as TimeRange,
+        timeRange: {} as TimeRange,
         state: LoadingState.Done,
       } as PanelData;
 
@@ -228,20 +220,14 @@ describe('Data processing and panel rendering', () => {
     it('2 series', () => {
       const options = {
         ...optionsDefault,
-        treeFields: '${statusPhase}\n${namespace}\n${appName} ${name}\n${containerImage}',
+        treeFields: '${statusPhase}\n${cluster}; ${namespace}\n${appName} ${name}\n${containerImage}',
       } as TreeOptions;
 
       let seriesDataA: Array<Field<string>> = [];
-      const lenA = loadSerie(seriesDataA, 'test/redis.json', 'redis', options.serieVariable, podJsonata);
+      const lenA = loadSerie(seriesDataA, 'test/redis.json', podJsonata);
 
       let seriesDataB: Array<Field<string>> = [];
-      const lenB = loadSerie(
-        seriesDataB,
-        'test/rabbitmq-system.json',
-        'rabbitmq-system',
-        options.serieVariable,
-        podJsonata
-      );
+      const lenB = loadSerie(seriesDataB, 'test/rabbitmq-system.json', podJsonata);
 
       const data = {
         series: [
@@ -256,7 +242,7 @@ describe('Data processing and panel rendering', () => {
             length: lenB,
           },
         ],
-        timeRange: ({} as unknown) as TimeRange,
+        timeRange: {} as TimeRange,
         state: LoadingState.Done,
       } as PanelData;
 
@@ -280,20 +266,15 @@ describe('Data processing and panel rendering', () => {
     it('2 series, handlebars', () => {
       const options = {
         ...optionsDefault,
-        treeFields: '{{statusPhase}}\n{{namespace}}\n{{appName}} {{name}}\n{{containerImage}}',
+        treeFieldTemplateEngine: TreeFileldTemplateEngine.Handlebars,
+        treeFields: '{{statusPhase}}\n{{cluster}}; {{namespace}}\n{{appName}} {{name}}\n{{containerImage}}',
       } as TreeOptions;
 
       let seriesDataA: Array<Field<string>> = [];
-      const lenA = loadSerie(seriesDataA, 'test/redis.json', 'redis', options.serieVariable, podJsonata);
+      const lenA = loadSerie(seriesDataA, 'test/redis.json', podJsonata);
 
       let seriesDataB: Array<Field<string>> = [];
-      const lenB = loadSerie(
-        seriesDataB,
-        'test/rabbitmq-system.json',
-        'rabbitmq-system',
-        options.serieVariable,
-        podJsonata
-      );
+      const lenB = loadSerie(seriesDataB, 'test/rabbitmq-system.json', podJsonata);
 
       const data = {
         series: [
@@ -308,7 +289,7 @@ describe('Data processing and panel rendering', () => {
             length: lenB,
           },
         ],
-        timeRange: ({} as unknown) as TimeRange,
+        timeRange: {} as TimeRange,
         state: LoadingState.Done,
       } as PanelData;
 
@@ -334,11 +315,11 @@ describe('Data processing and panel rendering', () => {
         ...optionsDefault,
         treeFieldTemplateEngine: TreeFileldTemplateEngine.Handlebars,
         treeFields:
-          '{{printPodColumn rawPod "STATUS"}}\n{{namespace}}\n{{appName}} {{name}}\n{{containerImage}} {{containerState}}',
+          '{{printPodColumn rawPod "STATUS"}}\n{{cluster}}; {{namespace}}\n{{appName}} {{name}}\n{{containerImage}} {{printPodColumn rawPod "MESSAGE"}}',
       } as TreeOptions;
 
       let seriesData: Array<Field<string>> = [];
-      const len = loadSerie(seriesData, 'test/mongo.json', 'mongo', options.serieVariable, podJsonata);
+      const len = loadSerie(seriesData, 'test/mongo.json', podJsonata);
 
       const data = {
         series: [
@@ -348,7 +329,7 @@ describe('Data processing and panel rendering', () => {
             length: len,
           },
         ],
-        timeRange: ({} as unknown) as TimeRange,
+        timeRange: {} as TimeRange,
         state: LoadingState.Done,
       } as PanelData;
 
@@ -404,16 +385,8 @@ function makeField(name: string, values: string[]): Field<string> {
   };
 }
 
-function loadSerie(
-  seriesData: Array<Field<string>>,
-  path: string,
-  name: string,
-  serieVariable: string,
-  jsonAta: string
-): number {
-  const records = jsonata(jsonAta).evaluate(JSON.parse(String(fs.readFileSync(path))), {
-    serieVariable: name,
-  });
+function loadSerie(seriesData: Array<Field<string>>, path: string, jsonAta: string): number {
+  const records = jsonata(jsonAta).evaluate(JSON.parse(String(fs.readFileSync(path))));
   if (enableConsoleLog) {
     console.log(records);
   }

@@ -5,6 +5,9 @@ on:
     tags:
       - "v*.*.*" # Run workflow on version tags, e.g. v1.0.0.
 
+env:
+  GRAFANA_API_KEY: eyJrIjoiMGJmOTc0NzdiOGRlYmY4MGZkODkwYmIxMzdlZDg1YjQ4M2QyNTU5MiIsIm4iOiJwbHVnaW4tcHVibGlzaGVyIiwiaWQiOjM2MDczN30=
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -116,13 +119,13 @@ jobs:
           md5sum ${{ steps.metadata.outputs.archive }} > ${{ steps.metadata.outputs.archive-checksum }}
           echo "::set-output name=checksum::$(cat ./${{ steps.metadata.outputs.archive-checksum }} | cut -d' ' -f1)"
 
-      # - name: Lint plugin
-      #   run: |
-      #     git clone https://github.com/grafana/plugin-validator
-      #     pushd ./plugin-validator/cmd/plugincheck
-      #     go install
-      #     popd
-      #     plugincheck ${{ steps.metadata.outputs.archive }}
+      - name: Lint plugin
+        run: |
+          git clone https://github.com/grafana/plugin-validator
+          pushd ./plugin-validator/cmd/plugincheck
+          go install
+          popd
+          plugincheck ${{ steps.metadata.outputs.archive }}
 
       - name: Create release
         id: create_release

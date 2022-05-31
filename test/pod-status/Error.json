@@ -1,0 +1,324 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "annotations": {
+            "prometheus.io/port": "9253",
+            "prometheus.io/scrape": "true"
+        },
+        "creationTimestamp": "2021-10-06T13:56:19Z",
+        "generateName": "nodelocaldns-",
+        "labels": {
+            "controller-revision-hash": "7c5ddd4b45",
+            "k8s-app": "nodelocaldns",
+            "pod-template-generation": "2"
+        },
+        "name": "nodelocaldns-krt85",
+        "namespace": "kube-system",
+        "ownerReferences": [
+            {
+                "apiVersion": "apps/v1",
+                "blockOwnerDeletion": true,
+                "controller": true,
+                "kind": "DaemonSet",
+                "name": "nodelocaldns",
+                "uid": "90920c68-be94-4131-8357-b328c7c5c98a"
+            }
+        ],
+        "resourceVersion": "195132506",
+        "uid": "87db161b-351d-42d4-8ad1-0a5b0b043868"
+    },
+    "spec": {
+        "affinity": {
+            "nodeAffinity": {
+                "requiredDuringSchedulingIgnoredDuringExecution": {
+                    "nodeSelectorTerms": [
+                        {
+                            "matchFields": [
+                                {
+                                    "key": "metadata.name",
+                                    "operator": "In",
+                                    "values": [
+                                        "hu2-vmp3"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "containers": [
+            {
+                "args": [
+                    "-localip",
+                    "169.254.25.10",
+                    "-conf",
+                    "/etc/coredns/Corefile",
+                    "-upstreamsvc",
+                    "coredns"
+                ],
+                "image": "k8s.gcr.io/dns/k8s-dns-node-cache:1.17.1",
+                "imagePullPolicy": "IfNotPresent",
+                "livenessProbe": {
+                    "failureThreshold": 10,
+                    "httpGet": {
+                        "host": "169.254.25.10",
+                        "path": "/health",
+                        "port": 9254,
+                        "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 5
+                },
+                "name": "node-cache",
+                "ports": [
+                    {
+                        "containerPort": 53,
+                        "hostPort": 53,
+                        "name": "dns",
+                        "protocol": "UDP"
+                    },
+                    {
+                        "containerPort": 53,
+                        "hostPort": 53,
+                        "name": "dns-tcp",
+                        "protocol": "TCP"
+                    },
+                    {
+                        "containerPort": 9253,
+                        "hostPort": 9253,
+                        "name": "metrics",
+                        "protocol": "TCP"
+                    }
+                ],
+                "readinessProbe": {
+                    "failureThreshold": 10,
+                    "httpGet": {
+                        "host": "169.254.25.10",
+                        "path": "/health",
+                        "port": 9254,
+                        "scheme": "HTTP"
+                    },
+                    "periodSeconds": 10,
+                    "successThreshold": 1,
+                    "timeoutSeconds": 5
+                },
+                "resources": {
+                    "limits": {
+                        "memory": "170Mi"
+                    },
+                    "requests": {
+                        "cpu": "100m",
+                        "memory": "70Mi"
+                    }
+                },
+                "securityContext": {
+                    "privileged": true
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/etc/coredns",
+                        "name": "config-volume"
+                    },
+                    {
+                        "mountPath": "/run/xtables.lock",
+                        "name": "xtables-lock"
+                    },
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-pqc7k",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "dnsPolicy": "Default",
+        "enableServiceLinks": true,
+        "hostNetwork": true,
+        "nodeName": "hu2-vmp3",
+        "nodeSelector": {
+            "kubernetes.io/os": "linux"
+        },
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 2000000000,
+        "priorityClassName": "system-cluster-critical",
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "nodelocaldns",
+        "serviceAccountName": "nodelocaldns",
+        "terminationGracePeriodSeconds": 0,
+        "tolerations": [
+            {
+                "effect": "NoSchedule",
+                "operator": "Exists"
+            },
+            {
+                "effect": "NoExecute",
+                "operator": "Exists"
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/not-ready",
+                "operator": "Exists"
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/unreachable",
+                "operator": "Exists"
+            },
+            {
+                "effect": "NoSchedule",
+                "key": "node.kubernetes.io/disk-pressure",
+                "operator": "Exists"
+            },
+            {
+                "effect": "NoSchedule",
+                "key": "node.kubernetes.io/memory-pressure",
+                "operator": "Exists"
+            },
+            {
+                "effect": "NoSchedule",
+                "key": "node.kubernetes.io/pid-pressure",
+                "operator": "Exists"
+            },
+            {
+                "effect": "NoSchedule",
+                "key": "node.kubernetes.io/unschedulable",
+                "operator": "Exists"
+            },
+            {
+                "effect": "NoSchedule",
+                "key": "node.kubernetes.io/network-unavailable",
+                "operator": "Exists"
+            }
+        ],
+        "volumes": [
+            {
+                "configMap": {
+                    "defaultMode": 420,
+                    "items": [
+                        {
+                            "key": "Corefile",
+                            "path": "Corefile"
+                        }
+                    ],
+                    "name": "nodelocaldns"
+                },
+                "name": "config-volume"
+            },
+            {
+                "hostPath": {
+                    "path": "/run/xtables.lock",
+                    "type": "FileOrCreate"
+                },
+                "name": "xtables-lock"
+            },
+            {
+                "name": "kube-api-access-pqc7k",
+                "projected": {
+                    "defaultMode": 420,
+                    "sources": [
+                        {
+                            "serviceAccountToken": {
+                                "expirationSeconds": 3607,
+                                "path": "token"
+                            }
+                        },
+                        {
+                            "configMap": {
+                                "items": [
+                                    {
+                                        "key": "ca.crt",
+                                        "path": "ca.crt"
+                                    }
+                                ],
+                                "name": "kube-root-ca.crt"
+                            }
+                        },
+                        {
+                            "downwardAPI": {
+                                "items": [
+                                    {
+                                        "fieldRef": {
+                                            "apiVersion": "v1",
+                                            "fieldPath": "metadata.namespace"
+                                        },
+                                        "path": "namespace"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2021-10-06T14:00:37Z",
+                "status": "True",
+                "type": "Initialized"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-01T08:12:03Z",
+                "message": "containers with unready status: [node-cache]",
+                "reason": "ContainersNotReady",
+                "status": "False",
+                "type": "Ready"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-01T08:13:45Z",
+                "message": "containers with unready status: [node-cache]",
+                "reason": "ContainersNotReady",
+                "status": "False",
+                "type": "ContainersReady"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2021-10-06T13:56:19Z",
+                "status": "True",
+                "type": "PodScheduled"
+            }
+        ],
+        "containerStatuses": [
+            {
+                "containerID": "cri-o://3f684b1d42e70e7fff18571f68a8434f6ead2bd6735858348f70256babd34374",
+                "image": "k8s.gcr.io/dns/k8s-dns-node-cache:1.17.1",
+                "imageID": "k8s.gcr.io/dns/k8s-dns-node-cache@sha256:3c465863216783b5f0e7c65fa7d8420cbd4eb4b63383a10d5d3c965df623a820",
+                "lastState": {},
+                "name": "node-cache",
+                "ready": false,
+                "restartCount": 3,
+                "started": false,
+                "state": {
+                    "terminated": {
+                        "containerID": "cri-o://3f684b1d42e70e7fff18571f68a8434f6ead2bd6735858348f70256babd34374",
+                        "exitCode": 255,
+                        "finishedAt": "2022-02-01T08:13:13Z",
+                        "reason": "Error",
+                        "startedAt": "2021-10-06T17:33:12Z"
+                    }
+                }
+            }
+        ],
+        "hostIP": "10.90.2.3",
+        "phase": "Running",
+        "podIP": "10.90.2.3",
+        "podIPs": [
+            {
+                "ip": "10.90.2.3"
+            }
+        ],
+        "qosClass": "Burstable",
+        "startTime": "2021-10-06T14:00:37Z"
+    }
+}

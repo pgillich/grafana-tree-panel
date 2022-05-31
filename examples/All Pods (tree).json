@@ -1,8 +1,8 @@
 {
   "__inputs": [
     {
-      "name": "DS_K8S_API",
-      "label": "K8s API",
+      "name": "DS_JSON_API",
+      "label": "JSON API",
       "description": "",
       "type": "datasource",
       "pluginId": "marcusolsson-json-datasource",
@@ -15,19 +15,19 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "8.3.2"
+      "version": "8.3.3"
     },
     {
       "type": "datasource",
       "id": "marcusolsson-json-datasource",
       "name": "JSON API",
-      "version": "1.3.0"
+      "version": "1.3.1"
     },
     {
       "type": "panel",
       "id": "pgillich-tree-panel",
       "name": "Tree View",
-      "version": "1.0.0"
+      "version": "0.1.8"
     }
   ],
   "annotations": {
@@ -54,18 +54,17 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1643536162589,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
         "type": "marcusolsson-json-datasource",
-        "uid": "${DS_K8S_API}"
+        "uid": "${DS_JSON_API}"
       },
       "description": "",
       "gridPos": {
-        "h": 11,
+        "h": 15,
         "w": 12,
         "x": 0,
         "y": 0
@@ -75,10 +74,12 @@
         "expandLevel": 100,
         "orderLevels": "asc",
         "rootName": "Pods by Status",
+        "serieColumn": "Cluster",
         "serieVariable": "serieVariable",
         "showItemCount": true,
         "showRoot": true,
-        "treeFields": "${Status}\n${Namespace}\n${App}\n${Name} [${Image}]\n${State}"
+        "treeFieldTemplateEngine": "simple",
+        "treeFields": "${Status}\n${Cluster}; ${Namespace}\n${App}\n${Name} [${Image}]\n${State}"
       },
       "pluginVersion": "8.3.2",
       "targets": [
@@ -86,7 +87,7 @@
           "cacheDurationSeconds": 300,
           "datasource": {
             "type": "marcusolsson-json-datasource",
-            "uid": "${DS_K8S_API}"
+            "uid": "${DS_JSON_API}"
           },
           "fields": [
             {
@@ -134,21 +135,21 @@
           ],
           "method": "GET",
           "queryParams": "",
-          "refId": "A",
-          "urlPath": "/api/v1/namespaces/${Namespace}/pods"
+          "refId": "cluster-2",
+          "urlPath": "/api/v1/pods"
         }
       ],
-      "title": "Pods by Status",
+      "title": "Pods by Status, raw k8s API",
       "type": "pgillich-tree-panel"
     },
     {
       "datasource": {
         "type": "marcusolsson-json-datasource",
-        "uid": "${DS_K8S_API}"
+        "uid": "${DS_JSON_API}"
       },
       "description": "",
       "gridPos": {
-        "h": 11,
+        "h": 15,
         "w": 12,
         "x": 12,
         "y": 0
@@ -158,10 +159,12 @@
         "expandLevel": 100,
         "orderLevels": "asc",
         "rootName": "Pods by Status",
+        "serieColumn": "Cluster",
         "serieVariable": "serieVariable",
         "showItemCount": true,
         "showRoot": true,
-        "treeFields": "${Namespace}\n${App}\n(${Status}) ${Name} [${Image}]\n${State}"
+        "treeFieldTemplateEngine": "handlebars",
+        "treeFields": "{{printPodColumn rawPod \"STATUS\"}}\n{{Cluster}}; {{Namespace}}\n{{App}}\n{{Name}} [{{Image}}]\n{{printPodColumn rawPod \"MESSAGE\"}}"
       },
       "pluginVersion": "8.3.2",
       "targets": [
@@ -169,98 +172,73 @@
           "cacheDurationSeconds": 300,
           "datasource": {
             "type": "marcusolsson-json-datasource",
-            "uid": "${DS_K8S_API}"
+            "uid": "${DS_JSON_API}"
           },
           "fields": [
             {
-              "jsonPath": "$map(items, function($v) {{\"namespace\": $v.metadata.namespace, \"name\": $v.metadata.name, \"appName\": $v.metadata.labels.\"app.kubernetes.io/name\" ? $v.metadata.labels.\"app.kubernetes.io/name\" : ($v.metadata.labels.\"app\" ? $v.metadata.labels.\"app\" : \"-\"), \"statusPhase\": $v.status.phase, \"containerCount\": $count($v.spec.containers), \"containerImage\": $join($v.spec.containers[*].image, \" \"), \"containerState\": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : \"-\", \"cluster\": $serieVariable}}).namespace",
+              "jsonPath": "$map(items, function($v) {{\"rawPod\": $v, \"namespace\": $v.metadata.namespace, \"name\": $v.metadata.name, \"appName\": $v.metadata.labels.\"app.kubernetes.io/name\" ? $v.metadata.labels.\"app.kubernetes.io/name\" : ($v.metadata.labels.\"app\" ? $v.metadata.labels.\"app\" : \"-\"), \"statusPhase\": $v.status.phase, \"containerCount\": $count($v.spec.containers), \"containerImage\": $join($v.spec.containers[*].image, \" \"), \"containerState\": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : \"-\", \"cluster\": $serieVariable}}).namespace",
               "language": "jsonata",
               "name": "Namespace",
               "type": "string"
             },
             {
-              "jsonPath": "$map(items, function($v) {{\"namespace\": $v.metadata.namespace, \"name\": $v.metadata.name, \"appName\": $v.metadata.labels.\"app.kubernetes.io/name\" ? $v.metadata.labels.\"app.kubernetes.io/name\" : ($v.metadata.labels.\"app\" ? $v.metadata.labels.\"app\" : \"-\"), \"statusPhase\": $v.status.phase, \"containerCount\": $count($v.spec.containers), \"containerImage\": $join($v.spec.containers[*].image, \" \"), \"containerState\": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : \"-\", \"cluster\": $serieVariable}}).appName",
+              "jsonPath": "$map(items, function($v) {{\"rawPod\": $v, \"namespace\": $v.metadata.namespace, \"name\": $v.metadata.name, \"appName\": $v.metadata.labels.\"app.kubernetes.io/name\" ? $v.metadata.labels.\"app.kubernetes.io/name\" : ($v.metadata.labels.\"app\" ? $v.metadata.labels.\"app\" : \"-\"), \"statusPhase\": $v.status.phase, \"containerCount\": $count($v.spec.containers), \"containerImage\": $join($v.spec.containers[*].image, \" \"), \"containerState\": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : \"-\", \"cluster\": $serieVariable}}).appName",
               "language": "jsonata",
               "name": "App",
               "type": "string"
             },
             {
-              "jsonPath": "$map(items, function($v) {{\"namespace\": $v.metadata.namespace, \"name\": $v.metadata.name, \"appName\": $v.metadata.labels.\"app.kubernetes.io/name\" ? $v.metadata.labels.\"app.kubernetes.io/name\" : ($v.metadata.labels.\"app\" ? $v.metadata.labels.\"app\" : \"-\"), \"statusPhase\": $v.status.phase, \"containerCount\": $count($v.spec.containers), \"containerImage\": $join($v.spec.containers[*].image, \" \"), \"containerState\": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : \"-\", \"cluster\": $serieVariable}}).name",
+              "jsonPath": "$map(items, function($v) {{\"rawPod\": $v, \"namespace\": $v.metadata.namespace, \"name\": $v.metadata.name, \"appName\": $v.metadata.labels.\"app.kubernetes.io/name\" ? $v.metadata.labels.\"app.kubernetes.io/name\" : ($v.metadata.labels.\"app\" ? $v.metadata.labels.\"app\" : \"-\"), \"statusPhase\": $v.status.phase, \"containerCount\": $count($v.spec.containers), \"containerImage\": $join($v.spec.containers[*].image, \" \"), \"containerState\": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : \"-\", \"cluster\": $serieVariable}}).name",
               "language": "jsonata",
               "name": "Name",
               "type": "string"
             },
             {
-              "jsonPath": "$map(items, function($v) {{\"namespace\": $v.metadata.namespace, \"name\": $v.metadata.name, \"appName\": $v.metadata.labels.\"app.kubernetes.io/name\" ? $v.metadata.labels.\"app.kubernetes.io/name\" : ($v.metadata.labels.\"app\" ? $v.metadata.labels.\"app\" : \"-\"), \"statusPhase\": $v.status.phase, \"containerCount\": $count($v.spec.containers), \"containerImage\": $join($v.spec.containers[*].image, \" \"), \"containerState\": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : \"-\", \"cluster\": $serieVariable}}).statusPhase",
+              "jsonPath": "$map(items, function($v) {{\"rawPod\": $v, \"namespace\": $v.metadata.namespace, \"name\": $v.metadata.name, \"appName\": $v.metadata.labels.\"app.kubernetes.io/name\" ? $v.metadata.labels.\"app.kubernetes.io/name\" : ($v.metadata.labels.\"app\" ? $v.metadata.labels.\"app\" : \"-\"), \"statusPhase\": $v.status.phase, \"containerCount\": $count($v.spec.containers), \"containerImage\": $join($v.spec.containers[*].image, \" \"), \"containerState\": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : \"-\", \"cluster\": $serieVariable}}).statusPhase",
               "language": "jsonata",
               "name": "Status",
               "type": "string"
             },
             {
-              "jsonPath": "$map(items, function($v) {{\"namespace\": $v.metadata.namespace, \"name\": $v.metadata.name, \"appName\": $v.metadata.labels.\"app.kubernetes.io/name\" ? $v.metadata.labels.\"app.kubernetes.io/name\" : ($v.metadata.labels.\"app\" ? $v.metadata.labels.\"app\" : \"-\"), \"statusPhase\": $v.status.phase, \"containerCount\": $count($v.spec.containers), \"containerImage\": $join($v.spec.containers[*].image, \" \"), \"containerState\": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : \"-\", \"cluster\": $serieVariable}}).containerCount",
+              "jsonPath": "$map(items, function($v) {{\"rawPod\": $v, \"namespace\": $v.metadata.namespace, \"name\": $v.metadata.name, \"appName\": $v.metadata.labels.\"app.kubernetes.io/name\" ? $v.metadata.labels.\"app.kubernetes.io/name\" : ($v.metadata.labels.\"app\" ? $v.metadata.labels.\"app\" : \"-\"), \"statusPhase\": $v.status.phase, \"containerCount\": $count($v.spec.containers), \"containerImage\": $join($v.spec.containers[*].image, \" \"), \"containerState\": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : \"-\", \"cluster\": $serieVariable}}).containerCount",
               "language": "jsonata",
               "name": "Containers",
               "type": "string"
             },
             {
-              "jsonPath": "$map(items, function($v) {{\"namespace\": $v.metadata.namespace, \"name\": $v.metadata.name, \"appName\": $v.metadata.labels.\"app.kubernetes.io/name\" ? $v.metadata.labels.\"app.kubernetes.io/name\" : ($v.metadata.labels.\"app\" ? $v.metadata.labels.\"app\" : \"-\"), \"statusPhase\": $v.status.phase, \"containerCount\": $count($v.spec.containers), \"containerImage\": $join($v.spec.containers[*].image, \" \"), \"containerState\": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : \"-\", \"cluster\": $serieVariable}}).containerImage",
+              "jsonPath": "$map(items, function($v) {{\"rawPod\": $v, \"namespace\": $v.metadata.namespace, \"name\": $v.metadata.name, \"appName\": $v.metadata.labels.\"app.kubernetes.io/name\" ? $v.metadata.labels.\"app.kubernetes.io/name\" : ($v.metadata.labels.\"app\" ? $v.metadata.labels.\"app\" : \"-\"), \"statusPhase\": $v.status.phase, \"containerCount\": $count($v.spec.containers), \"containerImage\": $join($v.spec.containers[*].image, \" \"), \"containerState\": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : \"-\", \"cluster\": $serieVariable}}).containerImage",
               "language": "jsonata",
               "name": "Image",
               "type": "string"
             },
             {
-              "jsonPath": "$map(items, function($v) {{\"namespace\": $v.metadata.namespace, \"name\": $v.metadata.name, \"appName\": $v.metadata.labels.\"app.kubernetes.io/name\" ? $v.metadata.labels.\"app.kubernetes.io/name\" : ($v.metadata.labels.\"app\" ? $v.metadata.labels.\"app\" : \"-\"), \"statusPhase\": $v.status.phase, \"containerCount\": $count($v.spec.containers), \"containerImage\": $join($v.spec.containers[*].image, \" \"), \"containerState\": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : \"-\", \"cluster\": $serieVariable}}).containerState",
+              "jsonPath": "$map(items, function($v) {{\"rawPod\": $v, \"namespace\": $v.metadata.namespace, \"name\": $v.metadata.name, \"appName\": $v.metadata.labels.\"app.kubernetes.io/name\" ? $v.metadata.labels.\"app.kubernetes.io/name\" : ($v.metadata.labels.\"app\" ? $v.metadata.labels.\"app\" : \"-\"), \"statusPhase\": $v.status.phase, \"containerCount\": $count($v.spec.containers), \"containerImage\": $join($v.spec.containers[*].image, \" \"), \"containerState\": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : \"-\", \"cluster\": $serieVariable}}).containerState",
               "language": "jsonata",
               "name": "State",
               "type": "string"
+            },
+            {
+              "jsonPath": "$map(items, function($v) {{\"rawPod\": $v, \"namespace\": $v.metadata.namespace, \"name\": $v.metadata.name, \"appName\": $v.metadata.labels.\"app.kubernetes.io/name\" ? $v.metadata.labels.\"app.kubernetes.io/name\" : ($v.metadata.labels.\"app\" ? $v.metadata.labels.\"app\" : \"-\"), \"statusPhase\": $v.status.phase, \"containerCount\": $count($v.spec.containers), \"containerImage\": $join($v.spec.containers[*].image, \" \"), \"containerState\": $v.status.containerStatuses[*].state ? $string($v.status.containerStatuses[*].state) : \"-\", \"cluster\": $serieVariable}}).rawPod",
+              "language": "jsonata",
+              "name": "rawPod"
             }
           ],
           "method": "GET",
           "queryParams": "",
-          "refId": "A",
-          "urlPath": "/api/v1/namespaces/${Namespace}/pods"
+          "refId": "cluster-2",
+          "urlPath": "/api/v1/pods"
         }
       ],
-      "title": "Pods by App",
+      "title": "Pods by Status, kubectl columns",
       "type": "pgillich-tree-panel"
     }
   ],
   "refresh": "",
-  "schemaVersion": 33,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": [
-      {
-        "current": {},
-        "datasource": {
-          "type": "marcusolsson-json-datasource",
-          "uid": "${DS_K8S_API}"
-        },
-        "definition": "$.items[*].metadata.name",
-        "hide": 0,
-        "includeAll": false,
-        "multi": false,
-        "name": "Namespace",
-        "options": [],
-        "query": {
-          "cacheDurationSeconds": 300,
-          "fields": [
-            {
-              "jsonPath": "$.items[*].metadata.name"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "urlPath": "/api/v1/namespaces"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1,
-        "type": "query"
-      }
-    ]
+    "list": []
   },
   "time": {
     "from": "now-6h",
@@ -268,8 +246,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Namespace Pods (tree)",
-  "uid": "x1hpfGb7k",
-  "version": 46,
+  "title": "Pods (tree)",
+  "uid": "x1hpfGb7kAll",
+  "version": 28,
   "weekStart": ""
 }

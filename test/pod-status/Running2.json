@@ -1,0 +1,342 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "creationTimestamp": "2021-10-15T08:36:40Z",
+        "generateName": "node-exporter-",
+        "labels": {
+            "app.kubernetes.io/component": "exporter",
+            "app.kubernetes.io/name": "node-exporter",
+            "app.kubernetes.io/part-of": "kube-prometheus",
+            "app.kubernetes.io/version": "1.2.2",
+            "controller-revision-hash": "77fdbcd8f8",
+            "pod-template-generation": "4"
+        },
+        "name": "node-exporter-s6tbv",
+        "namespace": "monitoring",
+        "ownerReferences": [
+            {
+                "apiVersion": "apps/v1",
+                "blockOwnerDeletion": true,
+                "controller": true,
+                "kind": "DaemonSet",
+                "name": "node-exporter",
+                "uid": "06ad8da3-ac19-4530-837c-b4723d45bb51"
+            }
+        ],
+        "resourceVersion": "182606275",
+        "uid": "d97e835c-4699-4bd9-9b43-2bcb0e3a8f12"
+    },
+    "spec": {
+        "affinity": {
+            "nodeAffinity": {
+                "requiredDuringSchedulingIgnoredDuringExecution": {
+                    "nodeSelectorTerms": [
+                        {
+                            "matchFields": [
+                                {
+                                    "key": "metadata.name",
+                                    "operator": "In",
+                                    "values": [
+                                        "hu2-vmp9"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        "containers": [
+            {
+                "args": [
+                    "--web.listen-address=127.0.0.1:9100",
+                    "--path.sysfs=/host/sys",
+                    "--path.rootfs=/host/root",
+                    "--no-collector.wifi",
+                    "--no-collector.hwmon",
+                    "--collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/pods/.+)($|/)",
+                    "--collector.netclass.ignored-devices=^(veth.*|[a-f0-9]{15})$",
+                    "--collector.netdev.device-exclude=^(veth.*|[a-f0-9]{15})$"
+                ],
+                "image": "quay.io/prometheus/node-exporter:v1.2.2",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "node-exporter",
+                "resources": {
+                    "limits": {
+                        "cpu": "250m",
+                        "memory": "180Mi"
+                    },
+                    "requests": {
+                        "cpu": "102m",
+                        "memory": "180Mi"
+                    }
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/host/sys",
+                        "mountPropagation": "HostToContainer",
+                        "name": "sys",
+                        "readOnly": true
+                    },
+                    {
+                        "mountPath": "/host/root",
+                        "mountPropagation": "HostToContainer",
+                        "name": "root",
+                        "readOnly": true
+                    },
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-ql2lf",
+                        "readOnly": true
+                    }
+                ]
+            },
+            {
+                "args": [
+                    "--logtostderr",
+                    "--secure-listen-address=[$(IP)]:9100",
+                    "--tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305,TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305",
+                    "--upstream=http://127.0.0.1:9100/"
+                ],
+                "env": [],
+                "image": "quay.io/brancz/kube-rbac-proxy:v0.11.0",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "kube-rbac-proxy",
+                "ports": [
+                    {
+                        "containerPort": 9100,
+                        "hostPort": 9100,
+                        "name": "https",
+                        "protocol": "TCP"
+                    }
+                ],
+                "resources": {
+                    "limits": {
+                        "cpu": "20m",
+                        "memory": "40Mi"
+                    },
+                    "requests": {
+                        "cpu": "10m",
+                        "memory": "20Mi"
+                    }
+                },
+                "securityContext": {
+                    "runAsGroup": 65532,
+                    "runAsNonRoot": true,
+                    "runAsUser": 65532
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-ql2lf",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "hostNetwork": true,
+        "hostPID": true,
+        "nodeName": "hu2-vmp9",
+        "nodeSelector": {
+            "kubernetes.io/os": "linux"
+        },
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {
+            "runAsNonRoot": true,
+            "runAsUser": 65534
+        },
+        "serviceAccount": "node-exporter",
+        "serviceAccountName": "node-exporter",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+            {
+                "operator": "Exists"
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/not-ready",
+                "operator": "Exists"
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/unreachable",
+                "operator": "Exists"
+            },
+            {
+                "effect": "NoSchedule",
+                "key": "node.kubernetes.io/disk-pressure",
+                "operator": "Exists"
+            },
+            {
+                "effect": "NoSchedule",
+                "key": "node.kubernetes.io/memory-pressure",
+                "operator": "Exists"
+            },
+            {
+                "effect": "NoSchedule",
+                "key": "node.kubernetes.io/pid-pressure",
+                "operator": "Exists"
+            },
+            {
+                "effect": "NoSchedule",
+                "key": "node.kubernetes.io/unschedulable",
+                "operator": "Exists"
+            },
+            {
+                "effect": "NoSchedule",
+                "key": "node.kubernetes.io/network-unavailable",
+                "operator": "Exists"
+            }
+        ],
+        "volumes": [
+            {
+                "hostPath": {
+                    "path": "/sys",
+                    "type": ""
+                },
+                "name": "sys"
+            },
+            {
+                "hostPath": {
+                    "path": "/",
+                    "type": ""
+                },
+                "name": "root"
+            },
+            {
+                "name": "kube-api-access-ql2lf",
+                "projected": {
+                    "defaultMode": 420,
+                    "sources": [
+                        {
+                            "serviceAccountToken": {
+                                "expirationSeconds": 3607,
+                                "path": "token"
+                            }
+                        },
+                        {
+                            "configMap": {
+                                "items": [
+                                    {
+                                        "key": "ca.crt",
+                                        "path": "ca.crt"
+                                    }
+                                ],
+                                "name": "kube-root-ca.crt"
+                            }
+                        },
+                        {
+                            "downwardAPI": {
+                                "items": [
+                                    {
+                                        "fieldRef": {
+                                            "apiVersion": "v1",
+                                            "fieldPath": "metadata.namespace"
+                                        },
+                                        "path": "namespace"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2021-10-15T08:36:40Z",
+                "status": "True",
+                "type": "Initialized"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-01-18T11:43:59Z",
+                "status": "True",
+                "type": "Ready"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-01-18T11:43:59Z",
+                "status": "True",
+                "type": "ContainersReady"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2021-10-15T08:36:40Z",
+                "status": "True",
+                "type": "PodScheduled"
+            }
+        ],
+        "containerStatuses": [
+            {
+                "containerID": "cri-o://2674bbb8dd4e9bdfcf461ab3a6c29ad5fd5a449d3e05bcbe80c7be6a1fcbc98c",
+                "image": "quay.io/brancz/kube-rbac-proxy:v0.11.0",
+                "imageID": "quay.io/brancz/kube-rbac-proxy@sha256:a4f6c39b17f2ba68366c6d4e139ed18ede2ad9f3f9d5bf7477bdcbef73b43e54",
+                "lastState": {
+                    "terminated": {
+                        "containerID": "cri-o://c38024bc647c939c46f9fd2515580c75e2ce605cbeb80e9e12c192a82cc9e540",
+                        "exitCode": 255,
+                        "finishedAt": "2022-01-18T11:42:30Z",
+                        "reason": "Error",
+                        "startedAt": "2022-01-18T11:22:55Z"
+                    }
+                },
+                "name": "kube-rbac-proxy",
+                "ready": true,
+                "restartCount": 3,
+                "started": true,
+                "state": {
+                    "running": {
+                        "startedAt": "2022-01-18T11:43:58Z"
+                    }
+                }
+            },
+            {
+                "containerID": "cri-o://a92788190493b4a5e1c87daeaa2660f9bc7e0d37ceb3e7e1c4545de523fbdb17",
+                "image": "quay.io/prometheus/node-exporter:v1.2.2",
+                "imageID": "quay.io/prometheus/node-exporter@sha256:4f30c76de420097cdc9915c439f5c5f725ccb834a98d0631b3fac1ccb39f96f6",
+                "lastState": {
+                    "terminated": {
+                        "containerID": "cri-o://7e64ce8f43fb5aec3e53a7b243bad4aa33a49269b3c068c372b4eaf42879226a",
+                        "exitCode": 255,
+                        "finishedAt": "2022-01-18T11:42:30Z",
+                        "reason": "Error",
+                        "startedAt": "2022-01-18T11:22:54Z"
+                    }
+                },
+                "name": "node-exporter",
+                "ready": true,
+                "restartCount": 3,
+                "started": true,
+                "state": {
+                    "running": {
+                        "startedAt": "2022-01-18T11:43:58Z"
+                    }
+                }
+            }
+        ],
+        "hostIP": "10.90.2.9",
+        "phase": "Running",
+        "podIP": "10.90.2.9",
+        "podIPs": [
+            {
+                "ip": "10.90.2.9"
+            }
+        ],
+        "qosClass": "Burstable",
+        "startTime": "2021-10-15T08:36:40Z"
+    }
+}

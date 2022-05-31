@@ -1,0 +1,195 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {
+    "annotations": {
+      "cni.projectcalico.org/containerID": "41c89c97ca8689cd62e5407c77130c4b1789f72ff1477180fad1888676dc1a10",
+      "cni.projectcalico.org/podIP": "10.92.81.12/32",
+      "cni.projectcalico.org/podIPs": "10.92.81.12/32"
+    },
+    "creationTimestamp": "2022-02-17T12:09:30Z",
+    "generateName": "ksniff-",
+    "labels": {
+      "app": "ksniff"
+    },
+    "name": "ksniff-8ljgd",
+    "namespace": "kube-system",
+    "resourceVersion": "2403536",
+    "uid": "0b5ce26d-2356-42a2-a180-371ac122bb6f"
+  },
+  "spec": {
+    "containers": [
+      {
+        "command": [
+          "sh",
+          "-c",
+          "sleep 10000000"
+        ],
+        "image": "maintained/tcpdump",
+        "imagePullPolicy": "Always",
+        "name": "ksniff-privileged",
+        "resources": {},
+        "securityContext": {
+          "privileged": true
+        },
+        "terminationMessagePath": "/dev/termination-log",
+        "terminationMessagePolicy": "File",
+        "volumeMounts": [
+          {
+            "mountPath": "/var/run/crio/crio.sock",
+            "name": "container-socket",
+            "readOnly": true
+          },
+          {
+            "mountPath": "/host",
+            "name": "host"
+          },
+          {
+            "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+            "name": "kube-api-access-856wt",
+            "readOnly": true
+          }
+        ]
+      }
+    ],
+    "dnsPolicy": "ClusterFirst",
+    "enableServiceLinks": true,
+    "hostPID": true,
+    "nodeName": "o-k8s-vps1",
+    "preemptionPolicy": "PreemptLowerPriority",
+    "priority": 0,
+    "restartPolicy": "Never",
+    "schedulerName": "default-scheduler",
+    "securityContext": {},
+    "serviceAccount": "default",
+    "serviceAccountName": "default",
+    "terminationGracePeriodSeconds": 30,
+    "tolerations": [
+      {
+        "effect": "NoExecute",
+        "key": "node.kubernetes.io/not-ready",
+        "operator": "Exists",
+        "tolerationSeconds": 300
+      },
+      {
+        "effect": "NoExecute",
+        "key": "node.kubernetes.io/unreachable",
+        "operator": "Exists",
+        "tolerationSeconds": 300
+      }
+    ],
+    "volumes": [
+      {
+        "hostPath": {
+          "path": "/",
+          "type": "Directory"
+        },
+        "name": "host"
+      },
+      {
+        "hostPath": {
+          "path": "/var/run/crio/crio.sock",
+          "type": "Socket"
+        },
+        "name": "container-socket"
+      },
+      {
+        "name": "kube-api-access-856wt",
+        "projected": {
+          "defaultMode": 420,
+          "sources": [
+            {
+              "serviceAccountToken": {
+                "expirationSeconds": 3607,
+                "path": "token"
+              }
+            },
+            {
+              "configMap": {
+                "items": [
+                  {
+                    "key": "ca.crt",
+                    "path": "ca.crt"
+                  }
+                ],
+                "name": "kube-root-ca.crt"
+              }
+            },
+            {
+              "downwardAPI": {
+                "items": [
+                  {
+                    "fieldRef": {
+                      "apiVersion": "v1",
+                      "fieldPath": "metadata.namespace"
+                    },
+                    "path": "namespace"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "status": {
+    "conditions": [
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2022-02-17T12:09:30Z",
+        "status": "True",
+        "type": "Initialized"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2022-02-17T12:09:30Z",
+        "message": "containers with unready status: [ksniff-privileged]",
+        "reason": "ContainersNotReady",
+        "status": "False",
+        "type": "Ready"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2022-02-17T12:09:30Z",
+        "message": "containers with unready status: [ksniff-privileged]",
+        "reason": "ContainersNotReady",
+        "status": "False",
+        "type": "ContainersReady"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2022-02-17T12:09:30Z",
+        "status": "True",
+        "type": "PodScheduled"
+      }
+    ],
+    "containerStatuses": [
+      {
+        "image": "maintained/tcpdump",
+        "imageID": "",
+        "lastState": {},
+        "name": "ksniff-privileged",
+        "ready": false,
+        "restartCount": 0,
+        "started": false,
+        "state": {
+          "waiting": {
+            "message": "Failed to inspect image \"maintained/tcpdump\": rpc error: code = Unknown desc = short-name \"maintained/tcpdump:latest\" did not resolve to an alias and no unqualified-search registries are defined in \"/etc/containers/registries.conf.d/01-unqualified.conf\"",
+            "reason": "ImageInspectError"
+          }
+        }
+      }
+    ],
+    "hostIP": "192.168.121.31",
+    "phase": "Pending",
+    "podIP": "10.92.81.12",
+    "podIPs": [
+      {
+        "ip": "10.92.81.12"
+      }
+    ],
+    "qosClass": "BestEffort",
+    "startTime": "2022-02-17T12:09:30Z"
+  }
+}

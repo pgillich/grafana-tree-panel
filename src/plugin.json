@@ -58,5 +58,6 @@
   "dependencies": {
     "grafanaDependency": ">=8.0.0",
     "plugins": []
-  }
+  },
+  "logs": false
 }

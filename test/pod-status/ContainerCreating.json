@@ -1,0 +1,180 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "creationTimestamp": "2022-02-10T08:21:12Z",
+        "generateName": "mysql-564d57cc47-",
+        "labels": {
+            "app": "mysql",
+            "pod-template-hash": "564d57cc47"
+        },
+        "name": "mysql-564d57cc47-qmlwp",
+        "namespace": "kratos-mysql",
+        "ownerReferences": [
+            {
+                "apiVersion": "apps/v1",
+                "blockOwnerDeletion": true,
+                "controller": true,
+                "kind": "ReplicaSet",
+                "name": "mysql-564d57cc47",
+                "uid": "8179dd39-b461-4160-9e37-e4ec7e6ecd65"
+            }
+        ],
+        "resourceVersion": "202996181",
+        "uid": "d5c97182-66ce-40be-a545-16bd4d612342"
+    },
+    "spec": {
+        "containers": [
+            {
+                "env": [],
+                "image": "mysql:8.0",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "mysql",
+                "ports": [
+                    {
+                        "containerPort": 3306,
+                        "name": "mysql",
+                        "protocol": "TCP"
+                    }
+                ],
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/lib/mysql",
+                        "name": "mysql-persistent-storage"
+                    },
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-hjwnb",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "nodeName": "hu2-vmp9",
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {},
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/not-ready",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/unreachable",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            }
+        ],
+        "volumes": [
+            {
+                "name": "mysql-persistent-storage",
+                "persistentVolumeClaim": {
+                    "claimName": "mysql-pv-claim"
+                }
+            },
+            {
+                "name": "kube-api-access-hjwnb",
+                "projected": {
+                    "defaultMode": 420,
+                    "sources": [
+                        {
+                            "serviceAccountToken": {
+                                "expirationSeconds": 3607,
+                                "path": "token"
+                            }
+                        },
+                        {
+                            "configMap": {
+                                "items": [
+                                    {
+                                        "key": "ca.crt",
+                                        "path": "ca.crt"
+                                    }
+                                ],
+                                "name": "kube-root-ca.crt"
+                            }
+                        },
+                        {
+                            "downwardAPI": {
+                                "items": [
+                                    {
+                                        "fieldRef": {
+                                            "apiVersion": "v1",
+                                            "fieldPath": "metadata.namespace"
+                                        },
+                                        "path": "namespace"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-10T08:21:12Z",
+                "status": "True",
+                "type": "Initialized"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-10T08:21:12Z",
+                "message": "containers with unready status: [mysql]",
+                "reason": "ContainersNotReady",
+                "status": "False",
+                "type": "Ready"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-10T08:21:12Z",
+                "message": "containers with unready status: [mysql]",
+                "reason": "ContainersNotReady",
+                "status": "False",
+                "type": "ContainersReady"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-10T08:21:12Z",
+                "status": "True",
+                "type": "PodScheduled"
+            }
+        ],
+        "containerStatuses": [
+            {
+                "image": "mysql:8.0",
+                "imageID": "",
+                "lastState": {},
+                "name": "mysql",
+                "ready": false,
+                "restartCount": 0,
+                "started": false,
+                "state": {
+                    "waiting": {
+                        "reason": "ContainerCreating"
+                    }
+                }
+            }
+        ],
+        "hostIP": "10.90.2.9",
+        "phase": "Pending",
+        "qosClass": "BestEffort",
+        "startTime": "2022-02-10T08:21:12Z"
+    }
+}

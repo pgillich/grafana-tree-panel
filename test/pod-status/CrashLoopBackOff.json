@@ -1,0 +1,267 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "annotations": {
+            "cni.projectcalico.org/containerID": "768e7d4a60bc28ff7cb5d1bcb8a7bcec5924e6d57577b9b7e1eb644f254dbc4d",
+            "cni.projectcalico.org/podIP": "10.92.92.14/32",
+            "cni.projectcalico.org/podIPs": "10.92.92.14/32",
+            "k8s.v1.cni.cncf.io/network-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.92.92.14\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]",
+            "k8s.v1.cni.cncf.io/networks-status": "[{\n    \"name\": \"cni0\",\n    \"ips\": [\n        \"10.92.92.14\"\n    ],\n    \"default\": true,\n    \"dns\": {}\n}]"
+        },
+        "creationTimestamp": "2022-02-01T08:20:03Z",
+        "generateName": "longhorn-driver-deployer-69985cff47-",
+        "labels": {
+            "app": "longhorn-driver-deployer",
+            "pod-template-hash": "69985cff47"
+        },
+        "name": "longhorn-driver-deployer-69985cff47-zrr68",
+        "namespace": "longhorn-system",
+        "ownerReferences": [
+            {
+                "apiVersion": "apps/v1",
+                "blockOwnerDeletion": true,
+                "controller": true,
+                "kind": "ReplicaSet",
+                "name": "longhorn-driver-deployer-69985cff47",
+                "uid": "6e34d2b9-3e5d-48d8-bfe9-805cd393612a"
+            }
+        ],
+        "resourceVersion": "211709119",
+        "uid": "0233ba8a-69bc-428d-8e2c-aec03cb5b146"
+    },
+    "spec": {
+        "containers": [
+            {
+                "command": [
+                    "longhorn-manager",
+                    "-d",
+                    "deploy-driver",
+                    "--manager-image",
+                    "longhornio/longhorn-manager:v1.2.0",
+                    "--manager-url",
+                    "http://longhorn-backend:9500/v1"
+                ],
+                "env": [
+                    {
+                        "name": "POD_NAMESPACE",
+                        "valueFrom": {
+                            "fieldRef": {
+                                "apiVersion": "v1",
+                                "fieldPath": "metadata.namespace"
+                            }
+                        }
+                    },
+                    {
+                        "name": "NODE_NAME",
+                        "valueFrom": {
+                            "fieldRef": {
+                                "apiVersion": "v1",
+                                "fieldPath": "spec.nodeName"
+                            }
+                        }
+                    },
+                    {
+                        "name": "SERVICE_ACCOUNT",
+                        "valueFrom": {
+                            "fieldRef": {
+                                "apiVersion": "v1",
+                                "fieldPath": "spec.serviceAccountName"
+                            }
+                        }
+                    }
+                ],
+                "image": "longhornio/longhorn-manager:v1.2.0",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "longhorn-driver-deployer",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-rmk9s",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "initContainers": [
+            {
+                "command": [
+                    "sh",
+                    "-c",
+                    "while [ $(curl -m 1 -s -o /dev/null -w \"%{http_code}\" http://longhorn-backend:9500/v1) != \"200\" ]; do echo waiting; sleep 2; done"
+                ],
+                "image": "longhornio/longhorn-manager:v1.2.0",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "wait-longhorn-manager",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-rmk9s",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "nodeName": "hu2-vmp9",
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "Always",
+        "schedulerName": "default-scheduler",
+        "securityContext": {
+            "runAsUser": 0
+        },
+        "serviceAccount": "longhorn-service-account",
+        "serviceAccountName": "longhorn-service-account",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/not-ready",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/unreachable",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            }
+        ],
+        "volumes": [
+            {
+                "name": "kube-api-access-rmk9s",
+                "projected": {
+                    "defaultMode": 420,
+                    "sources": [
+                        {
+                            "serviceAccountToken": {
+                                "expirationSeconds": 3607,
+                                "path": "token"
+                            }
+                        },
+                        {
+                            "configMap": {
+                                "items": [
+                                    {
+                                        "key": "ca.crt",
+                                        "path": "ca.crt"
+                                    }
+                                ],
+                                "name": "kube-root-ca.crt"
+                            }
+                        },
+                        {
+                            "downwardAPI": {
+                                "items": [
+                                    {
+                                        "fieldRef": {
+                                            "apiVersion": "v1",
+                                            "fieldPath": "metadata.namespace"
+                                        },
+                                        "path": "namespace"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-01T08:20:19Z",
+                "status": "True",
+                "type": "Initialized"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-20T07:52:18Z",
+                "message": "containers with unready status: [longhorn-driver-deployer]",
+                "reason": "ContainersNotReady",
+                "status": "False",
+                "type": "Ready"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-20T07:52:18Z",
+                "message": "containers with unready status: [longhorn-driver-deployer]",
+                "reason": "ContainersNotReady",
+                "status": "False",
+                "type": "ContainersReady"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2022-02-01T08:20:03Z",
+                "status": "True",
+                "type": "PodScheduled"
+            }
+        ],
+        "containerStatuses": [
+            {
+                "containerID": "cri-o://e6860714adb6f24bdda1c6e788ae2dd424f0cf69f0315920e313b84411fc41fd",
+                "image": "docker.io/longhornio/longhorn-manager:v1.2.0",
+                "imageID": "docker.io/longhornio/longhorn-manager@sha256:370c38bbf8ee5824680e21d5a15ad439b093fbd7aa76ecb0927dc66920504bda",
+                "lastState": {
+                    "terminated": {
+                        "containerID": "cri-o://e6860714adb6f24bdda1c6e788ae2dd424f0cf69f0315920e313b84411fc41fd",
+                        "exitCode": 1,
+                        "finishedAt": "2022-02-20T07:52:18Z",
+                        "reason": "Error",
+                        "startedAt": "2022-02-20T07:50:14Z"
+                    }
+                },
+                "name": "longhorn-driver-deployer",
+                "ready": false,
+                "restartCount": 3778,
+                "started": false,
+                "state": {
+                    "waiting": {
+                        "message": "back-off 5m0s restarting failed container=longhorn-driver-deployer pod=longhorn-driver-deployer-69985cff47-zrr68_longhorn-system(0233ba8a-69bc-428d-8e2c-aec03cb5b146)",
+                        "reason": "CrashLoopBackOff"
+                    }
+                }
+            }
+        ],
+        "hostIP": "10.90.2.9",
+        "initContainerStatuses": [
+            {
+                "containerID": "cri-o://0f276af184807e60d113b440c9ef33efee62b0280bf024b0366f2af3826a5570",
+                "image": "docker.io/longhornio/longhorn-manager:v1.2.0",
+                "imageID": "docker.io/longhornio/longhorn-manager@sha256:370c38bbf8ee5824680e21d5a15ad439b093fbd7aa76ecb0927dc66920504bda",
+                "lastState": {},
+                "name": "wait-longhorn-manager",
+                "ready": true,
+                "restartCount": 0,
+                "state": {
+                    "terminated": {
+                        "containerID": "cri-o://0f276af184807e60d113b440c9ef33efee62b0280bf024b0366f2af3826a5570",
+                        "exitCode": 0,
+                        "finishedAt": "2022-02-01T08:20:18Z",
+                        "reason": "Completed",
+                        "startedAt": "2022-02-01T08:20:11Z"
+                    }
+                }
+            }
+        ],
+        "phase": "Running",
+        "podIP": "10.92.92.14",
+        "podIPs": [
+            {
+                "ip": "10.92.92.14"
+            }
+        ],
+        "qosClass": "BestEffort",
+        "startTime": "2022-02-01T08:20:03Z"
+    }
+}

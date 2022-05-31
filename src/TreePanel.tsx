@@ -1,11 +1,15 @@
 import React, { FC } from 'react';
-import { Field, PanelProps, DataFrame, GrafanaTheme2 } from '@grafana/data';
+import { Field, FieldType, PanelData, PanelProps, DataFrame, GrafanaTheme2, ArrayVector } from '@grafana/data';
 import { TreeView, TreeItem } from '@material-ui/lab';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRighticon from '@material-ui/icons/ChevronRight';
-import { TreeOptions, TreeLevelOrderMode } from 'types';
-import { useStyles2 } from '@grafana/ui';
+import { /*Field,*/ useStyles2 } from '@grafana/ui';
 import { css } from '@emotion/css';
+import Handlebars from 'handlebars';
+import { TreeOptions, TreeLevelOrderMode, TreeFileldTemplateEngine } from 'types';
+//import { ObjectSerializer, V1Pod } from '@kubernetes/client-node';
+import { ObjectSerializer, V1Pod } from './kubernetes_client-node/model/models';
+import { printPod } from 'printers';
 
 export interface Props extends PanelProps<TreeOptions> {}
 
@@ -19,6 +23,14 @@ interface DataItem {
 
 export const idSep = ':';
 
+const treeFileldTemplateEngines = new Map<
+  TreeFileldTemplateEngine,
+  (str: string, values: Map<string, string>) => string
+>([
+  [TreeFileldTemplateEngine.Simple, evalTemplateSimple],
+  [TreeFileldTemplateEngine.Handlebars, evalTemplateHandlebars],
+]);
+
 const getStyles = (theme: GrafanaTheme2) => ({
   treeBox: css`
     max-width: 100%;
@@ -28,12 +40,15 @@ const getStyles = (theme: GrafanaTheme2) => ({
 });
 
 export const TreePanel: FC<Props> = ({ options, data, width, height }) => {
+  Handlebars.registerHelper('printPodColumn', printPodColumn);
+
   if (!data.series || data.series.length === 0) {
     throw 'no data';
   }
 
   const styles = useStyles2(getStyles);
 
+  addSerieColumn(options.serieColumn, data);
   let dataItems = buildTreeData(options, data.series);
   if (options.enableConsoleLog) {
     console.log(stringTree(dataItems, '', false));
@@ -102,6 +117,23 @@ function orderValues(orderLevels: TreeLevelOrderMode) {
   };
 }
 
+function addSerieColumn(columnName: string, data: PanelData) {
+  data.series.forEach((serie) => {
+    const name = serie.name === undefined || serie.name === '' ? '<none>' : serie.name;
+    let values: ArrayVector<string> = new ArrayVector<string>();
+    for (let i = 0; i < serie.length; i++) {
+      values.add(name);
+      const field: Field<string> = {
+        name: columnName,
+        config: {},
+        type: FieldType.string,
+        values: values,
+      } as Field;
+      serie.fields.push(field);
+    }
+  });
+}
+
 function buildTreeData(options: TreeOptions, series: DataFrame[]) {
   const name = options.rootName;
   const treeFields = options.treeFields.split('\n');
@@ -129,13 +161,11 @@ function buildTreeData(options: TreeOptions, series: DataFrame[]) {
 
 function childrenByField(item: DataItem, options: TreeOptions, treeFields: string[]) {
   const treeField = treeFields[0];
-  const evalTemplate = (str: string, values: Map<string, string>) =>
-    str.replace(/\${(.*?)}/g, (x, g) => String(values.get(String(g))));
 
   if (treeFields.length === 1) {
     let itemIdx = 0;
     item.rows.forEach((child) => {
-      const key = evalTemplate(treeField, child.values);
+      const key = evalTemplate(options.treeFieldTemplateEngine, treeField, child.values);
       const childId = item.id + idSep + correctId(key) + idSep + String(itemIdx++);
       item.groups.set(key, {
         id: childId,
@@ -152,7 +182,7 @@ function childrenByField(item: DataItem, options: TreeOptions, treeFields: strin
 
   let itemIdx = 0;
   item.rows.forEach((child) => {
-    const key = evalTemplate(treeField, child.values);
+    const key = evalTemplate(options.treeFieldTemplateEngine, treeField, child.values);
     const childId = item.id + idSep + correctId(key) + idSep + String(itemIdx++);
     if (!item.groups.has(key)) {
       item.groups.set(key, {
@@ -177,6 +207,50 @@ function childrenByField(item: DataItem, options: TreeOptions, treeFields: strin
   item.rows = [];
 }
 
+function evalTemplate(templateEngine: TreeFileldTemplateEngine, str: string, values: Map<string, string>): string {
+  const templateFunc = treeFileldTemplateEngines.get(templateEngine);
+  if (templateFunc === undefined) {
+    return 'Internal error: templateEngine is undefined';
+  }
+  let evaluated = '';
+
+  try {
+    evaluated = templateFunc(str, values);
+  } catch (err) {
+    evaluated = err instanceof Error ? err.message : String(err);
+  }
+
+  return evaluated;
+}
+
+function evalTemplateSimple(str: string, values: Map<string, string>): string {
+  const evalTemplate = (str: string, values: Map<string, string>) =>
+    str.replace(/\${(.*?)}/g, (x, g) => String(values.get(String(g))));
+
+  return evalTemplate(str, values);
+}
+
+function evalTemplateHandlebars(source: string, values: Map<string, string>): string {
+  var template = Handlebars.compile(source, {
+    noEscape: true,
+  });
+
+  return template(Object.fromEntries(values));
+}
+
+export function printPodColumn(jsonText: string, column: string): string {
+  var pod: V1Pod;
+  try {
+    pod = ObjectSerializer.deserialize(JSON.parse(jsonText), 'V1Pod');
+  } catch (err) {
+    return err instanceof Error ? err.message : String(err);
+  }
+
+  const row = printPod(pod, new Date());
+
+  return row.get(column) === undefined ? '' : String(row.get(column));
+}
+
 function getRows(fields: Field[]): DataItem[] {
   let rows: DataItem[] = [];
   let len = 0;
@@ -189,7 +263,16 @@ function getRows(fields: Field[]): DataItem[] {
   for (let i = 0; i < len; i++) {
     let rowValues = new Map<string, string>();
     fields.forEach((field) => {
-      const value = String(field.values.get(i));
+      let value = field.values.get(i);
+      if (typeof field.values.get(i) === 'object') {
+        try {
+          value = JSON.stringify(field.values.get(i));
+        } catch (err) {
+          value = err instanceof Error ? err.message : String(err) + ': ' + String(value);
+        }
+      } else {
+        value = String(value);
+      }
       rowValues.set(field.name, value);
     });
 

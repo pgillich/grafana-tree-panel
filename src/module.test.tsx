@@ -98,6 +98,44 @@ describe('Data processing and panel rendering', () => {
       expect(nodesRendered).toMatchSnapshot();
     });
 
+    it('empty data', () => {
+      const options = {
+        ...optionsDefault,
+        treeFields: '${statusPhase}\n${cluster}; ${namespace}\n${appName} ${name}\n${containerImage} ${containerState}',
+      } as TreeOptions;
+
+      let seriesData: Array<Field<string>> = [];
+      const len = loadSerie(seriesData, 'test/no-pod.json', podJsonata);
+
+      const data = {
+        series: [
+          {
+            name: 'no-pod.json',
+            fields: seriesData,
+            length: len,
+          },
+        ],
+        timeRange: {} as TimeRange,
+        state: LoadingState.Done,
+      } as PanelData;
+
+      const params: Props = {
+        ...panelPropsDefault,
+        options: options,
+        data: data,
+      };
+
+      const wrapper = mount(<TreePanel {...params} />);
+
+      const nodes = wrapper.find('.customTreeItem');
+      const nodesRendered = stringNodes(nodes, false);
+      if (enableConsoleLog) {
+        console.log('stringNodes():\n' + nodesRendered);
+      }
+
+      expect(nodesRendered).toMatchSnapshot();
+    });
+
     it('simple data, handlebars', () => {
       const options = {
         ...optionsDefault,
@@ -393,15 +431,17 @@ function loadSerie(seriesData: Array<Field<string>>, path: string, jsonAta: stri
 
   let fieldValues = new Map<string, any[]>();
   let len = 0;
-  records.forEach((record: Object) => {
-    len++;
-    Object.entries(record).forEach(([key, value]) => {
-      if (!fieldValues.has(key)) {
-        fieldValues.set(key, []);
-      }
-      fieldValues.get(key)?.push(value);
+  if (records !== undefined) {
+    records.forEach((record: Object) => {
+      len++;
+      Object.entries(record).forEach(([key, value]) => {
+        if (!fieldValues.has(key)) {
+          fieldValues.set(key, []);
+        }
+        fieldValues.get(key)?.push(value);
+      });
     });
-  });
+  }
 
   fieldValues.forEach((values, field) => {
     expect(values.length).toBe(len);

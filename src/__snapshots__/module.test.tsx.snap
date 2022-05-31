@@ -198,6 +198,8 @@ exports[`Data processing and panel rendering Rendering 2 series, handlebars 1`] 
          redis:6.2.6-alpine"
 `;
 
+exports[`Data processing and panel rendering Rendering empty data 1`] = `"Pods (0)"`;
+
 exports[`Data processing and panel rendering Rendering simple data 1`] = `
 "Pods (5)
   Failed (1)

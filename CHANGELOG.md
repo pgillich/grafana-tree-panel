@@ -12,6 +12,9 @@
 
 ### Bug fixes
 
+* Better handling empty JSON list
+* Kubernetes developer info
+
 <!-- 0.1.8 END -->
 
 <!-- 0.1.7 START -->

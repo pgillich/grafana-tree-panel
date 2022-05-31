@@ -2,9 +2,9 @@
 
 [![Build](https://github.com/pgillich/grafana-tree-panel/workflows/CI/badge.svg)](https://github.com/pgillich/grafana-tree-panel/actions?query=workflow%3A%22CI%22)
 
-This panel plugin shows a tree from records, provided by a datasource. This plugin is optized and tested with [JSON API](https://grafana.com/grafana/plugins/marcusolsson-json-datasource/) datasource.
+This panel plugin shows a tree from records, provided by a datasource. The plugin is optized and tested with [JSON API](https://grafana.com/grafana/plugins/marcusolsson-json-datasource/) datasource.
 
-This plugin is developed for presenting Kubernetes resources received from Kubernetes API. A possible production environment is described at <https://github.com/pgillich/grafana-kubernetes>.
+This plugin presents JSON API responses, for example Kubernetes resources received from Kubernetes API. A possible production environment is described at <https://github.com/pgillich/grafana-kubernetes>.
 
 Example screenshot about a Kubernetes Namespace:
 

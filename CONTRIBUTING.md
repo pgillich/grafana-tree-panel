@@ -5,12 +5,16 @@
 The skeleton was created by <https://www.npmjs.com/package/@grafana/toolkit>. The typical developing use cases are described there.
 Jest snapshot is also used, so snapshots can be updated by `--updateSnapshot` option.
 
+### Debug
+
+Console logs can be enabled by setting `const enableConsoleLog = false;` in `src/module.test.tsx`.
+
 ## Kubernetes client
 
 The official [@kubernetes/client-node](https://www.npmjs.com/package/@kubernetes/client-node) does not run in browser, because the `os.constants.signals` is needed, but [browser-os](https://www.npmjs.com/package/browser-os) does not provides it.
-There is similar issue with [browser-stream](https://www.npmjs.com/package/browser-stream).
+There is a similar issue with [browser-stream](https://www.npmjs.com/package/browser-stream).
 
-The workaround is generating only the model of [@kubernetes/client-node](https://www.npmjs.com/package/@kubernetes/client-node) by `generate-client.sh`, which is forked from <https://github.com/kubernetes-client/javascript/blob/master/generate-client.sh>.
+The workaround is: generating only the model of [@kubernetes/client-node](https://www.npmjs.com/package/@kubernetes/client-node) by `generate-client.sh`, which is forked from <https://github.com/kubernetes-client/javascript/blob/master/generate-client.sh>.
 
 ### Docker Compose
 
@@ -46,10 +50,26 @@ It's possible to install a local Kubernetes on a laptop with JSON API and this p
 * <https://github.com/pgillich/grafana-kubernetes>
 * <https://github.com/pgillich/kind-on-dev>
 
-After `yarn build` or `yarn dev`, below command copies the package files to the Grafana container and restarts it:
+Perhaps the official pgillich-tree-panel plugin should be uninstalled, for example on <https://monitoring.kind-01.company.com/grafana/plugins/pgillich-tree-panel?page=overview>.
+
+Edit Grafana pod ConfigMap to remove pgillich-tree-panel from plugin list:
 
 ```sh
-GRAFANA_POD=$(kubectl get pod -n monitoring -l 'app.kubernetes.io/name=grafana' -o name | sed 's#^pod/##g'); kubectl exec -n monitoring ${GRAFANA_POD} -c grafana -- /bin/sh -c 'rm -rf /var/lib/grafana/plugins/pgillich-tree-panel/*' kubectl cp ./dist -n monitoring -c grafana ${GRAFANA_POD}:/var/lib/grafana/plugins/pgillich-tree-panel; kubectl exec -n monitoring ${GRAFANA_POD} -c grafana -- /bin/sh -c 'ps -ef; kill 1'
+GRAFANA_POD=$(kubectl get pod -n monitoring -l 'app.kubernetes.io/name=grafana' -o name | sed 's#^pod/##g'); kubectl edit cm -n monitoring prometheus-stack-grafana;
+```
+
+After `yarn build` or `yarn dev`, below command copies the package files to the Grafana container:
+
+```sh
+export GRAFANA_POD=$(kubectl get pod -n monitoring -l 'app.kubernetes.io/name=grafana' -o name | sed 's#^pod/##g'); kubectl exec -n monitoring ${GRAFANA_POD} -c grafana -- /bin/sh -c 'rm -rf /var/lib/grafana/plugins/pgillich-tree-panel'; kubectl cp ./dist -n monitoring -c grafana ${GRAFANA_POD}:/var/lib/grafana/plugins/pgillich-tree-panel; kubectl exec -n monitoring ${GRAFANA_POD} -c grafana -- /bin/sh -c 'rm -f /var/lib/grafana/plugins/pgillich-tree-panel/MANIFEST.txt'; kubectl exec -n monitoring ${GRAFANA_POD} -c grafana -- /bin/sh -c 'grep version /var/lib/grafana/plugins/pgillich-tree-panel/plugin.json';
+```
+
+rm -f /var/lib/grafana/plugins/pgillich-tree-panel/MANIFEST.txt
+
+Below command restarts the container:
+
+```sh
+kubectl exec -n monitoring ${GRAFANA_POD} -c grafana -- /bin/sh -c 'ps -ef; kill 1'
 ```
 
 The container restart takes a few seconds, which can be checked by below command:

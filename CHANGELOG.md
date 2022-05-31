@@ -1,8 +1,8 @@
 # Changelog
 
-<!-- 0.1.7 START -->
+<!-- 0.1.8 START -->
 
-## 0.1.7 (2022-02-)
+## 0.1.8 (2022-02-)
 
 ### Features and enhancements
 
@@ -12,11 +12,23 @@
 
 ### Bug fixes
 
-<!-- 0.1.7 END -->
+<!-- 0.1.8 END -->
+
+<!-- 0.1.7 START -->
+
+## 0.1.7 (2022-05-26)
+
+### Features and enhancements
+
+Signed plugin.
+
+### Bug fixes
 
 <!-- 0.1.6 START -->
 
 ## 0.1.6 (2022-02-01)
+
+The first version to send it to Grafana for jury.
 
 ### Features and enhancements
 

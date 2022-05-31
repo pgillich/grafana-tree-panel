@@ -12,7 +12,7 @@ Example screenshot about a Kubernetes Namespace:
 
 Screenshot about a panel editor:
 
-![simple-editor](images/simple-editor.png)
+![simple-editor](https://github.com/pgillich/grafana-tree-panel/raw/main/images/simple-editor.png)
 
 ## Datasource
 
@@ -58,11 +58,11 @@ ${containerImage}
 If a more complex template engine is needed, [Handlebars](https://github.com/handlebars-lang/handlebars.js) can be used,
 which is a `{{field}}`-style engine, for example:
 
-![handlebars-options](images/handlebars-options.jpg)
+![handlebars-options](https://github.com/pgillich/grafana-tree-panel/raw/main/images/handlebars-options.jpg)
 
 Screenshot about a panel editor, with Handlebars engine:
 
-![handlebars-editor](images/handlebars-editor.png)
+![handlebars-editor](https://github.com/pgillich/grafana-tree-panel/raw/main/images/handlebars-editor.png)
 
 ## Handlebars extensions
 
@@ -102,7 +102,7 @@ $map(items, function($v) {{"rawPod": $v, "namespace": $v.metadata.namespace, "na
 
 Example screenshot for comparing Pod status info form raw Kubernetes API and from `printPodColumn` function:
 
-![simple-handlebars](images/simple-handlebars.png)
+![simple-handlebars](https://github.com/pgillich/grafana-tree-panel/raw/main/images/simple-handlebars.png)
 
 ## Example Dashboards
 
@@ -117,4 +117,4 @@ Please attach sample json file(s) to the new Issue.
 
 ## Contributing
 
-See more details in [CONTRIBUTING.md](CONTRIBUTING.md).
+See more details in [CONTRIBUTING.md](https://github.com/pgillich/grafana-tree-panel/raw/main/CONTRIBUTING.md).

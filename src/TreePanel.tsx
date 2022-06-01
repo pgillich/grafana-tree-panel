@@ -48,13 +48,31 @@ export const TreePanel: FC<Props> = ({ options, data, width, height }) => {
 
   const styles = useStyles2(getStyles);
 
-  addSerieColumn(options.serieColumn, data);
-  let dataItems = buildTreeData(options, data.series);
-  if (options.enableConsoleLog) {
-    console.log(stringTree(dataItems, '', false));
+  let onlyUndefined = true;
+  data.series.forEach((serie) => {
+    serie.fields.forEach((field) => {
+      for (let i = 0; i < field.values.length; i++) {
+        if (field.values.get(i) !== undefined) {
+          onlyUndefined = false;
+        }
+      }
+    });
+  });
+
+  let dataItems: DataItem;
+  let defaultExpanded: string[] = [];
+
+  if (onlyUndefined) {
+    const noSeries: DataFrame[] = [];
+    dataItems = buildTreeData(options, noSeries);
+  } else {
+    addSerieColumn(options.serieColumn, data);
+    dataItems = buildTreeData(options, data.series);
+    if (options.enableConsoleLog) {
+      console.log(stringTree(dataItems, '', false));
+    }
   }
 
-  let defaultExpanded: string[] = [];
   const appendToExpanded = (item: DataItem, level: number) => {
     if (level > 0) {
       defaultExpanded.push(item.id);
@@ -64,6 +82,7 @@ export const TreePanel: FC<Props> = ({ options, data, width, height }) => {
     }
   };
   appendToExpanded(dataItems, options.expandLevel);
+
   const [expanded, setExpanded] = React.useState<string[]>(defaultExpanded);
   const handleToggle = (_event: any, nodeIds: React.SetStateAction<string[]>) => {
     setExpanded(nodeIds);
@@ -120,17 +139,21 @@ function orderValues(orderLevels: TreeLevelOrderMode) {
 function addSerieColumn(columnName: string, data: PanelData) {
   data.series.forEach((serie) => {
     const name = serie.name === undefined || serie.name === '' ? '<none>' : serie.name;
+    let valueNum = 0;
+    serie.fields.forEach((field) => {
+      valueNum = Math.max(field.values.length, valueNum);
+    });
     let values: ArrayVector<string> = new ArrayVector<string>();
-    for (let i = 0; i < serie.length; i++) {
+    for (let i = 0; i < valueNum; i++) {
       values.add(name);
-      const field: Field<string> = {
-        name: columnName,
-        config: {},
-        type: FieldType.string,
-        values: values,
-      } as Field;
-      serie.fields.push(field);
     }
+    const field: Field<string> = {
+      name: columnName,
+      config: {},
+      type: FieldType.string,
+      values: values,
+    } as Field;
+    serie.fields.push(field);
   });
 }
 

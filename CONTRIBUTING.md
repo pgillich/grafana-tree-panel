@@ -9,6 +9,12 @@ Jest snapshot is also used, so snapshots can be updated by `--updateSnapshot` op
 
 Console logs can be enabled by setting `const enableConsoleLog = false;` in `src/module.test.tsx`.
 
+Below example runs only the selected test case:
+
+```sh
+yarn test --testNamePattern='simple data'
+```
+
 ## Kubernetes client
 
 The official [@kubernetes/client-node](https://www.npmjs.com/package/@kubernetes/client-node) does not run in browser, because the `os.constants.signals` is needed, but [browser-os](https://www.npmjs.com/package/browser-os) does not provides it.
@@ -63,8 +69,6 @@ After `yarn build` or `yarn dev`, below command copies the package files to the 
 ```sh
 export GRAFANA_POD=$(kubectl get pod -n monitoring -l 'app.kubernetes.io/name=grafana' -o name | sed 's#^pod/##g'); kubectl exec -n monitoring ${GRAFANA_POD} -c grafana -- /bin/sh -c 'rm -rf /var/lib/grafana/plugins/pgillich-tree-panel'; kubectl cp ./dist -n monitoring -c grafana ${GRAFANA_POD}:/var/lib/grafana/plugins/pgillich-tree-panel; kubectl exec -n monitoring ${GRAFANA_POD} -c grafana -- /bin/sh -c 'rm -f /var/lib/grafana/plugins/pgillich-tree-panel/MANIFEST.txt'; kubectl exec -n monitoring ${GRAFANA_POD} -c grafana -- /bin/sh -c 'grep version /var/lib/grafana/plugins/pgillich-tree-panel/plugin.json';
 ```
-
-rm -f /var/lib/grafana/plugins/pgillich-tree-panel/MANIFEST.txt
 
 Below command restarts the container:
 

@@ -1,5 +1,17 @@
 # Changelog
 
+<!-- 0.1.9 START -->
+
+## 0.1.9 (2022-06-)
+
+### Features and enhancements
+
+### Bug fixes
+
+* Handling empty and undefined JSON list
+
+<!-- 0.1.9 END -->
+
 <!-- 0.1.8 START -->
 
 ## 0.1.8 (2022-02-)

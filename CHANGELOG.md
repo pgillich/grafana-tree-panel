@@ -8,6 +8,7 @@
 
 ### Bug fixes
 
+* Remove kubernetes/client-node dependency
 * Handling empty and undefined JSON list
 
 <!-- 0.1.9 END -->

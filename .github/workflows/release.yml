@@ -6,7 +6,7 @@ on:
       - "v*.*.*" # Run workflow on version tags, e.g. v1.0.0.
 
 env:
-  GRAFANA_API_KEY: eyJrIjoiMGJmOTc0NzdiOGRlYmY4MGZkODkwYmIxMzdlZDg1YjQ4M2QyNTU5MiIsIm4iOiJwbHVnaW4tcHVibGlzaGVyIiwiaWQiOjM2MDczN30=
+  GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
 
 jobs:
   release:
